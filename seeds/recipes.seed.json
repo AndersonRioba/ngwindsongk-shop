@@ -1,0 +1,334 @@
+[
+  {
+    "title": "Fine Oats Porridge",
+    "slug": "fine-oats-porridge",
+    "description": "A smooth and comforting porridge made with finely ground oat flour. Perfect for a gentle start to your day.",
+    "ingredients": [
+      { "text": "1 cup cold water" },
+      { "text": "3/4 cup Grainmill Oat Flour" },
+      { "text": "1 teaspoon sweetener" },
+      { "text": "Milk (optional)" }
+    ],
+    "steps": [
+      { "text": "Mix cold water and oat flour in a pot.", "order": 1 },
+      { "text": "Place on fire and stir continuously to avoid lumps.", "order": 2 },
+      { "text": "Add honey or sweetener (optional).", "order": 3 },
+      { "text": "Cook for 5 minutes.", "order": 4 },
+      { "text": "Add milk if desired and serve.", "order": 5 }
+    ],
+    "status": "published",
+    "productSlug": "oat-flour"
+  },
+  {
+    "title": "Oat Flour Pancakes",
+    "slug": "oat-flour-pancakes",
+    "description": "Fluffy and nutritious pancakes made with Grainmill Oat Flour. A healthy twist on a classic breakfast favorite.",
+    "ingredients": [
+      { "text": "1 cup water or milk" },
+      { "text": "1/2 cup Grainmill Oat Flour" },
+      { "text": "2 eggs" },
+      { "text": "1 1/2 tablespoons cooking oil" },
+      { "text": "1 tablespoon sweetener" },
+      { "text": "A pinch of salt" },
+      { "text": "1 teaspoon baking powder" }
+    ],
+    "steps": [
+      { "text": "Mix water or milk with cooking oil.", "order": 1 },
+      { "text": "Add oat flour and baking powder, then stir well.", "order": 2 },
+      { "text": "Add eggs, sweetener, and salt, then continue to stir until smooth.", "order": 3 },
+      { "text": "Heat cooking oil in a hot pan.", "order": 4 },
+      { "text": "Pour the batter and spread using a serving spoon.", "order": 5 }
+    ],
+    "status": "published",
+    "productSlug": "oat-flour"
+  },
+  {
+    "title": "Oat Flour Omelette",
+    "slug": "oat-flour-omelette",
+    "description": "A protein-packed omelette reinforced with oat flour for extra texture and nutrition.",
+    "ingredients": [
+      { "text": "1 cup milk or water" },
+      { "text": "1/2 cup Grainmill Oat Flour" },
+      { "text": "3 eggs" },
+      { "text": "A pinch of black pepper" },
+      { "text": "1/2 onion, chopped" },
+      { "text": "1/2 bell pepper (hoho), chopped" },
+      { "text": "1 tomato, chopped" },
+      { "text": "1 coriander sprig, chopped" },
+      { "text": "A pinch of salt" }
+    ],
+    "steps": [
+      { "text": "Put oat flour into a bowl.", "order": 1 },
+      { "text": "Mix with milk or water and set aside for 10 minutes.", "order": 2 },
+      { "text": "Add salt, black pepper, and the remaining ingredients (vegetables).", "order": 3 },
+      { "text": "Stir until well combined.", "order": 4 },
+      { "text": "Add eggs as the final ingredient.", "order": 5 },
+      { "text": "Heat cooking oil in a pan.", "order": 6 },
+      { "text": "Pour the mixture and spread slowly using a serving spoon.", "order": 7 }
+    ],
+    "status": "published",
+    "productSlug": "oat-flour"
+  },
+  {
+    "title": "Oat Flour Waffles",
+    "slug": "oat-flour-waffles",
+    "description": "Crispy and delicious waffles made with wholesome oat flour.",
+    "ingredients": [
+      { "text": "Grainmill Oat Flour" },
+      { "text": "Milk" },
+      { "text": "Egg" },
+      { "text": "Salt" },
+      { "text": "Baking powder" },
+      { "text": "Butter" }
+    ],
+    "steps": [
+      { "text": "In a bowl, add milk and butter.", "order": 1 },
+      { "text": "Add egg and whisk together.", "order": 2 },
+      { "text": "Add oat flour, baking powder, and a pinch of salt.", "order": 3 },
+      { "text": "Let the batter rest for 10 minutes.", "order": 4 },
+      { "text": "Prepare your waffle maker by lightly oiling it.", "order": 5 },
+      { "text": "Pour the batter when the waffle maker is hot enough.", "order": 6 }
+    ],
+    "status": "published",
+    "productSlug": "oat-flour"
+  },
+  {
+    "title": "Oat Flour Ugali",
+    "slug": "oat-flour-ugali",
+    "description": "A nutritious alternative to traditional ugali, made with healthy Grainmill Oat Flour.",
+    "ingredients": [
+      { "text": "3 cups water" },
+      { "text": "2 cups Grainmill Oat Flour" }
+    ],
+    "steps": [
+      { "text": "Bring water to a boil in a pot.", "order": 1 },
+      { "text": "Set aside 1/2 cup of hot water for later use.", "order": 2 },
+      { "text": "Add oat flour and stir continuously until combined.", "order": 3 },
+      { "text": "Add the reserved hot water.", "order": 4 },
+      { "text": "Cover and cook for 3 minutes on medium heat.", "order": 5 },
+      { "text": "Stir for a moment after 3 minutes.", "order": 6 },
+      { "text": "Serve with vegetables of your choice.", "order": 7 }
+    ],
+    "status": "published",
+    "productSlug": "oat-flour"
+  },
+  {
+    "title": "Yoghurt Smoothie",
+    "slug": "yoghurt-smoothie",
+    "description": "A refreshing and probiotic-rich smoothie featuring QuickBreakfast oats.",
+    "ingredients": [
+      { "text": "1/4 cup Grainmill QuickBreakfast oats" },
+      { "text": "1/2 cup yoghurt" },
+      { "text": "Chia seeds" }
+    ],
+    "steps": [
+      { "text": "Put QuickBreakfast oats into a blender.", "order": 1 },
+      { "text": "Add the yoghurt and blend until smooth.", "order": 2 },
+      { "text": "Serve warm or cold with fruits as toppings.", "order": 3 }
+    ],
+    "status": "published",
+    "productSlug": "quick-breakfast"
+  },
+  {
+    "title": "Peanut Butter Smoothie",
+    "slug": "peanut-butter-smoothie",
+    "description": "A high-protein smoothie with the rich taste of peanut butter and the goodness of jumbo oats.",
+    "ingredients": [
+      { "text": "Jumbo oats" },
+      { "text": "Peanut butter" },
+      { "text": "Water" },
+      { "text": "Apples" }
+    ],
+    "steps": [
+      { "text": "Combine all ingredients in a blender.", "order": 1 },
+      { "text": "Blend until perfectly smooth.", "order": 2 },
+      { "text": "Serve warm or cold.", "order": 3 }
+    ],
+    "status": "published",
+    "productSlug": "quick-breakfast"
+  },
+  {
+    "title": "Nut Smoothie",
+    "slug": "nut-smoothie",
+    "description": "A creamy and nutty smoothie using QuickBreakfast oats and almonds.",
+    "ingredients": [
+      { "text": "Grainmill QuickBreakfast oats" },
+      { "text": "Almonds" },
+      { "text": "Milk" },
+      { "text": "Dates" }
+    ],
+    "steps": [
+      { "text": "Add all ingredients together in a blender.", "order": 1 },
+      { "text": "Blend until smooth.", "order": 2 },
+      { "text": "Serve warm or cold.", "order": 3 }
+    ],
+    "status": "published",
+    "productSlug": "quick-breakfast"
+  },
+  {
+    "title": "Green Smoothie",
+    "slug": "green-smoothie",
+    "description": "A detoxifying and nutrient-dense green smoothie with jumbo oats and spinach.",
+    "ingredients": [
+      { "text": "Jumbo oats" },
+      { "text": "Baby spinach" },
+      { "text": "Water" },
+      { "text": "Honey" }
+    ],
+    "steps": [
+      { "text": "Add all ingredients into a blender.", "order": 1 },
+      { "text": "Blend until smooth.", "order": 2 },
+      { "text": "Serve warm or cold.", "order": 3 }
+    ],
+    "status": "published",
+    "productSlug": "quick-breakfast"
+  },
+  {
+    "title": "Quick Oatmeal Porridge",
+    "slug": "quick-oatmeal-porridge",
+    "description": "A fast and satisfying oatmeal porridge for those busy mornings.",
+    "ingredients": [
+      { "text": "1 cup Grainmill QuickBreakfast oats" },
+      { "text": "1 cup water" },
+      { "text": "1/2 cup milk" },
+      { "text": "1 teaspoon honey" },
+      { "text": "Dried fruits" }
+    ],
+    "steps": [
+      { "text": "Boil water for 5 minutes.", "order": 1 },
+      { "text": "Add QuickBreakfast oats and milk, stirring continuously for a few minutes.", "order": 2 },
+      { "text": "Set the mixture aside to cool.", "order": 3 },
+      { "text": "Add honey and top with dried fruits like raisins.", "order": 4 }
+    ],
+    "status": "published",
+    "productSlug": "quick-breakfast"
+  },
+  {
+    "title": "Oats Dessert",
+    "slug": "oats-dessert",
+    "description": "A healthy and fruity dessert made with QuickBreakfast oats.",
+    "ingredients": [
+      { "text": "1 cup Grainmill QuickBreakfast oats" },
+      { "text": "1 banana" },
+      { "text": "Berries (strawberries, blueberries, or raspberries)" },
+      { "text": "2 tablespoons honey" },
+      { "text": "2 tablespoons yoghurt" }
+    ],
+    "steps": [
+      { "text": "Mix oats, banana, and honey.", "order": 1 },
+      { "text": "Stir continuously until well combined.", "order": 2 },
+      { "text": "Portion the mixture into small dessert glasses or tins.", "order": 3 },
+      { "text": "Freeze for one hour.", "order": 4 },
+      { "text": "Remove from freezer and decorate with yoghurt and fresh berries.", "order": 5 }
+    ],
+    "status": "published",
+    "productSlug": "quick-breakfast"
+  },
+  {
+    "title": "Overnight Jumbo Oats",
+    "slug": "overnight-jumbo-oats",
+    "description": "The perfect grab-and-go breakfast prepared the night before for maximum creaminess.",
+    "ingredients": [
+      { "text": "1 cup Grainmill Jumbo Oats" },
+      { "text": "1 cup dairy or non-dairy milk" },
+      { "text": "3 tablespoons vanilla yoghurt" },
+      { "text": "2 tablespoons honey" },
+      { "text": "1 tablespoon chia seeds" },
+      { "text": "A pinch of salt" },
+      { "text": "Dried fruits (optional)" }
+    ],
+    "steps": [
+      { "text": "Add jumbo oats, milk, yoghurt, chia seeds, and salt into a jar with a lid.", "order": 1 },
+      { "text": "Stir together until well combined.", "order": 2 },
+      { "text": "Place in the fridge overnight.", "order": 3 },
+      { "text": "Serve cold or warm as preferred.", "order": 4 }
+    ],
+    "status": "published",
+    "productSlug": "jumbo-oats"
+  },
+  {
+    "title": "Toasted Oats in a Pan",
+    "slug": "toasted-oats-in-a-pan",
+    "description": "Crunchy toasted oats with seeds and nuts, prepared quickly on the stovetop.",
+    "ingredients": [
+      { "text": "1 cup Grainmill Jumbo Oats" },
+      { "text": "2 tablespoons butter or coconut oil" },
+      { "text": "20g pumpkin seeds" },
+      { "text": "20g sunflower seeds" },
+      { "text": "20g cashew nuts" },
+      { "text": "20g dried fruits (mangoes and pineapples)" }
+    ],
+    "steps": [
+      { "text": "Melt butter or coconut oil in a pan.", "order": 1 },
+      { "text": "Add jumbo oats and stir for toasting.", "order": 2 },
+      { "text": "Add sunflower seeds, pumpkin seeds, and cashew nuts, continuing to stir.", "order": 3 },
+      { "text": "Serve and let cool for 15 minutes.", "order": 4 },
+      { "text": "Add preferred dried fruits as toppings.", "order": 5 }
+    ],
+    "status": "published",
+    "productSlug": "jumbo-oats"
+  },
+  {
+    "title": "Jumbo Oats Granola",
+    "slug": "jumbo-oats-granola",
+    "description": "Homemade granola with jumbo oats, seeds, and raisins for a perfect breakfast crunch.",
+    "ingredients": [
+      { "text": "Grainmill Jumbo Oats" },
+      { "text": "Sunflower seeds" },
+      { "text": "Melted coconut oil" },
+      { "text": "Pumpkin seeds" },
+      { "text": "Sultanas" },
+      { "text": "Raisins" }
+    ],
+    "steps": [
+      { "text": "Mix jumbo oats, sunflower seeds, and melted coconut oil well.", "order": 1 },
+      { "text": "Transfer the mixture onto a baking tray lined with parchment paper.", "order": 2 },
+      { "text": "Bake at 180 degrees until golden brown.", "order": 3 },
+      { "text": "Add dry ingredients like sultanas and raisins.", "order": 4 },
+      { "text": "Store in an airtight jar.", "order": 5 },
+      { "text": "Serve with yoghurt and fresh fruits.", "order": 6 }
+    ],
+    "status": "published",
+    "productSlug": "jumbo-oats"
+  },
+  {
+    "title": "Steel Cut Oats Porridge",
+    "slug": "steel-cut-oats-porridge",
+    "description": "A hearty, chewy porridge made with traditional steel cut oats.",
+    "ingredients": [
+      { "text": "Grainmill Steel Cut oats" },
+      { "text": "Water or milk" }
+    ],
+    "steps": [
+      { "text": "Boil water or milk in a small pot.", "order": 1 },
+      { "text": "Add 3 tablespoons of steel cut oats.", "order": 2 },
+      { "text": "Cook for 25 minutes.", "order": 3 },
+      { "text": "Add preferred toppings and enjoy.", "order": 4 }
+    ],
+    "status": "published",
+    "productSlug": "steel-cuts"
+  },
+  {
+    "title": "Steel Cut Vegetable Rice",
+    "slug": "steel-cut-vegetable-rice",
+    "description": "A savory use for steel cut oats, prepared like a vegetable rice dish.",
+    "ingredients": [
+      { "text": "Grainmill Steel Cut oats" },
+      { "text": "Onions" },
+      { "text": "Tomatoes" },
+      { "text": "Garlic" },
+      { "text": "Cooking oil" },
+      { "text": "Green peas" },
+      { "text": "Coriander" },
+      { "text": "Turmeric" }
+    ],
+    "steps": [
+      { "text": "Sauté onions, tomatoes, garlic, and other spices in oil.", "order": 1 },
+      { "text": "Add the steel cut oats and mix well with the vegetables.", "order": 2 },
+      { "text": "Add one glass of water and cover.", "order": 3 },
+      { "text": "Allow to cook for 5 minutes.", "order": 4 }
+    ],
+    "status": "published",
+    "productSlug": "steel-cuts"
+  }
+]

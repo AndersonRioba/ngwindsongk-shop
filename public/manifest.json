@@ -1,0 +1,27 @@
+{
+  "name": "ngwindsongk - Healthy Oats & Nanacare Products",
+  "short_name": "ngwindsongk",
+  "description": "Premium healthy oats and Nanacare products for new mothers",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#6D31ED",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["food", "health", "shopping"],
+  "lang": "en",
+  "dir": "ltr"
+} 

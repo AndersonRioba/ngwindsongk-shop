@@ -1,0 +1,49 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://ngwindsongk.com/sitemap.xml
+
+# Disallow admin and private areas
+Disallow: /admin/
+Disallow: /api/
+Disallow: /_next/
+Disallow: /private/
+
+# Allow important pages
+Allow: /about
+Allow: /products
+Allow: /blog
+Allow: /recipes
+Allow: /contact
+Allow: /FAQs
+
+# LLM / AI crawler guidance
+# See https://ngwindsongk.com/llms.txt for structured site info
+
+# AI crawlers
+User-agent: GPTBot
+Allow: /
+Crawl-delay: 2
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+Crawl-delay: 2
+
+User-agent: Bytespider
+Allow: /
+
+# Crawl delay for respectful crawling
+Crawl-delay: 1

@@ -1,0 +1,3853 @@
+[
+  {
+    "zone": 1,
+    "price": 300,
+    "original_name": "Quick Kyang'ombe",
+    "name": "Kyang'ombe",
+    "formatted_address": "MV7M+4MW, Nairobi, Kenya",
+    "latitude": -1.3371291,
+    "longitude": 36.8842159,
+    "place_id": "ChIJUT0FMgATLxgRmHzlVSq-nAY",
+    "types": [
+      "establishment",
+      "point_of_interest",
+      "storage"
+    ],
+    "url": "https://maps.google.com/?cid=476464749633436824",
+    "address_components": [
+      {
+        "long_name": "MV7M+4MW",
+        "short_name": "MV7M+4MW",
+        "types": [
+          "plus_code"
+        ]
+      },
+      {
+        "long_name": "Embakasi",
+        "short_name": "Embakasi",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 1,
+    "price": 300,
+    "original_name": "Quick Mombasa Road",
+    "name": "Quick Mart Mombasa Rd",
+    "formatted_address": "Mombasa Road, Nairobi, Kenya",
+    "latitude": -1.3223804,
+    "longitude": 36.8444999,
+    "place_id": "ChIJEwFh6A0RLxgRUj3V23o8nks",
+    "types": [
+      "establishment",
+      "food",
+      "grocery_or_supermarket",
+      "point_of_interest",
+      "store",
+      "supermarket"
+    ],
+    "url": "https://maps.google.com/?cid=5448859097536740690",
+    "address_components": [
+      {
+        "long_name": "Mombasa Road",
+        "short_name": "Mombasa Road",
+        "types": [
+          "route"
+        ]
+      },
+      {
+        "long_name": "Embakasi",
+        "short_name": "Embakasi",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 1,
+    "price": 300,
+    "original_name": "Naivas HQ",
+    "name": "Naivas Supermaket- Headquarters",
+    "formatted_address": "Road C, Nairobi, Kenya",
+    "latitude": -1.3266579,
+    "longitude": 36.8679462,
+    "place_id": "ChIJ11mcQ_URLxgRWL7GYkS8EsA",
+    "types": [
+      "establishment",
+      "point_of_interest"
+    ],
+    "url": "https://maps.google.com/?cid=13840331606763945560",
+    "address_components": [
+      {
+        "long_name": "Road C",
+        "short_name": "Road C",
+        "types": [
+          "route"
+        ]
+      },
+      {
+        "long_name": "Embakasi",
+        "short_name": "Embakasi",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 1,
+    "price": 300,
+    "original_name": "Cleanshelf South B",
+    "name": "Cleanshelf Supermarket South B",
+    "formatted_address": "South B, Nairobi, Kenya",
+    "latitude": -1.3115128,
+    "longitude": 36.8366241,
+    "place_id": "ChIJ76k7xzsRLxgRfnLepeAFQUI",
+    "types": [
+      "bakery",
+      "electronics_store",
+      "establishment",
+      "food",
+      "furniture_store",
+      "grocery_or_supermarket",
+      "home_goods_store",
+      "point_of_interest",
+      "store",
+      "supermarket"
+    ],
+    "url": "https://maps.google.com/?cid=4774103542403068542",
+    "address_components": [
+      {
+        "long_name": "South B",
+        "short_name": "South B",
+        "types": [
+          "neighborhood",
+          "political"
+        ]
+      },
+      {
+        "long_name": "southlink",
+        "short_name": "southlink",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      },
+      {
+        "long_name": "00217",
+        "short_name": "00217",
+        "types": [
+          "postal_code"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 1,
+    "price": 300,
+    "original_name": "Quick TM",
+    "name": "Quick Mart Tom Mboya",
+    "formatted_address": "PR8G+G4G Kai Plaza, Tom Mboya St, Nairobi, Kenya",
+    "latitude": -1.2836977,
+    "longitude": 36.825346,
+    "place_id": "ChIJvaOmnwARLxgR4Cm4rPYbCfY",
+    "types": [
+      "establishment",
+      "food",
+      "grocery_or_supermarket",
+      "point_of_interest",
+      "store",
+      "supermarket"
+    ],
+    "url": "https://maps.google.com/?cid=17728732154394323424",
+    "address_components": [
+      {
+        "long_name": "Kai Plaza",
+        "short_name": "Kai Plaza",
+        "types": [
+          "premise"
+        ]
+      },
+      {
+        "long_name": "PR8G+G4G",
+        "short_name": "PR8G+G4G",
+        "types": [
+          "plus_code"
+        ]
+      },
+      {
+        "long_name": "Tom Mboya Street",
+        "short_name": "Tom Mboya St",
+        "types": [
+          "route"
+        ]
+      },
+      {
+        "long_name": "Nairobi Central",
+        "short_name": "Nairobi Central",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      },
+      {
+        "long_name": "00100",
+        "short_name": "00100",
+        "types": [
+          "postal_code"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 1,
+    "price": 300,
+    "original_name": "Lang'ata",
+    "name": "Langata",
+    "formatted_address": "Langata, Nairobi, Kenya",
+    "latitude": -1.3640944,
+    "longitude": 36.7476257,
+    "place_id": "ChIJs8qbUuIELxgRwKRaovlVUbg",
+    "types": [
+      "neighborhood",
+      "political"
+    ],
+    "url": "https://maps.google.com/?cid=13281491306751370432",
+    "address_components": [
+      {
+        "long_name": "Langata",
+        "short_name": "Langata",
+        "types": [
+          "neighborhood",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Langata",
+        "short_name": "Langata",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 1,
+    "price": 300,
+    "original_name": "Allwin Industrial Area",
+    "name": "Allwin Agencies Kenya Limited",
+    "formatted_address": "Viwandani Enterprise Road-Likoni Road Goddown F, 35, Nairobi, Kenya",
+    "latitude": -1.3054735,
+    "longitude": 36.8380673,
+    "place_id": "ChIJz9FIBHcRLxgRXtac5SG6SIo",
+    "types": [
+      "establishment",
+      "point_of_interest"
+    ],
+    "url": "https://maps.google.com/?cid=9964418830306170462",
+    "address_components": [
+      {
+        "long_name": "Viwandani Enterprise Road-Likoni Road Goddown F, 35",
+        "short_name": "",
+        "types": []
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi South",
+        "short_name": "Nairobi South",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 1,
+    "price": 300,
+    "original_name": "Naivas Imara Daima",
+    "name": "Naivas Foodmarket - Imaara Mall",
+    "formatted_address": "Mombasa Road, Nairobi, Kenya",
+    "latitude": -1.3276955,
+    "longitude": 36.8816727,
+    "place_id": "ChIJRTlHDI4TLxgR56sAVh9ZPjY",
+    "types": [
+      "establishment",
+      "food",
+      "grocery_or_supermarket",
+      "point_of_interest",
+      "store"
+    ],
+    "url": "https://maps.google.com/?cid=3908659517725912039",
+    "address_components": [
+      {
+        "long_name": "Mombasa Road",
+        "short_name": "",
+        "types": []
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Embakasi",
+        "short_name": "Embakasi",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      },
+      {
+        "long_name": "00100",
+        "short_name": "00100",
+        "types": [
+          "postal_code"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 1,
+    "price": 300,
+    "original_name": "CBD Deliveries & Collections without Trolley",
+    "name": "Deliveroo Courier & Fulfillment Services",
+    "formatted_address": "Westlands, Nairobi, Kenya",
+    "latitude": -1.2593949,
+    "longitude": 36.8007134,
+    "place_id": "ChIJ85yi2QwaLxgROF9tNF4UdOI",
+    "types": [
+      "establishment",
+      "point_of_interest",
+      "storage"
+    ],
+    "url": "https://maps.google.com/?cid=16317689744709214008",
+    "address_components": [
+      {
+        "long_name": "Westlands",
+        "short_name": "Westlands",
+        "types": [
+          "neighborhood",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Spring Valley",
+        "short_name": "Spring Valley",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 1,
+    "price": 300,
+    "original_name": "Maji House",
+    "name": "Ministry of Water, Sanitation and Irrigation (MAJI HOUSE)",
+    "formatted_address": "PR47+H2Q, Ngong Rd, Nairobi, Kenya",
+    "latitude": -1.2935431,
+    "longitude": 36.8126201,
+    "place_id": "ChIJvRx24cIQLxgR24DCR5zLkQ0",
+    "types": [
+      "establishment",
+      "point_of_interest"
+    ],
+    "url": "https://maps.google.com/?cid=977786466195374299",
+    "address_components": [
+      {
+        "long_name": "PR47+H2Q",
+        "short_name": "PR47+H2Q",
+        "types": [
+          "plus_code"
+        ]
+      },
+      {
+        "long_name": "Ngong Road",
+        "short_name": "Ngong Rd",
+        "types": [
+          "route"
+        ]
+      },
+      {
+        "long_name": "Kilimani",
+        "short_name": "Kilimani",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 1,
+    "price": 300,
+    "original_name": "Paper House/KEBS",
+    "name": "The Paper House of Kenya Ltd",
+    "formatted_address": "Off Sasio Rd, Nairobi, Kenya",
+    "latitude": -1.3091877,
+    "longitude": 36.8696627,
+    "place_id": "ChIJd8vPkYcTLxgRpDLs4KF71aI",
+    "types": [
+      "establishment",
+      "point_of_interest"
+    ],
+    "url": "https://maps.google.com/?cid=11733420339377222308",
+    "address_components": [
+      {
+        "long_name": "Off",
+        "short_name": "Off",
+        "types": [
+          "street_number"
+        ]
+      },
+      {
+        "long_name": "Sasio Road",
+        "short_name": "Sasio Rd",
+        "types": [
+          "route"
+        ]
+      },
+      {
+        "long_name": "Industrial Area",
+        "short_name": "Industrial Area",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 1,
+    "price": 300,
+    "original_name": "South C",
+    "name": "South C",
+    "formatted_address": "South C, Nairobi, Kenya",
+    "latitude": -1.3222736,
+    "longitude": 36.8288933,
+    "place_id": "ChIJD4lrG7ERLxgRef2uDdWyjB8",
+    "types": [
+      "neighborhood",
+      "political"
+    ],
+    "url": "https://maps.google.com/?cid=2273388540042607993",
+    "address_components": [
+      {
+        "long_name": "South C",
+        "short_name": "South C",
+        "types": [
+          "neighborhood",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi West",
+        "short_name": "Nairobi West",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 2,
+    "price": 350,
+    "original_name": "Quick Pipeline",
+    "name": "Quickmart Pipeline",
+    "formatted_address": "MVJV+795, Off Outer Ring Rd, Nairobi, Kenya",
+    "latitude": -1.3190136,
+    "longitude": 36.8938328,
+    "place_id": "ChIJgTsee1QTLxgRDGJUxWvoraM",
+    "types": [
+      "establishment",
+      "food",
+      "grocery_or_supermarket",
+      "point_of_interest",
+      "store"
+    ],
+    "url": "https://maps.google.com/?cid=11794338548722983436",
+    "address_components": [
+      {
+        "long_name": "MVJV+795",
+        "short_name": "MVJV+795",
+        "types": [
+          "plus_code"
+        ]
+      },
+      {
+        "long_name": "Off",
+        "short_name": "Off",
+        "types": [
+          "street_number"
+        ]
+      },
+      {
+        "long_name": "Outer Ring Road",
+        "short_name": "Outer Ring Rd",
+        "types": [
+          "route"
+        ]
+      },
+      {
+        "long_name": "Embakasi",
+        "short_name": "Embakasi",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 2,
+    "price": 350,
+    "original_name": "Quick Fedha",
+    "name": "Quickmart - Fedha",
+    "formatted_address": "E.A.B.S Estate, Nairobi, Kenya",
+    "latitude": -1.3136463,
+    "longitude": 36.8949062,
+    "place_id": "ChIJrdWOHdUTLxgRwwC3-M3m8uI",
+    "types": [
+      "establishment",
+      "food",
+      "grocery_or_supermarket",
+      "point_of_interest",
+      "store",
+      "supermarket"
+    ],
+    "url": "https://maps.google.com/?cid=16353386969251119299",
+    "address_components": [
+      {
+        "long_name": "E.A.B.S Estate",
+        "short_name": "E.A.B.S Estate",
+        "types": [
+          "neighborhood",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Embakasi",
+        "short_name": "Embakasi",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 2,
+    "price": 350,
+    "original_name": "Quick Outering 1",
+    "name": "Quickmart Outering 1",
+    "formatted_address": "Pipeline, Outer Ring Rd, Nairobi, Kenya",
+    "latitude": -1.3169107,
+    "longitude": 36.8958962,
+    "place_id": "ChIJv2SN5W8TLxgRJANbmSONeDg",
+    "types": [
+      "establishment",
+      "food",
+      "grocery_or_supermarket",
+      "point_of_interest",
+      "store",
+      "supermarket"
+    ],
+    "url": "https://maps.google.com/?cid=4069157447365493540",
+    "address_components": [
+      {
+        "long_name": "Pipeline",
+        "short_name": "Pipeline",
+        "types": [
+          "establishment",
+          "point_of_interest"
+        ]
+      },
+      {
+        "long_name": "Outer Ring Road",
+        "short_name": "Outer Ring Rd",
+        "types": [
+          "route"
+        ]
+      },
+      {
+        "long_name": "Embakasi",
+        "short_name": "Embakasi",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 2,
+    "price": 350,
+    "original_name": "Quick Kilimani",
+    "name": "QUICK MART KILIMANI",
+    "formatted_address": "360 Kilimani Rd, Nairobi, Kenya",
+    "latitude": -1.2983013,
+    "longitude": 36.7832031,
+    "place_id": "ChIJ57Nx5fYRLxgR-aztan97z_I",
+    "types": [
+      "establishment",
+      "food",
+      "grocery_or_supermarket",
+      "point_of_interest",
+      "store",
+      "supermarket"
+    ],
+    "url": "https://maps.google.com/?cid=17496338864542690553",
+    "address_components": [
+      {
+        "long_name": "360",
+        "short_name": "360",
+        "types": [
+          "street_number"
+        ]
+      },
+      {
+        "long_name": "Kilimani Road",
+        "short_name": "Kilimani Rd",
+        "types": [
+          "route"
+        ]
+      },
+      {
+        "long_name": "Kilimani",
+        "short_name": "Kilimani",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      },
+      {
+        "long_name": "47580",
+        "short_name": "47580",
+        "types": [
+          "postal_code"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 2,
+    "price": 350,
+    "original_name": "Chandarana Yaya",
+    "name": "Chandarana Foodplus Supermarket (Yaya)",
+    "formatted_address": "Ground Floor, Yaya Centre, No. 209/ 18670 Argwings Kodhek Rd, Nairobi, Kenya",
+    "latitude": -1.2932792,
+    "longitude": 36.7877419,
+    "place_id": "ChIJC9lu26MQLxgRJSBzlKcVI6s",
+    "types": [
+      "establishment",
+      "food",
+      "grocery_or_supermarket",
+      "point_of_interest",
+      "store",
+      "supermarket"
+    ],
+    "url": "https://maps.google.com/?cid=12331724014164844581",
+    "address_components": [
+      {
+        "long_name": "Ground Floor, Yaya Centre",
+        "short_name": "",
+        "types": []
+      },
+      {
+        "long_name": "No. 209/ 18670",
+        "short_name": "No. 209/ 18670",
+        "types": [
+          "street_number"
+        ]
+      },
+      {
+        "long_name": "Argwings Kodhek Road",
+        "short_name": "Argwings Kodhek Rd",
+        "types": [
+          "route"
+        ]
+      },
+      {
+        "long_name": "Kilimani",
+        "short_name": "Kilimani",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 2,
+    "price": 350,
+    "original_name": "Chandarana Adlife",
+    "name": "Chandarana Foodplus Supermarket (Adlife Plaza Branch)",
+    "formatted_address": "Ground Floor, Adlife Plaza, Ring Rd Kilimani, Nairobi, Kenya",
+    "latitude": -1.2945759,
+    "longitude": 36.7872007,
+    "place_id": "ChIJPaiNiaEQLxgR9uai7LoHaJQ",
+    "types": [
+      "bakery",
+      "establishment",
+      "food",
+      "grocery_or_supermarket",
+      "liquor_store",
+      "point_of_interest",
+      "store",
+      "supermarket"
+    ],
+    "url": "https://maps.google.com/?cid=10693805814606653174",
+    "address_components": [
+      {
+        "long_name": "Ground Floor",
+        "short_name": "",
+        "types": []
+      },
+      {
+        "long_name": "Adlife Plaza",
+        "short_name": "Adlife Plaza",
+        "types": [
+          "premise"
+        ]
+      },
+      {
+        "long_name": "Ring Road Kilimani",
+        "short_name": "Ring Rd Kilimani",
+        "types": [
+          "route"
+        ]
+      },
+      {
+        "long_name": "Kilimani",
+        "short_name": "Kilimani",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 2,
+    "price": 350,
+    "original_name": "Quick Chaka",
+    "name": "Quick Mart Argwings",
+    "formatted_address": "43011, Nairobi, Kenya",
+    "latitude": -1.2930764,
+    "longitude": 36.7928108,
+    "place_id": "ChIJMWGW4QQRLxgRIUm1V3MUzLU",
+    "types": [
+      "establishment",
+      "food",
+      "grocery_or_supermarket",
+      "point_of_interest",
+      "store",
+      "supermarket"
+    ],
+    "url": "https://maps.google.com/?cid=13099867901739223329",
+    "address_components": [
+      {
+        "long_name": "43011",
+        "short_name": "",
+        "types": []
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kilimani",
+        "short_name": "Kilimani",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      },
+      {
+        "long_name": "00200",
+        "short_name": "00200",
+        "types": [
+          "postal_code"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 2,
+    "price": 350,
+    "original_name": "Quick Kileleshwa",
+    "name": "Quick Mart Kileleshwa",
+    "formatted_address": "Nairobi, Kenya",
+    "latitude": -1.2741853,
+    "longitude": 36.7888466,
+    "place_id": "ChIJz6KPG2kXLxgR4DRWLV0xSVk",
+    "types": [
+      "establishment",
+      "food",
+      "grocery_or_supermarket",
+      "point_of_interest",
+      "store"
+    ],
+    "url": "https://maps.google.com/?cid=6433727818937808096",
+    "address_components": [
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kileleshwa",
+        "short_name": "Kileleshwa",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 2,
+    "price": 350,
+    "original_name": "Quick Lavington",
+    "name": "Quick Mart Lavington",
+    "formatted_address": "WestField Mall, 34 Gitanga Rd, Nairobi, Kenya",
+    "latitude": -1.2899574,
+    "longitude": 36.7735556,
+    "place_id": "ChIJdw_ZNIAbLxgR43gPy4WJLX8",
+    "types": [
+      "establishment",
+      "food",
+      "grocery_or_supermarket",
+      "point_of_interest",
+      "shopping_mall",
+      "store"
+    ],
+    "url": "https://maps.google.com/?cid=9164132024499271907",
+    "address_components": [
+      {
+        "long_name": "WestField Mall",
+        "short_name": "WestField Mall",
+        "types": [
+          "establishment",
+          "point_of_interest"
+        ]
+      },
+      {
+        "long_name": "34",
+        "short_name": "34",
+        "types": [
+          "street_number"
+        ]
+      },
+      {
+        "long_name": "Gitanga Road",
+        "short_name": "Gitanga Rd",
+        "types": [
+          "route"
+        ]
+      },
+      {
+        "long_name": "Maziwa",
+        "short_name": "Maziwa",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 2,
+    "price": 350,
+    "original_name": "Westlands",
+    "name": "Westlands",
+    "formatted_address": "Westlands, Nairobi, Kenya",
+    "latitude": -1.2675001,
+    "longitude": 36.812022,
+    "place_id": "ChIJ550fCjwXLxgRyC5_H9-ELK0",
+    "types": [
+      "neighborhood",
+      "political"
+    ],
+    "url": "https://maps.google.com/?cid=12478494761377803976",
+    "address_components": [
+      {
+        "long_name": "Westlands",
+        "short_name": "Westlands",
+        "types": [
+          "neighborhood",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Highridge",
+        "short_name": "Highridge",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 2,
+    "price": 350,
+    "original_name": "Chandarana The Well",
+    "name": "Chandarana Foodplus Supermarket (The Well Karen)",
+    "formatted_address": "The Well Mall Karen Langata Road Ground Foor, Langata Rd, Nairobi, Kenya",
+    "latitude": -1.3405594,
+    "longitude": 36.7568134,
+    "place_id": "ChIJL0xbpC4bLxgRpo-Wrcd5Y2o",
+    "types": [
+      "establishment",
+      "food",
+      "grocery_or_supermarket",
+      "point_of_interest",
+      "store",
+      "supermarket"
+    ],
+    "url": "https://maps.google.com/?cid=7666104889232494502",
+    "address_components": [
+      {
+        "long_name": "The Well Mall Karen Langata Road Ground Foor",
+        "short_name": "",
+        "types": []
+      },
+      {
+        "long_name": "Langata Road",
+        "short_name": "Langata Rd",
+        "types": [
+          "route"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 2,
+    "price": 350,
+    "original_name": "Ngara",
+    "name": "Ngara",
+    "formatted_address": "Ngara, Nairobi, Kenya",
+    "latitude": -1.2781236,
+    "longitude": 36.8304167,
+    "place_id": "ChIJdw9D5dYWLxgR7nPX0e_FUU0",
+    "types": [
+      "neighborhood",
+      "political"
+    ],
+    "url": "https://maps.google.com/?cid=5571451847842427886",
+    "address_components": [
+      {
+        "long_name": "Ngara",
+        "short_name": "Ngara",
+        "types": [
+          "neighborhood",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Ngara East",
+        "short_name": "Ngara East",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 3,
+    "price": 400,
+    "original_name": "Karen",
+    "name": "Karen",
+    "formatted_address": "Karen, Nairobi, Kenya",
+    "latitude": -1.3239941,
+    "longitude": 36.6678026,
+    "place_id": "ChIJS9ZpmIAcLxgR9RN_pwRWmxk",
+    "types": [
+      "neighborhood",
+      "political"
+    ],
+    "url": "https://maps.google.com/?cid=1845163050328331253",
+    "address_components": [
+      {
+        "long_name": "Karen",
+        "short_name": "Karen",
+        "types": [
+          "neighborhood",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Karen",
+        "short_name": "Karen",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 3,
+    "price": 400,
+    "original_name": "Parklands",
+    "name": "Parklands",
+    "formatted_address": "Parklands, Nairobi, Kenya",
+    "latitude": -1.2598822,
+    "longitude": 36.8178918,
+    "place_id": "ChIJcX4pnBkXLxgR1JZIu0zCGXA",
+    "types": [
+      "political",
+      "sublocality",
+      "sublocality_level_1"
+    ],
+    "url": "https://maps.google.com/?cid=8077701041481094868",
+    "address_components": [
+      {
+        "long_name": "Parklands",
+        "short_name": "Parklands",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 3,
+    "price": 400,
+    "original_name": "BuruBuru",
+    "name": "Buruburu",
+    "formatted_address": "Buruburu, Nairobi, Kenya",
+    "latitude": -1.2922481,
+    "longitude": 36.8815479,
+    "place_id": "ChIJ0SusqukTLxgRqBCp3bXkXaA",
+    "types": [
+      "neighborhood",
+      "political"
+    ],
+    "url": "https://maps.google.com/?cid=11555643688661618856",
+    "address_components": [
+      {
+        "long_name": "Buruburu",
+        "short_name": "Buruburu",
+        "types": [
+          "neighborhood",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Hamza",
+        "short_name": "Hamza",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 3,
+    "price": 400,
+    "original_name": "Donholm",
+    "name": "Donholm",
+    "formatted_address": "Donholm, Nairobi, Kenya",
+    "latitude": -1.2939161,
+    "longitude": 36.8971181,
+    "place_id": "ChIJ34Wjlb0TLxgRqayrLuXDA_Y",
+    "types": [
+      "political",
+      "sublocality",
+      "sublocality_level_1"
+    ],
+    "url": "https://maps.google.com/?cid=17727227947358334121",
+    "address_components": [
+      {
+        "long_name": "Donholm",
+        "short_name": "Donholm",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 3,
+    "price": 400,
+    "original_name": "Syokimau",
+    "name": "Syokimau",
+    "formatted_address": "Syokimau, Nairobi, Kenya",
+    "latitude": -1.3592272,
+    "longitude": 36.9379845,
+    "place_id": "ChIJP9zAuSQNLxgRyoZAFcMJh5w",
+    "types": [
+      "political",
+      "sublocality",
+      "sublocality_level_1"
+    ],
+    "url": "https://maps.google.com/?cid=11278994525252519626",
+    "address_components": [
+      {
+        "long_name": "Syokimau",
+        "short_name": "Syokimau",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Eastern",
+        "short_name": "Eastern",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 3,
+    "price": 400,
+    "original_name": "Pangani",
+    "name": "Pangani",
+    "formatted_address": "Pangani, Nairobi, Kenya",
+    "latitude": -1.2667224,
+    "longitude": 36.8398293,
+    "place_id": "ChIJa3YPnMMWLxgRdkMIF6aNjMc",
+    "types": [
+      "neighborhood",
+      "political"
+    ],
+    "url": "https://maps.google.com/?cid=14379023454777656182",
+    "address_components": [
+      {
+        "long_name": "Pangani",
+        "short_name": "Pangani",
+        "types": [
+          "neighborhood",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Pangani",
+        "short_name": "Pangani",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 3,
+    "price": 400,
+    "original_name": "Embakasi",
+    "name": "Embakasi",
+    "formatted_address": "Embakasi, Nairobi, Kenya",
+    "latitude": -1.3237858,
+    "longitude": 36.8999616,
+    "place_id": "ChIJ93OvNGoSLxgR-NLPg-Nmkhg",
+    "types": [
+      "political",
+      "sublocality",
+      "sublocality_level_1"
+    ],
+    "url": "https://maps.google.com/?cid=1770590730865070840",
+    "address_components": [
+      {
+        "long_name": "Embakasi",
+        "short_name": "Embakasi",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 4,
+    "price": 450,
+    "original_name": "Outering 2",
+    "name": "Jepal Investment Limited",
+    "formatted_address": "Nacim Building, 2nd Floor Outer Ring Rd, Nairobi, Kenya",
+    "latitude": -1.258532,
+    "longitude": 36.8793389,
+    "place_id": "ChIJvcUpSTsULxgRq2b1SzAFrt8",
+    "types": [
+      "electrician",
+      "establishment",
+      "point_of_interest"
+    ],
+    "url": "https://maps.google.com/?cid=16117825821396526763",
+    "address_components": [
+      {
+        "long_name": "Nacim Building",
+        "short_name": "Nacim Building",
+        "types": [
+          "premise"
+        ]
+      },
+      {
+        "long_name": "2nd Floor",
+        "short_name": "2nd Floor",
+        "types": [
+          "street_number"
+        ]
+      },
+      {
+        "long_name": "Outer Ring Road",
+        "short_name": "Outer Ring Rd",
+        "types": [
+          "route"
+        ]
+      },
+      {
+        "long_name": "Kariobangi North",
+        "short_name": "Kariobangi North",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 4,
+    "price": 450,
+    "original_name": "Komarock",
+    "name": "Komarocks",
+    "formatted_address": "Komarocks, Nairobi, Kenya",
+    "latitude": -1.2689365,
+    "longitude": 36.907205,
+    "place_id": "ChIJ6fQssmIULxgR0m_Xf8adr-4",
+    "types": [
+      "neighborhood",
+      "political"
+    ],
+    "url": "https://maps.google.com/?cid=17199138977825124306",
+    "address_components": [
+      {
+        "long_name": "Komarocks",
+        "short_name": "Komarocks",
+        "types": [
+          "neighborhood",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Koma Rock Estate",
+        "short_name": "Koma Rock Estate",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 4,
+    "price": 450,
+    "original_name": "Muthainga",
+    "name": "Muthaiga",
+    "formatted_address": "Muthaiga, Nairobi, Kenya",
+    "latitude": -1.2500849,
+    "longitude": 36.8213209,
+    "place_id": "ChIJIV4W5asXLxgRcXZlOTG4B-A",
+    "types": [
+      "political",
+      "sublocality",
+      "sublocality_level_1"
+    ],
+    "url": "https://maps.google.com/?cid=16143073910888691313",
+    "address_components": [
+      {
+        "long_name": "Muthaiga",
+        "short_name": "Muthaiga",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 5,
+    "price": 500,
+    "original_name": "Mulolongo",
+    "name": "Mlolongo",
+    "formatted_address": "Mlolongo, Kenya",
+    "latitude": -1.3887197,
+    "longitude": 36.9384886,
+    "place_id": "ChIJr5jOzroMLxgRUR1CRJH0zMI",
+    "types": [
+      "locality",
+      "political"
+    ],
+    "url": "https://maps.google.com/?cid=14036863043359612241",
+    "address_components": [
+      {
+        "long_name": "Mlolongo",
+        "short_name": "Mlolongo",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Machakos County",
+        "short_name": "Machakos County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 5,
+    "price": 500,
+    "original_name": "Signature",
+    "name": "Signature",
+    "formatted_address": "Kilimani Kindaruma Road Commodore Office, Nairobi, Kenya",
+    "latitude": -1.2860449,
+    "longitude": 36.8266234,
+    "place_id": "ChIJt82KnSgRLxgRIKKBfV7w5SY",
+    "types": [
+      "establishment",
+      "food",
+      "point_of_interest",
+      "restaurant"
+    ],
+    "url": "https://maps.google.com/?cid=2802910631731241504",
+    "address_components": [
+      {
+        "long_name": "Kilimani Kindaruma Road Commodore Office",
+        "short_name": "",
+        "types": []
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "City Square",
+        "short_name": "City Square",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 5,
+    "price": 500,
+    "original_name": "Rongai",
+    "name": "Ongata Rongai",
+    "formatted_address": "Ongata Rongai, Kenya",
+    "latitude": -1.3938636,
+    "longitude": 36.7442377,
+    "place_id": "ChIJjU75UM8FLxgRqYz95laWwlE",
+    "types": [
+      "locality",
+      "political"
+    ],
+    "url": "https://maps.google.com/?cid=5891436562540760233",
+    "address_components": [
+      {
+        "long_name": "Ongata Rongai",
+        "short_name": "Ongata Rongai",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 5,
+    "price": 500,
+    "original_name": "Waithaka",
+    "name": "Waithaka",
+    "formatted_address": "Waithaka, Nairobi, Kenya",
+    "latitude": -1.281995,
+    "longitude": 36.7139515,
+    "place_id": "ChIJAV8UQOEbLxgRemvI06tCLiA",
+    "types": [
+      "political",
+      "sublocality",
+      "sublocality_level_1"
+    ],
+    "url": "https://maps.google.com/?cid=2318864163902352250",
+    "address_components": [
+      {
+        "long_name": "Waithaka",
+        "short_name": "Waithaka",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 5,
+    "price": 500,
+    "original_name": "Mountain View",
+    "name": "Mountain View",
+    "formatted_address": "Mountain View, Nairobi, Kenya",
+    "latitude": -1.2675543,
+    "longitude": 36.7307641,
+    "place_id": "ChIJVTG5IXEZLxgRVfvDkV7PzmE",
+    "types": [
+      "administrative_area_level_4",
+      "political"
+    ],
+    "url": "https://maps.google.com/?cid=7047798471960820565",
+    "address_components": [
+      {
+        "long_name": "Mountain View",
+        "short_name": "Mountain View",
+        "types": [
+          "administrative_area_level_4",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kangemi",
+        "short_name": "Kangemi",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 5,
+    "price": 500,
+    "original_name": "UN",
+    "name": "United Nations Office at Nairobi (UNON)",
+    "formatted_address": "United Nations, United Nations Ave, Westlands, Kenya",
+    "latitude": -1.233077,
+    "longitude": 36.815143,
+    "place_id": "ChIJO-VWJw4XLxgRGvpDYuBFhZQ",
+    "types": [
+      "establishment",
+      "point_of_interest"
+    ],
+    "url": "https://maps.google.com/?cid=10702036919539464730",
+    "address_components": [
+      {
+        "long_name": "United Nations",
+        "short_name": "",
+        "types": []
+      },
+      {
+        "long_name": "United Nations Avenue",
+        "short_name": "United Nations Ave",
+        "types": [
+          "route"
+        ]
+      },
+      {
+        "long_name": "Parklands",
+        "short_name": "Parklands",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Westlands",
+        "short_name": "Westlands",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 5,
+    "price": 500,
+    "original_name": "Ruaka",
+    "name": "Ruaka",
+    "formatted_address": "Ruaka, Kenya",
+    "latitude": -1.2058128,
+    "longitude": 36.7795319,
+    "place_id": "ChIJ-eUfbrMiLxgRcSr0dgiCfeo",
+    "types": [
+      "locality",
+      "political"
+    ],
+    "url": "https://maps.google.com/?cid=16896804349831031409",
+    "address_components": [
+      {
+        "long_name": "Ruaka",
+        "short_name": "Ruaka",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kiambu County",
+        "short_name": "Kiambu County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 5,
+    "price": 500,
+    "original_name": "Ridgeways",
+    "name": "Ridgeways",
+    "formatted_address": "Ridgeways, Nairobi, Kenya",
+    "latitude": -1.2275959,
+    "longitude": 36.8486748,
+    "place_id": "ChIJwabimxMWLxgRikQFE6ahZBY",
+    "types": [
+      "neighborhood",
+      "political"
+    ],
+    "url": "https://maps.google.com/?cid=1613592301161235594",
+    "address_components": [
+      {
+        "long_name": "Ridgeways",
+        "short_name": "Ridgeways",
+        "types": [
+          "neighborhood",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Roysambu",
+        "short_name": "Roysambu",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 5,
+    "price": 500,
+    "original_name": "Utawala",
+    "name": "Utawala Street",
+    "formatted_address": "Utawala St, Nairobi, Kenya",
+    "latitude": -1.1857341,
+    "longitude": 36.9028575,
+    "place_id": "ChIJZRlh0lc-LxgR9s2H-T3xcP0",
+    "types": [
+      "route"
+    ],
+    "url": "https://maps.google.com/?cid=18262361737469087222",
+    "address_components": [
+      {
+        "long_name": "Utawala Street",
+        "short_name": "Utawala St",
+        "types": [
+          "route"
+        ]
+      },
+      {
+        "long_name": "Kahawa South",
+        "short_name": "Kahawa South",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 5,
+    "price": 500,
+    "original_name": "Jipange",
+    "name": "JIPANGE WOOD AND METAL WORKS",
+    "formatted_address": "Racecouse Ngong Rd, Nairobi, Kenya",
+    "latitude": -1.2994605,
+    "longitude": 36.7906854,
+    "place_id": "ChIJP4p4gfcRLxgRhBZkL_qau0E",
+    "types": [
+      "establishment",
+      "point_of_interest"
+    ],
+    "url": "https://maps.google.com/?cid=4736549832437798532",
+    "address_components": [
+      {
+        "long_name": "Racecouse",
+        "short_name": "Racecouse",
+        "types": [
+          "street_number"
+        ]
+      },
+      {
+        "long_name": "Ngong Road",
+        "short_name": "Ngong Rd",
+        "types": [
+          "route"
+        ]
+      },
+      {
+        "long_name": "Golf Course",
+        "short_name": "Golf Course",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 5,
+    "price": 500,
+    "original_name": "Mountai Mall",
+    "name": "Mountain Mall",
+    "formatted_address": "Thika Rd, Nairobi, Kenya",
+    "latitude": -1.2329018,
+    "longitude": 36.8739284,
+    "place_id": "ChIJ7yRpPa8VLxgR-hoCJm5m_PQ",
+    "types": [
+      "establishment",
+      "point_of_interest",
+      "shopping_mall"
+    ],
+    "url": "https://maps.google.com/?cid=17653097262655609594",
+    "address_components": [
+      {
+        "long_name": "Thika Road",
+        "short_name": "Thika Rd",
+        "types": [
+          "route"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 5,
+    "price": 500,
+    "original_name": "Garden City",
+    "name": "Garden City Mall",
+    "formatted_address": "Thika Rd, Nairobi, Kenya",
+    "latitude": -1.2324833,
+    "longitude": 36.8787799,
+    "place_id": "ChIJGdueTt0VLxgRk19ir6oE8I0",
+    "types": [
+      "establishment",
+      "point_of_interest",
+      "shopping_mall"
+    ],
+    "url": "https://maps.google.com/?cid=10227679884891807635",
+    "address_components": [
+      {
+        "long_name": "Thika Road",
+        "short_name": "Thika Rd",
+        "types": [
+          "route"
+        ]
+      },
+      {
+        "long_name": "Kasarani Constituency",
+        "short_name": "Kasarani Constituency",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 5,
+    "price": 500,
+    "original_name": "Roysambu",
+    "name": "Roysambu",
+    "formatted_address": "Roysambu, Nairobi, Kenya",
+    "latitude": -1.2160186,
+    "longitude": 36.8879618,
+    "place_id": "ChIJlwcaDfUVLxgRYLXewH8eTFM",
+    "types": [
+      "neighborhood",
+      "political"
+    ],
+    "url": "https://maps.google.com/?cid=6002205937423529312",
+    "address_components": [
+      {
+        "long_name": "Roysambu",
+        "short_name": "Roysambu",
+        "types": [
+          "neighborhood",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Roysambu",
+        "short_name": "Roysambu",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 5,
+    "price": 500,
+    "original_name": "Thindigua",
+    "name": "Thindigua",
+    "formatted_address": "Thindigua, Nairobi, Kenya",
+    "latitude": -1.2043694,
+    "longitude": 36.8404525,
+    "place_id": "ChIJOdoBoSEWLxgRXCOnPUyeaWc",
+    "types": [
+      "neighborhood",
+      "political"
+    ],
+    "url": "https://maps.google.com/?cid=7451661108750263132",
+    "address_components": [
+      {
+        "long_name": "Thindigua",
+        "short_name": "Thindigua",
+        "types": [
+          "neighborhood",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Roysambu",
+        "short_name": "Roysambu",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kiambu County",
+        "short_name": "Kiambu County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 5,
+    "price": 500,
+    "original_name": "Kiambu Road",
+    "name": "Kiambu Road",
+    "formatted_address": "Kiambu Rd, Kenya",
+    "latitude": -1.1307381,
+    "longitude": 36.7648591,
+    "place_id": "ChIJdyakq1IkLxgR80tdPEezdG0",
+    "types": [
+      "route"
+    ],
+    "url": "https://maps.google.com/?cid=7887125965969378291",
+    "address_components": [
+      {
+        "long_name": "Kiambu Road",
+        "short_name": "Kiambu Rd",
+        "types": [
+          "route"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 5,
+    "price": 500,
+    "original_name": "Thome",
+    "name": "Thome",
+    "formatted_address": "Thome, Nairobi, Kenya",
+    "latitude": -1.2206103,
+    "longitude": 36.8734588,
+    "place_id": "ChIJY23H-vsVLxgRyAwXOZd1NmM",
+    "types": [
+      "neighborhood",
+      "political"
+    ],
+    "url": "https://maps.google.com/?cid=7149030750855564488",
+    "address_components": [
+      {
+        "long_name": "Thome",
+        "short_name": "Thome",
+        "types": [
+          "neighborhood",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Roysambu",
+        "short_name": "Roysambu",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 5,
+    "price": 500,
+    "original_name": "Kahawa Wendani",
+    "name": "Kahawa Wendani",
+    "formatted_address": "Kahawa Wendani, Kenya",
+    "latitude": -1.2017712,
+    "longitude": 36.9252784,
+    "place_id": "ChIJDZZnA8c_LxgREl68YcILiHc",
+    "types": [
+      "route"
+    ],
+    "url": "https://maps.google.com/?cid=8613147216837369362",
+    "address_components": [
+      {
+        "long_name": "Kahawa Wendani",
+        "short_name": "Kahawa Wendani",
+        "types": [
+          "route"
+        ]
+      },
+      {
+        "long_name": "Kiambu County",
+        "short_name": "Kiambu County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 5,
+    "price": 500,
+    "original_name": "Kahawa West",
+    "name": "Kahawa West",
+    "formatted_address": "Kahawa West, Githurai, Kenya",
+    "latitude": -1.1858857,
+    "longitude": 36.9069054,
+    "place_id": "ChIJx9TsQlQ-LxgRj1NFhUqXGn4",
+    "types": [
+      "neighborhood",
+      "political"
+    ],
+    "url": "https://maps.google.com/?cid=9086741544492684175",
+    "address_components": [
+      {
+        "long_name": "Kahawa West",
+        "short_name": "Kahawa West",
+        "types": [
+          "neighborhood",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kahawa South",
+        "short_name": "Kahawa South",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Githurai",
+        "short_name": "Githurai",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 5,
+    "price": 500,
+    "original_name": "Kahawa Sukari",
+    "name": "Kahawa Sukari",
+    "formatted_address": "Kahawa Sukari, Kenya",
+    "latitude": -1.1946057,
+    "longitude": 36.9472742,
+    "place_id": "ChIJR9mKS44_LxgRk3s7R8fsBJU",
+    "types": [
+      "political",
+      "sublocality",
+      "sublocality_level_1"
+    ],
+    "url": "https://maps.google.com/?cid=10737967752195832723",
+    "address_components": [
+      {
+        "long_name": "Kahawa Sukari",
+        "short_name": "Kahawa Sukari",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Kiambu County",
+        "short_name": "Kiambu County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 5,
+    "price": 500,
+    "original_name": "Kayole",
+    "name": "Kayole",
+    "formatted_address": "Kayole, Nairobi, Kenya",
+    "latitude": -1.2773942,
+    "longitude": 36.9157976,
+    "place_id": "ChIJ8ZPYuYEULxgR8wLo1SNiPcM",
+    "types": [
+      "neighborhood",
+      "political"
+    ],
+    "url": "https://maps.google.com/?cid=14068508717027427059",
+    "address_components": [
+      {
+        "long_name": "Kayole",
+        "short_name": "Kayole",
+        "types": [
+          "neighborhood",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Umoja",
+        "short_name": "Umoja",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 5,
+    "price": 500,
+    "original_name": "Dandora",
+    "name": "Dandora",
+    "formatted_address": "Dandora, Nairobi, Kenya",
+    "latitude": -1.2482996,
+    "longitude": 36.9025814,
+    "place_id": "ChIJaY_DQVIULxgRmDwH7XdkrOo",
+    "types": [
+      "political",
+      "sublocality",
+      "sublocality_level_1"
+    ],
+    "url": "https://maps.google.com/?cid=16910001167109930136",
+    "address_components": [
+      {
+        "long_name": "Dandora",
+        "short_name": "Dandora",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 6,
+    "price": 600,
+    "original_name": "Kiambu Town",
+    "name": "Kiambu",
+    "formatted_address": "Kiambu, Kenya",
+    "latitude": -1.1749722,
+    "longitude": 36.8342727,
+    "place_id": "ChIJh83egGI8LxgR6RP95ggZGho",
+    "types": [
+      "locality",
+      "political"
+    ],
+    "url": "https://maps.google.com/?cid=1880843320406381545",
+    "address_components": [
+      {
+        "long_name": "Kiambu",
+        "short_name": "Kiambu",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kiambu County",
+        "short_name": "Kiambu County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 6,
+    "price": 600,
+    "original_name": "Kikuyu",
+    "name": "Kikuyu Street",
+    "formatted_address": "Kikuyu St, Nairobi, Kenya",
+    "latitude": -1.2839234,
+    "longitude": 36.8448573,
+    "place_id": "ChIJD8AjZTYRLxgR5TD_8_WVmFI",
+    "types": [
+      "route"
+    ],
+    "url": "https://maps.google.com/?cid=5951671791163224293",
+    "address_components": [
+      {
+        "long_name": "Kikuyu Street",
+        "short_name": "Kikuyu St",
+        "types": [
+          "route"
+        ]
+      },
+      {
+        "long_name": "Majengo",
+        "short_name": "Majengo",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 6,
+    "price": 600,
+    "original_name": "Ruiru",
+    "name": "Ruiru",
+    "formatted_address": "Ruiru, Kenya",
+    "latitude": -1.1483781,
+    "longitude": 36.9605781,
+    "place_id": "ChIJDeW0jKc4LxgR-_DLwtn6p9o",
+    "types": [
+      "locality",
+      "political"
+    ],
+    "url": "https://maps.google.com/?cid=15755837634561962235",
+    "address_components": [
+      {
+        "long_name": "Ruiru",
+        "short_name": "Ruiru",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kiambu County",
+        "short_name": "Kiambu County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 6,
+    "price": 600,
+    "original_name": "By-Pass 1&2",
+    "name": "SOUTHERN BYPASS",
+    "formatted_address": "Nairobi, Kenya",
+    "latitude": -1.3287006,
+    "longitude": 36.8532587,
+    "place_id": "ChIJL81dFewRLxgR4nTAc3uiU_c",
+    "types": [
+      "establishment",
+      "point_of_interest"
+    ],
+    "url": "https://maps.google.com/?cid=17821766801541854434",
+    "address_components": [
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Embakasi",
+        "short_name": "Embakasi",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 6,
+    "price": 600,
+    "original_name": "Ruai",
+    "name": "Ruai",
+    "formatted_address": "Ruai, Nairobi, Kenya",
+    "latitude": -1.2536408,
+    "longitude": 36.9863415,
+    "place_id": "ChIJ6_sTcBFrLxgR6O2odzddIXA",
+    "types": [
+      "neighborhood",
+      "political"
+    ],
+    "url": "https://maps.google.com/?cid=8079841699291524584",
+    "address_components": [
+      {
+        "long_name": "Ruai",
+        "short_name": "Ruai",
+        "types": [
+          "neighborhood",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Ruai",
+        "short_name": "Ruai",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 6,
+    "price": 600,
+    "original_name": "Kitengela",
+    "name": "Kitengela Road",
+    "formatted_address": "Kitengela Rd, Nairobi, Kenya",
+    "latitude": -1.3261323,
+    "longitude": 36.7853541,
+    "place_id": "ChIJnQEFxXQQLxgRqoKMzobaEp8",
+    "types": [
+      "route"
+    ],
+    "url": "https://maps.google.com/?cid=11462464274137121450",
+    "address_components": [
+      {
+        "long_name": "Kitengela Road",
+        "short_name": "Kitengela Rd",
+        "types": [
+          "route"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 6,
+    "price": 600,
+    "original_name": "Ngong",
+    "name": "Ngong",
+    "formatted_address": "Ngong, Kenya",
+    "latitude": -1.3567647,
+    "longitude": 36.6728112,
+    "place_id": "ChIJY8DtKOQCLxgRU8Gj1Qq6xdg",
+    "types": [
+      "locality",
+      "political"
+    ],
+    "url": "https://maps.google.com/?cid=15620095438301151571",
+    "address_components": [
+      {
+        "long_name": "Ngong",
+        "short_name": "Ngong",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kajiado County",
+        "short_name": "Kajiado County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 6,
+    "price": 600,
+    "original_name": "Kiserian",
+    "name": "Kiserian",
+    "formatted_address": "Kiserian, Kenya",
+    "latitude": -1.4251869,
+    "longitude": 36.6936512,
+    "place_id": "ChIJEVuQESUBLxgRxHC_syKi8t0",
+    "types": [
+      "locality",
+      "political"
+    ],
+    "url": "https://maps.google.com/?cid=15993023496674308292",
+    "address_components": [
+      {
+        "long_name": "Kiserian",
+        "short_name": "Kiserian",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kajiado County",
+        "short_name": "Kajiado County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 6,
+    "price": 600,
+    "original_name": "Greenspoon",
+    "name": "Greenspoon - Online Supermarket",
+    "formatted_address": "Regal Plaza, Limuru Rd, Nairobi, Kenya",
+    "latitude": -1.273057,
+    "longitude": 36.8227141,
+    "place_id": "ChIJYV9-SMMFLxgR_IBQhHYpqcY",
+    "types": [
+      "establishment",
+      "food",
+      "grocery_or_supermarket",
+      "point_of_interest",
+      "store",
+      "supermarket"
+    ],
+    "url": "https://maps.google.com/?cid=14315018479576580348",
+    "address_components": [
+      {
+        "long_name": "Regal Plaza",
+        "short_name": "Regal Plaza",
+        "types": [
+          "establishment",
+          "point_of_interest"
+        ]
+      },
+      {
+        "long_name": "Limuru Road",
+        "short_name": "Limuru Rd",
+        "types": [
+          "route"
+        ]
+      },
+      {
+        "long_name": "Parklands",
+        "short_name": "Parklands",
+        "types": [
+          "political",
+          "sublocality",
+          "sublocality_level_1"
+        ]
+      },
+      {
+        "long_name": "Nairobi",
+        "short_name": "Nairobi",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nairobi County",
+        "short_name": "Nairobi County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      },
+      {
+        "long_name": "00509",
+        "short_name": "00509",
+        "types": [
+          "postal_code"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 6,
+    "price": 600,
+    "original_name": "Athi River",
+    "name": "Athi River",
+    "formatted_address": "Athi River, Kenya",
+    "latitude": -1.4577245,
+    "longitude": 36.9785033,
+    "place_id": "ChIJvfd3pkZ1LxgRIKKPWGLC13I",
+    "types": [
+      "locality",
+      "political"
+    ],
+    "url": "https://maps.google.com/?cid=8275296567964967456",
+    "address_components": [
+      {
+        "long_name": "Athi River",
+        "short_name": "Athi River",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Machakos County",
+        "short_name": "Machakos County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 7,
+    "price": 700,
+    "original_name": "Greenpark Athi River",
+    "name": "Greenpark Estate",
+    "formatted_address": "G2R5+JX5, Mombasa Road, Athi River, Kenya",
+    "latitude": -1.4623298,
+    "longitude": 37.0126065,
+    "place_id": "ChIJQZDKwoh1LxgRAxaltkbpYQ8",
+    "types": [
+      "establishment",
+      "general_contractor",
+      "point_of_interest"
+    ],
+    "url": "https://maps.google.com/?cid=1108423473231107587",
+    "address_components": [
+      {
+        "long_name": "G2R5+JX5",
+        "short_name": "G2R5+JX5",
+        "types": [
+          "plus_code"
+        ]
+      },
+      {
+        "long_name": "Mombasa Road",
+        "short_name": "Mombasa Road",
+        "types": [
+          "route"
+        ]
+      },
+      {
+        "long_name": "Athi River",
+        "short_name": "Athi River",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Machakos County",
+        "short_name": "Machakos County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 7,
+    "price": 700,
+    "original_name": "Juja",
+    "name": "Juja",
+    "formatted_address": "Juja, Kenya",
+    "latitude": -1.1018224,
+    "longitude": 37.0144027,
+    "place_id": "ChIJXQMdohZGLxgRX_SJNfpubNQ",
+    "types": [
+      "locality",
+      "political"
+    ],
+    "url": "https://maps.google.com/?cid=15306731254444586079",
+    "address_components": [
+      {
+        "long_name": "Juja",
+        "short_name": "Juja",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kiambu County",
+        "short_name": "Kiambu County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  },
+  {
+    "zone": 7,
+    "price": 700,
+    "original_name": "Spur Mall",
+    "name": "Spur Mall",
+    "formatted_address": "Exit 12, 13 Thika Super Highway, Ruiru, Kenya",
+    "latitude": -1.1363865,
+    "longitude": 36.9702942,
+    "place_id": "ChIJZ4pnVck_LxgR6m3h2GSsLLQ",
+    "types": [
+      "establishment",
+      "point_of_interest",
+      "shopping_mall"
+    ],
+    "url": "https://maps.google.com/?cid=12982941374937656810",
+    "address_components": [
+      {
+        "long_name": "Exit 12",
+        "short_name": "Exit 12",
+        "types": [
+          "premise"
+        ]
+      },
+      {
+        "long_name": "13",
+        "short_name": "13",
+        "types": [
+          "street_number"
+        ]
+      },
+      {
+        "long_name": "Thika Super Highway",
+        "short_name": "Thika Super Highway",
+        "types": [
+          "route"
+        ]
+      },
+      {
+        "long_name": "Ruiru",
+        "short_name": "Ruiru",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kiambu County",
+        "short_name": "Kiambu County",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Kenya",
+        "short_name": "KE",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ]
+  }
+]

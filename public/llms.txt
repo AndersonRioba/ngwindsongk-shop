@@ -1,0 +1,36 @@
+# ngwindsongk
+
+> Premium healthy oats and Nanacare products for new mothers. Founded by Jennifer in Nairobi, Kenya.
+
+## About
+
+ngwindsongk is an e-commerce store offering two main product lines:
+
+1. **Grainmill** - Premium healthy oats including jumbo oats, steel-cut oats, oat flour, and quick breakfast oats. All products are 100% natural with no additives or preservatives.
+2. **Nanacare** - Thoughtful products designed for new mothers, including cooler bags, storage cups, and motherhood essentials.
+
+All products are available for delivery across Nairobi with 7 delivery zones.
+
+## Product Categories
+
+- Breakfast Cereal: Jumbo oats, steel-cut oats, oat flour, quick breakfast oats
+- Nanacare: Cooler bags, storage cups, motherhood essentials
+
+## Key Pages
+
+- Homepage: https://ngwindsongk.com/
+- Products: https://ngwindsongk.com/products
+- About: https://ngwindsongk.com/about
+- Contact: https://ngwindsongk.com/contact
+- FAQs: https://ngwindsongk.com/FAQs
+
+## Product URLs
+
+Product pages follow the pattern: https://ngwindsongk.com/products/{category}/{product-name}
+
+## Contact
+
+- Website: https://ngwindsongk.com
+- Email: Available via contact page
+- Location: Nairobi, Kenya
+- Currency: KES (Kenyan Shillings)

@@ -1,0 +1,53 @@
+{
+  "name": "shop",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "seed:recipes": "node scripts/seedRecipes.js"
+  },
+  "dependencies": {
+    "@gsap/react": "^2.1.2",
+    "@lottiefiles/dotlottie-react": "^0.8.3",
+    "@piotr-cz/swr-idb-cache": "^1.1.2",
+    "@tiptap/extension-bold": "^3.2.0",
+    "@tiptap/extension-bullet-list": "^3.2.0",
+    "@tiptap/extension-code": "^3.2.0",
+    "@tiptap/extension-document": "^3.2.0",
+    "@tiptap/extension-history": "^3.2.0",
+    "@tiptap/extension-image": "^3.2.0",
+    "@tiptap/extension-italic": "^3.2.0",
+    "@tiptap/extension-link": "^3.2.0",
+    "@tiptap/extension-list-item": "^3.2.0",
+    "@tiptap/extension-ordered-list": "^3.2.0",
+    "@tiptap/extension-paragraph": "^3.2.0",
+    "@tiptap/extension-placeholder": "^3.2.0",
+    "@tiptap/extension-strike": "^3.2.0",
+    "@tiptap/extension-text": "^3.2.0",
+    "@tiptap/extension-underline": "^3.2.0",
+    "@tiptap/pm": "^3.2.0",
+    "@tiptap/react": "^3.2.0",
+    "@tiptap/starter-kit": "^3.2.0",
+    "@vercel/analytics": "^2.0.1",
+    "gsap": "^3.13.0",
+    "idb": "^8.0.3",
+    "lucide-react": "^0.525.0",
+    "mongoose": "^8.0.0",
+    "next": "14.2.5",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-masonry-css": "^1.0.16",
+    "swr": "^2.2.5"
+  },
+  "devDependencies": {
+    "@iconify/json": "^2.2.239",
+    "@iconify/tailwind": "^1.1.2",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.5",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1"
+  }
+}

@@ -1,0 +1,216 @@
+'use client'
+
+import Link from "next/link";
+import Image from "next/image";
+import { useEffect, useState, useContext } from "react";
+import { CartContext } from "@/app/lib/providers/CartProvider";
+import { CheckoutContext } from "@/app/lib/providers/CheckoutProvider";
+import useSWR from "swr";
+import { useRouter } from "next/navigation";
+import { fetcher } from "@/app/lib/data";
+import ProductListing, {ProductListingSkeleton} from "@/app/UI/ProductListing";
+import useCart from "@/app/lib/hooks/useCart";
+import { getImageUrl } from "@/app/lib/utils/image";
+
+function Related({product, category='oats'}){
+    let { data, error, isLoading } = useSWR([`/products`,{category, exclude: product}], fetcher,{
+        revalidateOnFocus: false,
+        revalidateOnReconnect: false,
+        revalidateOnMount: true,
+        errorRetryInterval: 300000
+    });
+    return(
+        <>
+        {
+            (data?.data?.length > 0) &&
+            <h6 className="text-xl font-semibold mb-5">Your may also like</h6>
+        }
+        <div className="grid grid-flow-col auto-cols-[80%] md:auto-cols-[20vw] grid-rows-1 gap-8 py-4 overflow-x-auto">
+            {
+                isLoading || error?
+                [...new Array(4)].map((_,i)=>(<div key={i}><ProductListingSkeleton/></div>))
+                :
+                (data?.data || []).map((product,i)=>(<div className="" key={i}><ProductListing data={product}/></div>))
+            }
+        </div>
+        </>
+    )
+}
+
+function CartItem({product, setTotal}){
+    console.log('cart ::', product)
+    let [quantity, setQuantity] =useState(0);
+    let [amount, setAmount] = useState(0);
+    const { removeFromCart, updateCartQuantity } = useCart();
+
+    const { data, error, isLoading } = useSWR([`/products/${product.product}`,{}], fetcher,{
+        revalidateOnFocus: false,
+        revalidateOnReconnect: false,
+        revalidateOnMount: true,
+        errorRetryInterval: 300000
+    })
+
+    const [init, setInit] = useState(false);
+
+    useEffect(()=>{
+        if(data && !isLoading && !error && !init){
+            const variationPrice = parseFloat(product.variation?.price || 0);
+            const variationDiscount = parseFloat(product.variation?.discount || 0);
+
+            const basePrice = variationPrice || parseFloat(data?.price || 0);
+            const discountAmount = variationDiscount || parseFloat(data?.discount || 0);
+            
+            const finalPrice = Math.max(0, basePrice - discountAmount);
+            setAmount(finalPrice);
+            
+            const qty = parseInt(product?.quantity) || 1;
+            setQuantity(qty);
+            setTotal(prev => (parseFloat(prev) || 0) + (finalPrice * qty));
+            setInit(true);
+        }
+    },[data, isLoading, error, init, product, setTotal]);
+
+    const modify = (positive) => {
+        let newQty = quantity;
+        if (positive) {
+            newQty = quantity + 1;
+        } else if (quantity > 1) {
+            newQty = quantity - 1;
+        }
+
+        if (newQty !== quantity) {
+            setTotal(total => (parseFloat(total) || 0) + (positive ? amount : -amount));
+            setQuantity(newQty);
+            updateCartQuantity(product.product, newQty, product.variation);
+        }
+    }
+
+    const remove = (product) => {
+        removeFromCart(product.product, product.variation);
+        setTotal(total => (parseFloat(total) || 0) - (amount * quantity));
+        setQuantity(0);
+    }
+
+    return(
+        <div className="flex flex-col md:flex-row justify-start md:justify-between md:items-center my-7 border-b-2 border-gray-100 pb-4">
+            <div className="flex gap-5 md:items-center">
+                <div className="bg-slate-100 flex md:items-center md:justify-center">
+                    <Image 
+                        className="rounded-lg object-cover" 
+                        src={getImageUrl((data?.product_images || []).filter(image=>image?.is_primary==1)[0]?.url)} 
+                        alt={data?.name+' image'} 
+                        width={128}
+                        height={128}
+                    />
+                </div>
+                <div className="space-y-1">
+                    <p className="text-xl">{data?.name} {product.variation &&<span className="text-sm text-black/70">({product.variation.attribute_value})</span>}</p>
+                    <p className="text-sm text-black/50">Quantity: {quantity}</p>
+                    <p className="">KSH {amount}</p>
+                </div>
+            </div>
+            <div className=" flex md:flex-col justify-end gap-x-4">
+                <div className="flex gap-5 mb-6 mt-2">
+                    <button onClick={e=>modify(false)} className="bg-primary text-white px-4">-</button>
+                    <input 
+                        className="bg-gray-200 p-2 w-10 text-center" 
+                        value={quantity} 
+                        onChange={e=>{
+                            if(parseInt(e.target.value) > data?.stock) return;
+                            setQuantity(parseInt(e.target.value));
+                            setTotal(total=>total+=(data?.price*parseInt(e.target.value)));
+                        }} 
+                        type="number" 
+                        name="" 
+                        id="" 
+                        min={1} max={data?.stock}
+                    />
+                    <button onClick={e=>modify(true)} className="bg-primary text-white px-4">+</button>
+                </div>
+                <button onClick={e=>remove(product)} className="rounded-lg flex items-center text-sm">
+                    <span className="icon-[material-symbols-light--delete-outline] w-5 h-5 text-red-500"/>
+                    Remove Item
+                </button>
+            </div>
+        </div>
+    )
+}
+
+export default function CartPage(){
+    let [total, setTotal] = useState(0);
+    const { cart } = useContext(CartContext);
+    const { setProducts } = useContext(CheckoutContext);
+    const { clearCart } = useCart();
+    const router = useRouter();
+
+    const checkout = () => {
+        setProducts(cart);
+        router.push('/checkout');
+    }
+
+    return(
+        <main className="md:max-w-[80vw] mx-auto my-10 px-2">
+            <section className="flex flex-col gap-y-7 md:flex-row md:justify-between">
+                <section className="md:w-1/2">
+                    <h3 className="text-3xl mb-3">Your Cart</h3>
+                    <p className="text-sm lg:text-xs 2xl:text-sm text-black/70">Order before 10pm and get it delivered next day before 3pm. Order before noon and get it delivered today. <span className="text-primary">Order NgwindsongkExpress</span> for delivery in under 99 minutes between 8am and 7pm!</p>
+                    
+                    <>
+                    {
+                        cart.length>0?
+                        <>
+                        {
+                            cart.map((item,i)=>(<CartItem setTotal={setTotal} key={i} product={item}/>))
+                        }
+                        <div className="flex justify-end">
+                            <button onClick={e=>clearCart()} className="shadow-md px-4 py-2 rounded-lg flex items-center gap-1">
+                                <span className="icon-[material-symbols-light--delete-outline] w-6 h-6 text-red-500"/>
+                                Clear Cart
+                            </button>
+                        </div>
+                        </>
+                        :
+                        <div className="my-7">No Items</div>
+                    }
+                    </>
+                </section>
+
+                <section className="md:w-1/3">
+                    <div className="flex border-2 border-gray-200 rounded-md mb-7">
+                        <input  className="w-full px-4" placeholder="Enter coupon code" type="text" name="" id="" />
+                        <button className="bg-primary text-white py-2 px-4 rounded-r-md" >Apply</button>
+                    </div>
+                    
+                    <h6 className="font-semibold text-lg">Payment summary</h6>
+                    <div className="border-b-2 py-3">
+                        <div className="flex my-3 justify-between text-sm lg:text-xs 2xl:text-sm">
+                            <p className="">Items</p>
+                            <p>{total} <span className="text-sm uppercase">kes</span> </p>
+                        </div>
+                        <div className="flex my-3 justify-between text-sm lg:text-xs 2xl:text-sm">
+                            <p className="">Shipping</p>
+                            <p>{'--'} <span className="text-sm uppercase">kes</span> </p>
+                        </div>
+                        <div className="flex my-3 justify-between text-sm lg:text-xs 2xl:text-sm font-semibold">
+                            <p className="">Subtotal</p>
+                            <p>{total} <span className="text-sm uppercase">kes</span> </p>
+                        </div>
+                        <div className="flex my-3 justify-between text-sm lg:text-xs 2xl:text-sm">
+                            <p className="">Current Balance</p>
+                            <p>{'0'} <span className="text-sm uppercase">kes</span> </p>
+                        </div>
+                    </div>
+                    <div className="flex my-3 justify-between text-lg">
+                        <p className="">Total</p>
+                        <p>{total} <span className="text-sm uppercase">kes</span> </p>
+                    </div>
+                    <button onClick={e=>checkout()} className="bg-primary text-white block text-center w-full py-4 rounded-xl">Proceed to Checkout</button>
+                </section>
+            </section>
+
+            <div className="mt-5">
+                <Related product={1}/>
+            </div>
+        </main>
+    )
+}
