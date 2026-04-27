@@ -22,7 +22,8 @@ export default function CheckoutPaymentPage(){
         shipping, setShipping,
         contact, setContact,
         coordinates, setCoordinates,
-        addressComponents, setAddressComponents
+        addressComponents, setAddressComponents,
+        deliveryZone, setDeliveryZone
     } = useContext(CheckoutContext);
 
     const [products, setProducts] = useState([]);
@@ -61,50 +62,79 @@ export default function CheckoutPaymentPage(){
         fetchSettings();
     }, []);
 
-    // New Tiered Shipping Calculation
+    // Dynamic Shipping Calculation (API-based)
     useEffect(() => {
-        if (total === 0 || Object.keys(settings).length === 0 || products.length === 0) return;
-        
-        let hasBulk = false;
-        let bulkTotalWeight = 0;
-        let requiresPaidShipping = false;
+        if (!settings || products.length === 0) return;
 
-        products.forEach(p => {
-            if (p.is_bulk) {
-                hasBulk = true;
-                bulkTotalWeight += (p.weight_kg * p.quantity);
-                requiresPaidShipping = true; // By default, bulk doesn't get free shipping
+        const calculateShipping = async () => {
+            // Rule: Pickup Fees
+            if (pickup) {
+                const selectedLocation = PICKUP_LOCATIONS.find(l => l.id === pickup);
+                setShipping(selectedLocation ? selectedLocation.fee : 0);
+                setDeliveryZone(selectedLocation ? selectedLocation.name : null);
+                setShippingLoading(false);
+                return;
             }
-        });
 
-        // "Free delivery from 10bags i.e 250Kgs within Nairobi"
-        const freeBulkThreshold = Number(settings.free_delivery_threshold_bulk_kg || 250);
-        if (hasBulk && bulkTotalWeight >= freeBulkThreshold) {
-            requiresPaidShipping = false;
-        }
+            // Standard Free Delivery Check
+            let hasBulk = false;
+            let bulkTotalWeight = 0;
+            let requiresPaidShipping = false;
 
-        // Rule: Pickup Fees
-        if (pickup) {
-            const selectedLocation = PICKUP_LOCATIONS.find(l => l.id === pickup);
-            setShipping(selectedLocation ? selectedLocation.fee : 0);
-            setShippingLoading(false);
-            return;
-        }
+            products.forEach(p => {
+                if (p.is_bulk) {
+                    hasBulk = true;
+                    bulkTotalWeight += (p.weight_kg * p.quantity);
+                    requiresPaidShipping = true;
+                }
+            });
 
-        const freeDeliveryThreshold = Number(settings.free_delivery_threshold_amount || 5000);
-        
-        // Rule: Standard Free Delivery for orders >= 5,000 (Unless there's bulk requiring paid shipping)
-        if (total >= freeDeliveryThreshold && !requiresPaidShipping) {
-            setShipping(0);
-            setShippingLoading(false);
-            return;
-        }
+            const freeBulkThreshold = Number(settings.free_delivery_threshold_bulk_kg || 250);
+            const freeDeliveryThreshold = Number(settings.free_delivery_threshold_amount || 5000);
 
-        // Rule: Standard Delivery Fee
-        setShipping(350);
-        setShippingLoading(false);
+            if (hasBulk && bulkTotalWeight >= freeBulkThreshold) {
+                requiresPaidShipping = false;
+            }
 
-    }, [total, pickup, setShipping, settings, products]);
+            if (total >= freeDeliveryThreshold && !requiresPaidShipping) {
+                setShipping(0);
+                setDeliveryZone("Free Delivery Threshold");
+                setShippingLoading(false);
+                return;
+            }
+
+            // If coordinates/components available, fetch from API
+            if (coordinates.latitude && addressComponents.length > 0) {
+                setShippingLoading(true);
+                try {
+                    const res = await postFetcher('/delivery-fee', {
+                        latitude: coordinates.latitude,
+                        longitude: coordinates.longitude,
+                        address_components: addressComponents
+                    });
+                    if (res.delivery_fee !== null) {
+                        setShipping(res.delivery_fee);
+                        setDeliveryZone(res.matched_location);
+                    } else {
+                        setShipping(350); // Fallback
+                        setDeliveryZone(null);
+                    }
+                } catch (err) {
+                    console.error("Failed to fetch delivery fee:", err);
+                    setShipping(350); // Fallback
+                    setDeliveryZone(null);
+                } finally {
+                    setShippingLoading(false);
+                }
+            } else {
+                setShipping(350);
+                setShippingLoading(false);
+            }
+        };
+
+        calculateShipping();
+
+    }, [total, pickup, coordinates, addressComponents, settings, products, setShipping, setDeliveryZone]);
 
     useEffect(()=>{
         if (items.length > 0 && products.length === 0) {
@@ -260,6 +290,7 @@ export default function CheckoutPaymentPage(){
                 sales: products,
                 pickup_station: pickupStation,
                 delivery_method: deliveryMethod,
+                delivery_zone: deliveryZone,
                 voucher_id: appliedVoucher?.id || null,
                 latitude: coordinates.latitude,
                 longitude: coordinates.longitude

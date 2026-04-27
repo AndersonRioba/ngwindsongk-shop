@@ -51,7 +51,7 @@ export function getFile(name, endpoint, parameters, token = load('token')) {
     fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}?${params}`, {
         headers: {
             'Authorization': `Bearer ${token}`,
-            'Accept': 'application/json'
+            'Accept': '*/*'
         },
         credentials: 'include'
     })
@@ -73,6 +73,7 @@ export function getFile(name, endpoint, parameters, token = load('token')) {
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);
+            popupE('Success', 'File downloaded successfully');
         })
         .catch(err => {
             console.log(err)

@@ -72,8 +72,8 @@ export function MobileSideMenu({ isOpen, setIsOpen }){
                     <Link 
                         key={item.id}
                         href={item.url} 
-                        target={item.is_external ? "_blank" : "_self"}
-                        rel={item.is_external ? "noopener noreferrer" : ""}
+                        target={item.is_external ? "_blank" : undefined}
+                        rel={item.is_external ? "noopener noreferrer" : undefined}
                         className={`flex items-center py-3 rounded-xl transition-colors ${pathname === item.url ? 'text-primary bg-primary/5' : 'text-gray-600'}`}
                     >
                         <div className="mx-3">
@@ -147,8 +147,8 @@ export function TopMenu(){
                             key={item.id}
                             className={`${pathname === item.url ? 'text-primary' : 'text-gray-600'} font-bold text-sm hover:text-primary transition-colors`} 
                             href={item.url}
-                            target={item.is_external ? "_blank" : "_self"}
-                            rel={item.is_external ? "noopener noreferrer" : ""}
+                            target={item.is_external ? "_blank" : undefined}
+                            rel={item.is_external ? "noopener noreferrer" : undefined}
                         >
                             {item.label}
                         </Link>
