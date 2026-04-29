@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { Poppins, Lato } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
@@ -9,6 +10,7 @@ import Cart from "@/app/UI/Cart";
 import { SearchProvider } from "@/app/lib/providers/SearchProvider";
 // import Overlays from "@/app/UI/Overlays";
 import { Analytics } from "@vercel/analytics/next"
+import PageTracker from "@/app/components/PageTracker";
 
 const poppins = Poppins({ subsets: ["latin"], weight: ['200', '300', '400', '600', '800'], style: 'normal' });
 const latto = Lato({ subsets: ["latin"], weight: ['300', '400', '700'], style: 'normal' });
@@ -163,6 +165,9 @@ export default function RootLayout({ children }) {
       <Analytics/>
         <SearchProvider>
           <AuthProvider>
+            <Suspense fallback={null}>
+              <PageTracker />
+            </Suspense>
             <ContextProvider>
               <Header />
               <div className="fixed z-50 bottom-24 md:top-40 right-[3vw] lg:right-[0.5vw] 2xl:right-[3vw] w-fit h-fit">
