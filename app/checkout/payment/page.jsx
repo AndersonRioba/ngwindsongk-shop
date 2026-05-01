@@ -104,7 +104,7 @@ export default function CheckoutPaymentPage(){
             }
 
             // If coordinates/components available, fetch from API
-            if (coordinates.latitude && addressComponents.length > 0) {
+            if (coordinates && coordinates.latitude && addressComponents && addressComponents.length > 0) {
                 setShippingLoading(true);
                 try {
                     const res = await postFetcher('/delivery-fee', {

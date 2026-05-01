@@ -11,6 +11,8 @@ import { SearchProvider } from "@/app/lib/providers/SearchProvider";
 // import Overlays from "@/app/UI/Overlays";
 import { Analytics } from "@vercel/analytics/next"
 import PageTracker from "@/app/components/PageTracker";
+import GoogleTag from "@/app/components/GoogleTag";
+
 
 const poppins = Poppins({ subsets: ["latin"], weight: ['200', '300', '400', '600', '800'], style: 'normal' });
 const latto = Lato({ subsets: ["latin"], weight: ['300', '400', '700'], style: 'normal' });
@@ -107,18 +109,8 @@ export default function RootLayout({ children }) {
         <meta name="geo.position" content="-1.2921;36.8219" />
         <meta name="ICBM" content="-1.2921, 36.8219" />
 
-        <Script async src="https://www.googletagmanager.com/gtag/js?id=G-W876V5XPB8"></Script>
-        <Script
-          id="google-analytics"
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments)}
-              gtag('js', new Date());
-              gtag('config', 'G-W876V5XPB8');
-            `
-          }}
-        />
+        <GoogleTag />
+
 
 
         {/* Structured Data */}

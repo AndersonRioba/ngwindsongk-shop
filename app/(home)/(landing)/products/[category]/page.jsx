@@ -1,6 +1,9 @@
 'use client'
 
+import React, { useEffect } from "react"
+
 import useSWR from "swr"
+
 import { useParams } from "next/navigation"
 import { fetcher } from "@/app/lib/data"
 import Masonry from "react-masonry-css"
@@ -14,6 +17,33 @@ export default function Products(){
     const searchParams = useSearchParams();
     const router = useRouter();
     const page = parseInt(searchParams.get('page')) || 1;
+
+    // Track Brand Page View
+    useEffect(() => {
+        const trackBrandView = async () => {
+            const rawSlug = (category || "").toLowerCase().trim();
+            const spacedSlug = rawSlug.replaceAll('-', ' ').replaceAll('%20', ' ');
+            
+            try {
+                // Try to find a brand that matches the slug
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/brands`);
+                const brands = await response.json();
+                const currentBrand = brands.find(b => 
+                    b.name.toLowerCase() === spacedSlug || 
+                    b.name.toLowerCase().replaceAll(' ', '-') === rawSlug
+                );
+
+                if (currentBrand && currentBrand.tracking_snippet) {
+                    const executeSnippet = new Function(currentBrand.tracking_snippet);
+                    executeSnippet();
+                }
+            } catch (error) {
+                console.error("Brand view tracking failed:", error);
+            }
+        };
+        trackBrandView();
+    }, [category]);
+
 
     const masonryBreakpoints = {
       default: 3,

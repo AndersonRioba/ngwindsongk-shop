@@ -8,8 +8,9 @@ import { gsap } from "gsap";
 
 export default function CheckoutSuccessPage(){
     const { 
-        setProducts, setOrderDetails, setContact 
+        products, setProducts, setOrderDetails, setContact 
     } = useContext(CheckoutContext);
+
     const { clearCart } = useCart();
 
     useEffect(() => {
@@ -19,12 +20,50 @@ export default function CheckoutSuccessPage(){
             { scale: 1, opacity: 1, rotate: 0, duration: 0.8, ease: "back.out(1.7)", delay: 0.2 }
         );
 
+        // Track Conversions
+        const trackConversions = async () => {
+            try {
+                // 1. Global Tracking
+                const settingsRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/settings?group=tracking`);
+                const settingsData = await settingsRes.json();
+                if (settingsData.success && settingsData.data.purchase_event_snippet) {
+                    const executeGlobal = new Function(settingsData.data.purchase_event_snippet);
+                    executeGlobal();
+                }
+
+                // 2. Brand-Specific Tracking
+                if (products && products.length > 0) {
+                    const brandIds = [...new Set(products.map(p => p.brand?.id).filter(id => !!id))];
+                    
+                    for (const brandId of brandIds) {
+                        const brandRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/brands/${brandId}`);
+                        const brandData = await brandRes.json();
+                        
+                        if (brandData && brandData.purchase_snippet) {
+                            try {
+                                const executeBrandSnippet = new Function(brandData.purchase_snippet);
+                                executeBrandSnippet();
+                            } catch (err) {
+                                console.error(`Failed to execute purchase snippet for brand ${brandId}:`, err);
+                            }
+                        }
+                    }
+
+                }
+            } catch (error) {
+                console.error("Conversion tracking failed:", error);
+            }
+        };
+        trackConversions();
+
         // Clear cart and checkout context on success
         clearCart();
         setProducts([]);
         setOrderDetails({ full_name: '', phone: '', address: '', notes: '' });
         setContact('');
-    }, [clearCart, setProducts, setOrderDetails, setContact]);
+    }, [clearCart, products, setProducts, setOrderDetails, setContact]);
+
+
 
     return(
         <main className="md:max-w-[80vw] mx-auto md:my-20 p-2 flex justify-center items-center min-h-[50vh]">
