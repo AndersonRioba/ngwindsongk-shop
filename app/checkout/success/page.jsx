@@ -27,8 +27,12 @@ export default function CheckoutSuccessPage(){
                 const settingsRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/settings?group=tracking`);
                 const settingsData = await settingsRes.json();
                 if (settingsData.success && settingsData.data.purchase_event_snippet) {
-                    const executeGlobal = new Function(settingsData.data.purchase_event_snippet);
-                    executeGlobal();
+                    try {
+                        const fragment = document.createRange().createContextualFragment(settingsData.data.purchase_event_snippet);
+                        document.head.appendChild(fragment);
+                    } catch (err) {
+                        console.error("Failed to execute global purchase snippet:", err);
+                    }
                 }
 
                 // 2. Brand-Specific Tracking
@@ -41,8 +45,8 @@ export default function CheckoutSuccessPage(){
                         
                         if (brandData && brandData.purchase_snippet) {
                             try {
-                                const executeBrandSnippet = new Function(brandData.purchase_snippet);
-                                executeBrandSnippet();
+                                const fragment = document.createRange().createContextualFragment(brandData.purchase_snippet);
+                                document.head.appendChild(fragment);
                             } catch (err) {
                                 console.error(`Failed to execute purchase snippet for brand ${brandId}:`, err);
                             }

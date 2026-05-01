@@ -34,8 +34,12 @@ export default function Products(){
                 );
 
                 if (currentBrand && currentBrand.tracking_snippet) {
-                    const executeSnippet = new Function(currentBrand.tracking_snippet);
-                    executeSnippet();
+                    try {
+                        const fragment = document.createRange().createContextualFragment(currentBrand.tracking_snippet);
+                        document.head.appendChild(fragment);
+                    } catch (e) {
+                        console.error("Failed to inject brand tracking snippet:", e);
+                    }
                 }
             } catch (error) {
                 console.error("Brand view tracking failed:", error);
