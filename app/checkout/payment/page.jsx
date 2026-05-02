@@ -66,6 +66,12 @@ export default function CheckoutPaymentPage(){
     useEffect(() => {
         if (!settings || products.length === 0) return;
 
+        // If shipping was already set by the zone picker on the previous page, don't overwrite it
+        if (shipping !== 0 && shipping !== 350 && !pickup) {
+            setShippingLoading(false);
+            return;
+        }
+
         const calculateShipping = async () => {
             // Rule: Pickup Fees
             if (pickup) {
@@ -116,25 +122,25 @@ export default function CheckoutPaymentPage(){
                         setShipping(res.delivery_fee);
                         setDeliveryZone(res.matched_location);
                     } else {
-                        setShipping(350); // Fallback
-                        setDeliveryZone(null);
+                        // Keep current shipping if set, otherwise fallback
+                        if (!shipping) setShipping(350); 
                     }
                 } catch (err) {
                     console.error("Failed to fetch delivery fee:", err);
-                    setShipping(350); // Fallback
-                    setDeliveryZone(null);
+                    if (!shipping) setShipping(350);
                 } finally {
                     setShippingLoading(false);
                 }
             } else {
-                setShipping(350);
+                // If shipping is already set from zone picker, keep it
+                if (!shipping) setShipping(350);
                 setShippingLoading(false);
             }
         };
 
         calculateShipping();
 
-    }, [total, pickup, coordinates, addressComponents, settings, products, setShipping, setDeliveryZone]);
+    }, [total, pickup, coordinates, addressComponents, settings, products, setShipping, setDeliveryZone, shipping]);
 
     useEffect(()=>{
         if (items.length > 0 && products.length === 0) {
@@ -321,8 +327,28 @@ export default function CheckoutPaymentPage(){
                             const loc = PICKUP_LOCATIONS.find(l => l.id === pickup);
                             return <p><span className="font-semibold">Pickup:</span> {loc ? `${loc.name} — ${loc.address}` : pickup}</p>;
                         })() : (
-                            <p><span className="font-semibold">Address:</span> {orderDetails.address}</p>
+                            <>
+                                <p><span className="font-semibold">County:</span> {orderDetails.delivery_county || 'Not selected'}</p>
+                                <p><span className="font-semibold">Town:</span> {orderDetails.delivery_zone || 'Not selected'}</p>
+                                <p><span className="font-semibold">Address:</span> {orderDetails.address || 'N/A'}</p>
+                            </>
                         )}
+                        <p className="pt-2 border-t border-gray-200 mt-2">
+                            <span className="font-semibold text-primary">Estimated Delivery:</span> {(() => {
+                                const now = new Date();
+                                const eatOffset = 3 * 60; // EAT is UTC+3
+                                const localTime = new Date(now.getTime() + (now.getTimezoneOffset() + eatOffset) * 60000);
+                                
+                                const cutoffHour = parseInt(settings.shipping_cutoff_hour || 10);
+                                const deliveryDate = new Date(localTime);
+                                
+                                if (localTime.getHours() >= cutoffHour) {
+                                    deliveryDate.setDate(deliveryDate.getDate() + 1);
+                                }
+                                
+                                return deliveryDate.toLocaleDateString('en-KE', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+                            })()}
+                        </p>
                     </div>
 
                     <div className="border-b-2 py-3">
@@ -340,15 +366,7 @@ export default function CheckoutPaymentPage(){
                                 : <p>{Number(shipping)} <span className="text-sm uppercase">kes</span></p>
                             }
                         </div>
-                        {appliedVoucher && (
-                            <div className="flex mb-3 justify-between text-base text-green-600 font-bold">
-                                <div className="flex items-center gap-2">
-                                    <p>Discount ({appliedVoucher.code})</p>
-                                    <button onClick={removeVoucher} className="text-[10px] bg-red-100 text-red-600 px-2 py-0.5 rounded hover:bg-red-200">Remove</button>
-                                </div>
-                                <p>- {discountAmount} <span className="text-sm uppercase">kes</span></p>
-                            </div>
-                        )}
+
                         <div className="flex my-3 justify-between text-base font-semibold">
                             <p className="">Subtotal</p>
                             <p>{finalOrderTotal} <span className="text-sm uppercase">kes</span> </p>
@@ -359,32 +377,7 @@ export default function CheckoutPaymentPage(){
                         <p className="text-primary">{finalOrderTotal} <span className="text-sm uppercase">kes</span> </p>
                     </div>
 
-                    {/* Voucher Section */}
-                    <div className="mt-8 pt-6 border-t border-gray-100">
-                        <p className="text-sm font-semibold mb-3 flex items-center gap-2">
-                            <span className="icon-[solar--ticket-sale-bold-duotone] w-5 h-5 text-primary" />
-                            Have a promo or referral code?
-                        </p>
-                        <div className="flex gap-2">
-                            <input 
-                                type="text" 
-                                placeholder="Enter code here"
-                                className="flex-1 bg-gray-50 border-gray-200 border rounded-xl px-4 py-3 text-sm font-semibold uppercase tracking-wider focus:outline-none focus:ring-2 focus:ring-primary/20"
-                                value={voucherCode}
-                                onChange={e => setVoucherCode(e.target.value.toUpperCase())}
-                                disabled={appliedVoucher || isValidatingVoucher}
-                            />
-                            <button 
-                                onClick={handleApplyVoucher}
-                                disabled={!voucherCode || appliedVoucher || isValidatingVoucher}
-                                className="bg-gray-900 text-white px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-black transition-all disabled:bg-gray-300"
-                            >
-                                {isValidatingVoucher ? '...' : 'Apply'}
-                            </button>
-                        </div>
-                        {voucherError && <p className="text-red-500 text-[11px] mt-2 font-bold px-1">{voucherError}</p>}
-                        {appliedVoucher && <p className="text-green-600 text-[11px] mt-2 font-bold px-1 flex items-center gap-1"><span className="icon-[solar--check-circle-bold-duotone] w-4 h-4"/> Code applied successfully!</p>}
-                    </div>
+
 
                     <h6 className="font-semibold capitalize mt-8 mb-2">How would you like to place your order ?</h6>
                     <div className="my-3 p-4 border-[1px] border-green-500 rounded-lg bg-green-50">

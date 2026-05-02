@@ -5,6 +5,8 @@ import { CheckoutContext } from "@/app/lib/providers/CheckoutProvider";
 import { useRouter } from "next/navigation";
 import useAuth from "@/src/hooks/useAuth";
 import PlacesAutocomplete from "../components/PlacesAutocomplete";
+import useSWR from "swr";
+import { fetcher } from "@/app/lib/data";
 
 const PICKUP_LOCATIONS = [
     { id: 'industrial', name: 'Head Office / Factory (Industrial Area)', address: 'Industrial Area, Nairobi, Kenya', fee: 0 },
@@ -18,7 +20,9 @@ export default function CheckoutInfoPage(){
         pickup, setPickup,
         createAccount, setCreateAccount,
         coordinates, setCoordinates,
-        addressComponents, setAddressComponents
+        addressComponents, setAddressComponents,
+        shipping, setShipping,
+        deliveryZone, setDeliveryZone
     } = useContext(CheckoutContext);
 
     // 'pickup' holds the selected location id string, or null for delivery
@@ -26,6 +30,18 @@ export default function CheckoutInfoPage(){
     let [isReturning, setIsReturning] = useState(false);
     const [error, setError] = useState('');
     const router = useRouter();
+
+    // Zone picker state
+    const [selectedCounty, setSelectedCounty] = useState(null);
+    const [selectedUrban, setSelectedUrban] = useState('');
+    const [manualTown, setManualTown] = useState('');
+    const [deliveryFee, setDeliveryFee] = useState(null);
+
+    // Fetch all counties + urban centers in one call
+    const { data: countiesData } = useSWR(['/locations/counties', {}], fetcher, {
+        revalidateOnFocus: false,
+    });
+    const counties = countiesData?.data || [];
 
     useEffect(() => {
         if (!user) return;
@@ -43,7 +59,51 @@ export default function CheckoutInfoPage(){
     const selectMode = (mode) => {
         setDeliveryMode(mode);
         if (mode === 'delivery') setPickup(null);
-        // Reset pickup selection when switching back to pickup
+        if (mode === 'pickup') {
+            setSelectedCounty(null);
+            setSelectedUrban('');
+            setDeliveryFee(null);
+        }
+    };
+
+    const handleCountyChange = (e) => {
+        const county = counties.find(c => c.id === parseInt(e.target.value));
+        setSelectedCounty(county || null);
+        setSelectedUrban('');
+        setManualTown('');
+        
+        const fee = county ? parseFloat(county.delivery_fee) : 0;
+        setDeliveryFee(fee);
+        setShipping(fee);
+        setDeliveryZone(county?.name || null);
+
+        setOrderDetails(prev => ({ ...prev, delivery_county: county?.name || '', delivery_zone: '' }));
+    };
+
+    const handleUrbanChange = (e) => {
+        const val = e.target.value;
+        setSelectedUrban(val);
+        setManualTown('');
+        if (val === 'other') {
+            const fee = selectedCounty ? parseFloat(selectedCounty.delivery_fee) : 0;
+            setDeliveryFee(fee);
+            setShipping(fee);
+            setDeliveryZone(selectedCounty?.name ? `${selectedCounty.name} (Other Town)` : null);
+            setOrderDetails(prev => ({ ...prev, delivery_zone: '' }));
+        } else if (val) {
+            const urban = selectedCounty?.children?.find(c => c.id === parseInt(val));
+            const fee = urban ? parseFloat(urban.delivery_fee) : (selectedCounty ? parseFloat(selectedCounty.delivery_fee) : 0);
+            setDeliveryFee(fee);
+            setShipping(fee);
+            setDeliveryZone(urban?.name || selectedCounty?.name || null);
+            setOrderDetails(prev => ({ ...prev, delivery_zone: urban?.name || '' }));
+        } else {
+            const fee = selectedCounty ? parseFloat(selectedCounty.delivery_fee) : 0;
+            setDeliveryFee(fee);
+            setShipping(fee);
+            setDeliveryZone(selectedCounty?.name || null);
+            setOrderDetails(prev => ({ ...prev, delivery_zone: '' }));
+        }
     };
 
     const selectPickupLocation = (locationId) => {
@@ -64,9 +124,29 @@ export default function CheckoutInfoPage(){
             setError('Please select a pickup location.');
             return;
         }
-        if (deliveryMode === 'delivery' && (!orderDetails.address || orderDetails.address.trim() === '')) {
-            setError('Please enter a delivery address.');
-            return;
+        if (deliveryMode === 'delivery') {
+            if (!selectedCounty) {
+                setError('Please select your delivery county.');
+                return;
+            }
+            if (selectedUrban === 'other' && !manualTown.trim()) {
+                setError('Please enter your town name.');
+                return;
+            }
+            const finalZone = selectedUrban === 'other' ? manualTown.trim() : (selectedUrban ? (selectedCounty?.children?.find(c => c.id === parseInt(selectedUrban))?.name) : selectedCounty?.name);
+            const finalFee = deliveryFee ?? 0;
+
+            // Store final zone and fee into global context
+            setDeliveryZone(finalZone);
+            setShipping(finalFee);
+
+            // Store into orderDetails before navigating
+            setOrderDetails(prev => ({
+                ...prev,
+                delivery_zone: finalZone,
+                delivery_county: selectedCounty?.name || '',
+                shipping: finalFee,
+            }));
         }
         setError('');
         router.push('/checkout/payment');
@@ -175,7 +255,9 @@ export default function CheckoutInfoPage(){
                                     <div className="flex-1">
                                         <p className="font-semibold text-base">Delivery</p>
                                         <p className="text-black/60 text-sm">Have your order delivered to your address — urban centres in Kenya</p>
-                                        <span className="mt-1.5 inline-block text-xs font-bold text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-full">KES 350</span>
+                                        <span className="mt-1.5 inline-block text-xs font-bold text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-full">
+                                            {deliveryFee !== null ? `KES ${deliveryFee.toLocaleString()}` : 'Select zone'}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -206,38 +288,107 @@ export default function CheckoutInfoPage(){
                                 </div>
                             )}
 
-                        {/* Delivery: show address input */}
+                        {/* Delivery: zone picker + address input */}
                         {deliveryMode === 'delivery' && (
-                            <div className="mb-6">
-                                <div className="flex items-center gap-2 mb-3 p-3 bg-blue-50 border border-blue-100 rounded-lg">
+                            <div className="mb-6 space-y-4">
+                                {/* Info bar */}
+                                <div className="flex items-center gap-2 p-3 bg-blue-50 border border-blue-100 rounded-lg">
                                     <span className="icon-[fluent--vehicle-truck-24-regular] w-5 h-5 text-blue-600 shrink-0" />
-                                    <p className="text-sm text-blue-800 font-medium">Standard delivery to all urban centres in Kenya — <span className="font-bold">KES 350</span></p>
+                                    <p className="text-sm text-blue-800 font-medium">
+                                        Delivery fee is based on your selected county/zone.
+                                        {deliveryFee !== null && <span className="font-bold ml-1">Current fee: KES {deliveryFee.toLocaleString()}</span>}
+                                    </p>
                                 </div>
-                                <label htmlFor="address">
-                                    Delivery Address <span className="text-red-500">*</span>
-                                </label>
-                                <PlacesAutocomplete
-                                    id="address"
-                                    onChange={(value) => {
-                                        setOrderDetails({ ...orderDetails, address: value });
-                                        setCoordinates(null);
-                                        setAddressComponents(null);
-                                    }}
-                                    onSelect={(place) => {
-                                        setOrderDetails({
-                                            ...orderDetails,
-                                            address: place.formatted_address || place.name || '',
-                                        });
-                                        setCoordinates({
-                                            latitude: place.latitude,
-                                            longitude: place.longitude,
-                                        });
-                                        setAddressComponents(place.address_components || []);
-                                    }}
-                                    value={orderDetails.address}
-                                    className="block w-full p-2 border-[1px] border-primary rounded-md mt-1 focus:outline-none focus:ring-2 focus:ring-primary" 
-                                    placeholder="Building, Apartment, or Street, City" 
-                                />
+
+                                {/* Step 1: County */}
+                                <div>
+                                    <label htmlFor="county" className="block text-sm font-medium mb-1">
+                                        County <span className="text-red-500">*</span>
+                                    </label>
+                                    <select
+                                        id="county"
+                                        value={selectedCounty?.id || ''}
+                                        onChange={handleCountyChange}
+                                        className="block w-full p-2 border-[1px] border-primary rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                                    >
+                                        <option value="">-- Select County --</option>
+                                        {counties.map(c => (
+                                            <option key={c.id} value={c.id}>
+                                                {c.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                {/* Step 2: Urban center (shown after county selected) */}
+                                {selectedCounty && (
+                                    <div>
+                                        <label htmlFor="urban" className="block text-sm font-medium mb-1">
+                                            Town / Urban Center <span className="text-black/40 text-xs">(optional — county fee applies if not listed)</span>
+                                        </label>
+                                        <select
+                                            id="urban"
+                                            value={selectedUrban}
+                                            onChange={handleUrbanChange}
+                                            className="block w-full p-2 border-[1px] border-primary rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                                        >
+                                            <option value="">-- Select Town/Urban Center --</option>
+                                            {(selectedCounty.children || []).map(u => (
+                                                <option key={u.id} value={u.id}>
+                                                    {u.name}
+                                                </option>
+                                            ))}
+                                            <option value="other">Other (enter town manually)</option>
+                                        </select>
+                                    </div>
+                                )}
+
+                                {/* Manual town input */}
+                                {selectedUrban === 'other' && (
+                                    <div>
+                                        <label htmlFor="manual_town" className="block text-sm font-medium mb-1">
+                                            Enter Your Town <span className="text-red-500">*</span>
+                                        </label>
+                                        <input
+                                            id="manual_town"
+                                            type="text"
+                                            value={manualTown}
+                                            onChange={e => setManualTown(e.target.value)}
+                                            className="block w-full p-2 border-[1px] border-primary rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                                            placeholder="e.g. Eldoret, Kisii, Thika..."
+                                        />
+                                        <p className="text-xs text-black/50 mt-1">County-level fee applies.</p>
+                                    </div>
+                                )}
+
+                                {/* Delivery Address */}
+                                <div>
+                                    <label htmlFor="address">
+                                        Delivery Address <span className="text-black/40 text-xs">(optional)</span>
+                                    </label>
+                                    <PlacesAutocomplete
+                                        id="address"
+                                        onChange={(value) => {
+                                            setOrderDetails({ ...orderDetails, address: value });
+                                            setCoordinates(null);
+                                            setAddressComponents(null);
+                                        }}
+                                        onSelect={(place) => {
+                                            setOrderDetails({
+                                                ...orderDetails,
+                                                address: place.formatted_address || place.name || '',
+                                            });
+                                            setCoordinates({
+                                                latitude: place.latitude,
+                                                longitude: place.longitude,
+                                            });
+                                            setAddressComponents(place.address_components || []);
+                                        }}
+                                        value={orderDetails.address}
+                                        className="block w-full p-2 border-[1px] border-primary rounded-md mt-1 focus:outline-none focus:ring-2 focus:ring-primary" 
+                                        placeholder="Building, Apartment, or Street, City" 
+                                    />
+                                </div>
                             </div>
                         )}
 

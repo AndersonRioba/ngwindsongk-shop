@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useRef } from "react";
 import { CartContext } from "@/app/lib/providers/CartProvider";
 import { CheckoutContext } from "@/app/lib/providers/CheckoutProvider";
 import useSWR from "swr";
@@ -50,10 +50,10 @@ function CartItem({product, setTotal}){
         errorRetryInterval: 300000
     })
 
-    const [init, setInit] = useState(false);
+    const initialized = useRef(false);
 
     useEffect(()=>{
-        if(data && !isLoading && !error && !init){
+        if(data && !isLoading && !error && !initialized.current){
             const variationPrice = parseFloat(product.variation?.price || 0);
             const variationDiscount = parseFloat(product.variation?.discount || 0);
 
@@ -61,14 +61,21 @@ function CartItem({product, setTotal}){
             const discountAmount = variationDiscount || parseFloat(data?.discount || 0);
             
             const finalPrice = Math.max(0, basePrice - discountAmount);
-            setAmount(finalPrice);
-            
             const qty = parseInt(product?.quantity) || 1;
+
+            setAmount(finalPrice);
             setQuantity(qty);
+            initialized.current = true;
             setTotal(prev => (parseFloat(prev) || 0) + (finalPrice * qty));
-            setInit(true);
+
+            // Cleanup for React StrictMode: subtract on unmount to cancel double-add
+            return () => {
+                setTotal(prev => (parseFloat(prev) || 0) - (finalPrice * qty));
+                initialized.current = false;
+            };
         }
-    },[data, isLoading, error, init, product, setTotal]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[data, isLoading, error]);
 
     const modify = (positive) => {
         let newQty = quantity;
@@ -115,10 +122,13 @@ function CartItem({product, setTotal}){
                     <input 
                         className="bg-gray-200 p-2 w-10 text-center" 
                         value={quantity} 
-                        onChange={e=>{
-                            if(parseInt(e.target.value) > data?.stock) return;
-                            setQuantity(parseInt(e.target.value));
-                            setTotal(total=>total+=(data?.price*parseInt(e.target.value)));
+                        onChange={e => {
+                            const newQty = parseInt(e.target.value) || 1;
+                            if (newQty > data?.stock) return;
+                            const diff = newQty - quantity;
+                            setTotal(total => (parseFloat(total) || 0) + (diff * amount));
+                            setQuantity(newQty);
+                            updateCartQuantity(product.product, newQty, product.variation);
                         }} 
                         type="number" 
                         name="" 
@@ -153,7 +163,7 @@ export default function CartPage(){
             <section className="flex flex-col gap-y-7 md:flex-row md:justify-between">
                 <section className="md:w-1/2">
                     <h3 className="text-3xl mb-3">Your Cart</h3>
-                    <p className="text-sm lg:text-xs 2xl:text-sm text-black/70">Order before 10pm and get it delivered next day before 3pm. Order before noon and get it delivered today. <span className="text-primary">Order NgwindsongkExpress</span> for delivery in under 99 minutes between 8am and 7pm!</p>
+                    <p className="text-sm lg:text-xs 2xl:text-sm text-black/70">Order before <span className="font-semibold text-primary">10am</span> and get it delivered <span className="font-semibold">same day</span>. Orders after 10am will be delivered the <span className="font-semibold">following day</span>.</p>
                     
                     <>
                     {

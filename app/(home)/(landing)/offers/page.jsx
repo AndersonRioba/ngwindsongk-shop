@@ -64,7 +64,7 @@ export default function OffersPage() {
                         </div>
                         <h2 className="text-2xl font-semibold text-gray-700 mb-2">No Active Offers</h2>
                         <p className="text-gray-500 text-center max-w-md">
-                            Check back soon for new promotions and seasonal deals on your favorite products.
+                            Check back soon for new special offers and new arrivals on your favorite products.
                         </p>
                     </div>
                 )}
