@@ -94,7 +94,6 @@ const TestimonialsSection = () => {
         <div className="mt-8 text-center">
             <Link 
               href="/reviews"
-              target="_blank"
               className="bg-primary text-white font-bold tracking-widest uppercase text-[11px] py-4 px-10 rounded-2xl hover:bg-primary/90 inline-flex items-center gap-3 shadow-[0_12px_40px_rgba(24,119,242,0.25)] transition hover:shadow-[0_16px_50px_rgba(24,119,242,0.3)] hover:scale-105 active:scale-95 duration-200"
             >
                 View all Reviews

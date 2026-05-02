@@ -10,6 +10,7 @@ import Cart from "@/app/UI/Cart";
 import { SearchProvider } from "@/app/lib/providers/SearchProvider";
 // import Overlays from "@/app/UI/Overlays";
 import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import PageTracker from "@/app/components/PageTracker";
 import GoogleTag from "@/app/components/GoogleTag";
 
@@ -155,6 +156,7 @@ export default function RootLayout({ children }) {
       </head>
       <body suppressHydrationWarning className={`${latto.className} lg:text-sm 2xl:text-base`}>
       <Analytics/>
+      <SpeedInsights />
         <SearchProvider>
           <AuthProvider>
             <Suspense fallback={null}>
@@ -165,7 +167,7 @@ export default function RootLayout({ children }) {
               <div className="fixed z-50 bottom-24 md:top-40 right-[3vw] lg:right-[0.5vw] 2xl:right-[3vw] w-fit h-fit">
                   <Cart />
               </div>
-              <a href="https://wa.me/254718156421" target="_blank" className="block fixed z-50 bottom-10 right-[3vw] lg:right-[0.5vw] 2xl:right-[3vw] icon-[logos--whatsapp-icon] w-12 h-12 md:w-14 md:h-14">
+              <a href="https://wa.me/254718156421" className="block fixed z-50 bottom-10 right-[3vw] lg:right-[0.5vw] 2xl:right-[3vw] icon-[logos--whatsapp-icon] w-12 h-12 md:w-14 md:h-14">
               </a>
               {children}
             </ContextProvider>

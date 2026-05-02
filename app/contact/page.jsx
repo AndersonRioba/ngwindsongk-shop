@@ -158,7 +158,7 @@ export default function Contact(){
                                 <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary shrink-0 group-hover:bg-primary group-hover:text-white transition-all duration-500 shadow-lg shadow-primary/5">
                                     <span className="icon-[solar--map-point-bold-duotone] w-8 h-8"/>
                                 </div>
-                                <a target="_blank" href={settings.contact_maps_url || "https://maps.app.goo.gl/yGuJeUQddbhW9wcF7"} className="block group/link">
+                                <a href={settings.contact_maps_url || "https://maps.app.goo.gl/yGuJeUQddbhW9wcF7"} className="block group/link">
                                     <address className="not-italic text-lg font-bold text-gray-800 leading-relaxed group-hover/link:text-primary transition-colors">
                                         {settings.contact_address ? (
                                             <div dangerouslySetInnerHTML={{ __html: settings.contact_address }} />

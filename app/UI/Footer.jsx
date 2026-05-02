@@ -92,8 +92,6 @@ export default function Footer() {
                                     )}
                                     <a
                                         href={`https://wa.me/${settings.consultant_whatsapp || settings.footer_whatsapp || '254718156421'}`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
                                         className="flex items-center gap-2 text-sm font-bold text-green-600 hover:text-green-700 transition-colors">
                                         <span className="icon-[logos--whatsapp-icon] w-4 h-4" />
                                         Chat on WhatsApp
@@ -138,8 +136,6 @@ export default function Footer() {
                             <p className="text-black/30 text-[10px] font-black uppercase tracking-widest mb-2">Need help?</p>
                             <a
                                 href={`https://wa.me/${settings.footer_whatsapp || '254718156421'}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
                                 className="flex items-center gap-2 text-green-600 font-bold hover:text-green-700 transition-all hover:translate-x-1"
                             >
                                 <span className="icon-[logos--whatsapp-icon] w-5 h-5 flex-shrink-0" />
@@ -191,13 +187,13 @@ export default function Footer() {
                                     <p className="text-[9px] font-black uppercase tracking-widest text-black/35">{brand.name}</p>
                                     <div className="flex gap-3">
                                         {brand.facebook_url && (
-                                            <a href={brand.facebook_url} target="_blank" rel="noopener noreferrer"
+                                            <a href={brand.facebook_url}
                                                 className="text-black/25 hover:text-[#1877F2] hover:scale-110 transition-all">
                                                 <span className="icon-[logos--facebook] w-4 h-4" />
                                             </a>
                                         )}
                                         {brand.instagram_url && (
-                                            <a href={brand.instagram_url} target="_blank" rel="noopener noreferrer"
+                                            <a href={brand.instagram_url}
                                                 className="text-black/25 hover:text-[#E4405F] hover:scale-110 transition-all">
                                                 <span className="icon-[skill-icons--instagram] w-4 h-4" />
                                             </a>
