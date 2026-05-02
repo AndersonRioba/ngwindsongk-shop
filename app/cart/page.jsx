@@ -167,55 +167,71 @@ export default function CartPage(){
                     
                     <>
                     {
-                        cart.length>0?
+                        cart.length > 0 ?
                         <>
                         {
                             cart.map((item,i)=>(<CartItem setTotal={setTotal} key={i} product={item}/>))
                         }
                         <div className="flex justify-end">
-                            <button onClick={e=>clearCart()} className="shadow-md px-4 py-2 rounded-lg flex items-center gap-1">
+                            <button onClick={e=>clearCart()} className="shadow-md px-4 py-2 rounded-lg flex items-center gap-1 hover:bg-red-50 transition-colors">
                                 <span className="icon-[material-symbols-light--delete-outline] w-6 h-6 text-red-500"/>
                                 Clear Cart
                             </button>
                         </div>
                         </>
                         :
-                        <div className="my-7">No Items</div>
+                        <div className="my-12 flex flex-col items-center justify-center bg-gray-50 rounded-2xl p-10 border border-dashed border-gray-200">
+                            <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-6">
+                                <span className="icon-[solar--cart-large-broken] w-10 h-10 text-gray-400"/>
+                            </div>
+                            <h4 className="text-xl font-semibold text-gray-900 mb-2">Your cart is empty</h4>
+                            <p className="text-gray-500 text-center mb-8 max-w-[280px]">Looks like you haven't added anything to your cart yet.</p>
+                            <Link 
+                                href="/" 
+                                className="bg-primary text-white px-8 py-3 rounded-xl font-bold hover:bg-opacity-90 transition-all shadow-lg shadow-primary/20"
+                            >
+                                Start Shopping
+                            </Link>
+                        </div>
                     }
                     </>
                 </section>
 
-                <section className="md:w-1/3">
-                    <div className="flex border-2 border-gray-200 rounded-md mb-7">
-                        <input  className="w-full px-4" placeholder="Enter coupon code" type="text" name="" id="" />
-                        <button className="bg-primary text-white py-2 px-4 rounded-r-md" >Apply</button>
-                    </div>
-                    
-                    <h6 className="font-semibold text-lg">Payment summary</h6>
-                    <div className="border-b-2 py-3">
-                        <div className="flex my-3 justify-between text-sm lg:text-xs 2xl:text-sm">
-                            <p className="">Items</p>
-                            <p>{total} <span className="text-sm uppercase">kes</span> </p>
+                {cart.length > 0 && (
+                    <section className="md:w-1/3">
+                        <div className="flex border-2 border-gray-200 rounded-md mb-7">
+                            <input  className="w-full px-4 py-2 outline-none" placeholder="Enter coupon code" type="text" name="" id="" />
+                            <button className="bg-primary text-white py-2 px-4 rounded-r-md" >Apply</button>
                         </div>
-                        <div className="flex my-3 justify-between text-sm lg:text-xs 2xl:text-sm">
-                            <p className="">Shipping</p>
-                            <p>{'--'} <span className="text-sm uppercase">kes</span> </p>
+                        
+                        <h6 className="font-semibold text-lg">Payment summary</h6>
+                        <div className="border-b-2 py-3">
+                            <div className="flex my-3 justify-between text-sm lg:text-xs 2xl:text-sm">
+                                <p className="">Items</p>
+                                <p>{total} <span className="text-sm uppercase">kes</span> </p>
+                            </div>
+                            <div className="flex my-3 justify-between text-sm lg:text-xs 2xl:text-sm">
+                                <p className="">Shipping</p>
+                                <p>{'--'} <span className="text-sm uppercase">kes</span> </p>
+                            </div>
+                            <div className="flex my-3 justify-between text-sm lg:text-xs 2xl:text-sm font-semibold">
+                                <p className="">Subtotal</p>
+                                <p>{total} <span className="text-sm uppercase">kes</span> </p>
+                            </div>
+                            <div className="flex my-3 justify-between text-sm lg:text-xs 2xl:text-sm">
+                                <p className="">Current Balance</p>
+                                <p>{'0'} <span className="text-sm uppercase">kes</span> </p>
+                            </div>
                         </div>
-                        <div className="flex my-3 justify-between text-sm lg:text-xs 2xl:text-sm font-semibold">
-                            <p className="">Subtotal</p>
-                            <p>{total} <span className="text-sm uppercase">kes</span> </p>
+                        <div className="flex my-3 justify-between text-lg">
+                            <p className="">Total</p>
+                            <p className="text-primary font-bold">{total} <span className="text-sm uppercase">kes</span> </p>
                         </div>
-                        <div className="flex my-3 justify-between text-sm lg:text-xs 2xl:text-sm">
-                            <p className="">Current Balance</p>
-                            <p>{'0'} <span className="text-sm uppercase">kes</span> </p>
-                        </div>
-                    </div>
-                    <div className="flex my-3 justify-between text-lg">
-                        <p className="">Total</p>
-                        <p>{total} <span className="text-sm uppercase">kes</span> </p>
-                    </div>
-                    <button onClick={e=>checkout()} className="bg-primary text-white block text-center w-full py-4 rounded-xl">Proceed to Checkout</button>
-                </section>
+                        <button onClick={e=>checkout()} className="bg-primary text-white block text-center w-full py-4 rounded-xl font-bold hover:bg-opacity-90 transition-all">
+                            Proceed to Checkout
+                        </button>
+                    </section>
+                )}
             </section>
 
             <div className="mt-5">
