@@ -23,21 +23,21 @@ export default function usePageTracking() {
             const url = `${pathname}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`;
             
             try {
-                // Fire and forget - never block the UI
-                fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://api.ngwindsongk.com'}/api/pageviews`, {
+                const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'https://api.ngwindsongk.com';
+                const endpoint = apiBaseUrl.endsWith('/api') ? `${apiBaseUrl}/pageviews` : `${apiBaseUrl}/api/pageviews`;
+
+                fetch(endpoint, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json',
-                        // If we have an auth token, it will be handled by the browser's cookies if using sanctum 
-                        // or we might need to add it if it's stored in localStorage
                     },
                     body: JSON.stringify({
                         path: url,
                         referrer: document.referrer,
                         session_id: sessionId,
                     }),
-                    keepalive: true, // Ensures the request completes even if the page is closed
+                    keepalive: true,
                 }).catch(err => console.error('Analytics error:', err));
             } catch (error) {
                 // Silent fail
