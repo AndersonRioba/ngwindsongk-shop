@@ -32,11 +32,6 @@ export default function Recipe() {
         { revalidateOnFocus: false }
     );
 
-    // Fetch banners using SWR
-    const { data: bannerResponse } = useSWR(['/banners', { page: 'recipes' }], fetcher);
-    const banners = bannerResponse?.data || [];
-    const [activeBanner, setActiveBanner] = useState(0);
-
     // Fetch categories using SWR
     const { data: categoriesData } = useSWR(
         ['/recipes/categories', {}],
@@ -47,15 +42,6 @@ export default function Recipe() {
     const recipes = recipesData?.data?.data || recipesData?.data || [];
     const paginationMeta = recipesData?.data;
     const categories = categoriesData?.data || [];
-
-    const getDifficultyColor = (difficulty) => {
-        switch (difficulty) {
-            case 'easy': return 'bg-green-100 text-green-800';
-            case 'medium': return 'bg-yellow-100 text-yellow-800';
-            case 'hard': return 'bg-red-100 text-red-800';
-            default: return 'bg-gray-100 text-gray-800';
-        }
-    };
 
     const formatCookingTime = (minutes) => {
         if (minutes < 60) return `${minutes} min`;
@@ -80,171 +66,165 @@ export default function Recipe() {
 
     if (recipesError) {
         return (
-            <div className="text-center py-12">
-                <div className="text-red-500 mb-4">
-                    <Search className="h-16 w-16 mx-auto" />
+            <div className="text-center py-24 luxe-reveal">
+                <div className="text-primary mb-6">
+                    <Search className="h-20 w-20 mx-auto opacity-20" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">Error loading recipes</h3>
-                <p className="text-gray-600">Please try again later</p>
+                <h3 className="text-2xl font-semibold text-black mb-2">Error loading recipes</h3>
+                <p className="text-black/40">Please check your connection and try again later</p>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-white text-gray-900 py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-7xl mx-auto space-y-12">
-                {/* Dynamic Banner / Header Section */}
-                <div className="relative overflow-hidden w-full flex items-center group">
-                    {banners.length > 0 ? (
-                        <div className="relative w-full rounded-[2.5rem] bg-gray-900 overflow-hidden shadow-2xl min-h-[200px]">
-                            {banners.map((banner, i) => (
-                                <div
-                                    key={i}
-                                    className={`relative w-full transition-opacity duration-1000 ${i === activeBanner ? 'opacity-100' : 'opacity-0'} ${i === activeBanner ? '' : 'hidden'}`}
-                                >
-                                    <Image
-                                        src={getImageUrl(banner.image, '/recipe-placeholder.png')}
-                                        className="object-cover opacity-60"
-                                        alt={banner.title || ''}
-                                        fill
-                                        priority={i === activeBanner}
-                                    />
-                                    <div className="absolute inset-x-0 bottom-0 p-8 md:p-12 bg-gradient-to-t from-black/80 via-black/40 to-transparent text-white">
-                                        <div className="max-w-3xl animate-in slide-in-from-left duration-700">
-                                            {banner.title && <h2 className="text-4xl md:text-5xl font-black mb-2 tracking-tighter">{banner.title}</h2>}
-                                            {banner.description && <p className="text-base md:text-lg text-gray-200 font-light max-w-2xl leading-relaxed">{banner.description}</p>}
-                                        </div>
+        <div className="min-h-screen bg-[#fcfcfb] text-black">
+            <div className="relative">
+                {/* Luxe Background Glow */}
+                <div className="absolute inset-x-0 top-0 -z-10 h-[24rem] luxe-glow bg-[radial-gradient(circle_at_top_left,_rgba(109,49,237,0.08),_transparent_45%),radial-gradient(circle_at_top_right,_rgba(21,171,255,0.08),_transparent_45%),linear-gradient(to_bottom,_rgba(255,255,255,0.9),_rgba(252,252,251,1))]" />
+
+                <main className="w-full px-4 pt-10 md:px-8 xl:max-w-[1400px] mx-auto pb-24">
+                    <div className="mx-2 md:mx-6 space-y-10">
+                        {/* Header Section */}
+                        <div className="space-y-4 flex flex-col items-center text-center luxe-reveal luxe-delay-1">
+                            <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-primary mb-1">Culinary Collection</p>
+                            <h1 className="text-3xl md:text-5xl font-semibold tracking-tight leading-[1.2] text-black max-w-3xl">
+                                Elevated Flavors for the <span className="italic">Modern Kitchen</span>
+                            </h1>
+                            <p className="text-black/40 text-sm md:text-base max-w-xl leading-relaxed font-medium">
+                                Explore our curated collection of artisanal recipes.
+                            </p>
+                        </div>
+
+                        {/* Filter Bar */}
+                        <div className="luxe-reveal luxe-delay-2 luxe-card rounded-[2.5rem] border border-black/5 bg-white p-4 md:p-5 shadow-[0_24px_80px_rgba(0,0,0,0.05)] flex flex-col lg:flex-row gap-4 items-center">
+                            <div className="flex-1 w-full relative group">
+                                <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-black/20 h-4 w-4 group-focus-within:text-primary transition-colors" />
+                                <input
+                                    type="text"
+                                    placeholder="Search recipes..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className="w-full pl-14 pr-6 py-3.5 bg-[#f9f9f7] border-none rounded-2xl focus:ring-1 focus:ring-primary/20 transition-all text-sm outline-none placeholder:text-black/30 font-medium"
+                                />
+                            </div>
+
+                            <div className="flex gap-3 w-full lg:w-auto">
+                                <div className="flex-1 lg:w-48 relative">
+                                    <select
+                                        value={selectedCategory}
+                                        onChange={(e) => setSelectedCategory(e.target.value)}
+                                        className="w-full px-5 py-3.5 bg-[#f9f9f7] border-none rounded-2xl text-xs font-medium focus:ring-1 focus:ring-primary/20 outline-none cursor-pointer hover:bg-[#f3f3f1] transition-all appearance-none text-black/70"
+                                    >
+                                        <option value="">All Collections</option>
+                                        {categories.map((c) => (
+                                            <option key={c} value={c}>{c.charAt(0).toUpperCase() + c.slice(1)}</option>
+                                        ))}
+                                    </select>
+                                    <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-black/30">
+                                        <Filter size={12} />
                                     </div>
                                 </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="text-center space-y-3 px-4">
-                                <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-primary">
-                                    CURATED RECIPES
-                                </h1>
-                                <div className="h-1 w-16 bg-primary mx-auto rounded-full"></div>
-                                <p className="text-gray-500 text-base max-w-2xl mx-auto font-medium leading-relaxed">
-                                    Elevate your culinary journey with our premium grains.
-                                    Artisanal instructions for the modern kitchen.
-                                </p>
-                            </div>
-                        </div>
-                    )}
-                </div>
 
-                {/* Filter Section */}
-                <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col md:flex-row gap-6 items-center">
-                    <div className="flex-1 w-full relative group">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-primary h-5 w-5 group-focus-within:scale-110 transition-transform" />
-                        <input
-                            type="text"
-                            placeholder="Search the collection..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full pl-12 pr-4 py-4 bg-white border border-gray-200 rounded-xl focus:ring-1 focus:ring-primary focus:border-primary transition-all text-sm outline-none placeholder:text-gray-400"
-                        />
-                    </div>
-
-                    <div className="flex gap-4 w-full md:w-auto">
-                        <select
-                            value={selectedCategory}
-                            onChange={(e) => setSelectedCategory(e.target.value)}
-                            className="flex-1 md:w-48 px-4 py-4 bg-white border border-gray-200 rounded-xl text-sm focus:ring-1 focus:ring-primary outline-none cursor-pointer hover:border-gray-300"
-                        >
-                            <option value="">All Collections</option>
-                            {categories.map((c) => (
-                                <option key={c} value={c}>{c.charAt(0).toUpperCase() + c.slice(1)}</option>
-                            ))}
-                        </select>
-
-                        <select
-                            value={selectedDifficulty}
-                            onChange={(e) => setSelectedDifficulty(e.target.value)}
-                            className="flex-1 md:w-40 px-4 py-4 bg-white border border-gray-200 rounded-xl text-sm focus:ring-1 focus:ring-primary outline-none cursor-pointer hover:border-gray-300"
-                        >
-                            <option value="">Complexity</option>
-                            <option value="easy">Beginner</option>
-                            <option value="medium">Intermediate</option>
-                            <option value="hard">Master</option>
-                        </select>
-                    </div>
-                </div>
-
-                {/* Grid Section */}
-                {recipes.length === 0 ? (
-                    <div className="text-center py-32 space-y-4 opacity-50">
-                        <span className="icon-[arcticons--reciper] w-20 h-20 mx-auto block text-gray-700" />
-                        <p className="text-xl font-light italic">No culinary matches found...</p>
-                    </div>
-                ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                        {recipes.map((recipe, index) => (
-                            <div
-                                key={recipe.id}
-                                className="group bg-white rounded-3xl overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.06)] hover:shadow-[0_24px_80px_rgba(0,0,0,0.12)] hover:-translate-y-1 transition-all duration-500 flex flex-col"
-                                style={{ animationDelay: `${index * 100}ms` }}
-                            >
-                                {/* Immersive Header */}
-                                <Link href={`/recipes/${recipe.slug}`} className="relative h-64 overflow-hidden block">
-                                    <div className="absolute inset-0 bg-gradient-to-t from-white/20 via-transparent to-transparent z-10"></div>
-                                    <Image
-                                        src={getImageUrl(recipe.image, '/recipe-placeholder.png')}
-                                        alt={recipe.title}
-                                        className="object-cover group-hover:scale-110 transition-transform duration-1000"
-                                        fill
-                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                    />
-                                    <div className="absolute top-4 left-4 z-20 flex gap-2">
-                                        <span className="bg-white/90 backdrop-blur-md text-primary border border-primary/20 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest shadow-sm">
-                                            {recipe.category}
-                                        </span>
-                                        {recipe.is_featured && (
-                                            <span className="bg-primary text-white px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-1 shadow-lg shadow-primary/20">
-                                                <Star size={10} fill="currentColor" />
-                                                Signature
-                                            </span>
-                                        )}
-                                    </div>
-                                </Link>
-
-                                {/* Content Body */}
-                                <div className="p-8 flex-1 flex flex-col space-y-6">
-                                    <div className="space-y-3">
-                                        <Link href={`/recipes/${recipe.slug}`} className="block w-fit">
-                                            <h3 className="text-2xl font-bold text-gray-900 group-hover:text-primary hover:underline underline-offset-4 transition-all leading-tight lowercase capitalize">
-                                                {recipe.title}
-                                            </h3>
-                                        </Link>
-                                        <p className="text-gray-500 text-sm leading-relaxed line-clamp-2 italic font-light cursor-default">
-                                            &ldquo;{recipe.content}&rdquo;
-                                        </p>
-                                    </div>
-
-
-
-                                    {/* Action Foot */}
-                                    <div className="pt-4 flex items-center justify-between">
-                                        <div className="flex items-center gap-2 text-gray-400 text-[10px] font-bold uppercase tracking-widest">
-                                            <span className="icon-[solar--eye-bold] text-primary/40" />
-                                            {recipe.views} Views
-                                        </div>
-                                        <Link
-                                            href={`/recipes/${recipe.slug}`}
-                                            className="px-6 py-2 rounded-xl bg-primary text-white text-xs font-black uppercase tracking-widest hover:bg-primary/90 transition-all duration-300 shadow-md active:scale-95"
-                                        >
-                                            View Recipe
-                                        </Link>
+                                <div className="flex-1 lg:w-40 relative">
+                                    <select
+                                        value={selectedDifficulty}
+                                        onChange={(e) => setSelectedDifficulty(e.target.value)}
+                                        className="w-full px-5 py-3.5 bg-[#f9f9f7] border-none rounded-2xl text-xs font-medium focus:ring-1 focus:ring-primary/20 outline-none cursor-pointer hover:bg-[#f3f3f1] transition-all appearance-none text-black/70"
+                                    >
+                                        <option value="">Complexity</option>
+                                        <option value="easy">Beginner</option>
+                                        <option value="medium">Intermediate</option>
+                                        <option value="hard">Master</option>
+                                    </select>
+                                    <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-black/30">
+                                        <Clock size={12} />
                                     </div>
                                 </div>
                             </div>
-                        ))}
-                    </div>
-                )}
+                        </div>
 
-                {/* Pagination */}
-                <Pagination meta={paginationMeta} onPageChange={handlePageChange} />
+                        {/* Recipe Grid */}
+                        {recipes.length === 0 ? (
+                            <div className="luxe-reveal luxe-delay-3 text-center py-32 space-y-6">
+                                <div className="w-24 h-24 bg-black/5 rounded-full flex items-center justify-center mx-auto">
+                                    <Search className="h-10 w-10 text-black/20" />
+                                </div>
+                                <div className="space-y-2">
+                                    <p className="text-2xl font-semibold text-black">No recipes found</p>
+                                    <p className="text-black/40">Try adjusting your search or filters to find what you're looking for.</p>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
+                                {recipes.map((recipe, index) => (
+                                    <div
+                                        key={recipe.id}
+                                        className={`luxe-reveal luxe-delay-${(index % 4) + 1} group`}
+                                    >
+                                        <div className="luxe-card bg-white rounded-[2rem] overflow-hidden border border-black/[0.03] shadow-[0_12px_40px_rgba(0,0,0,0.03)] hover:shadow-[0_32px_80px_rgba(0,0,0,0.08)] flex flex-col h-full">
+                                            {/* Image Header */}
+                                            <Link href={`/recipes/${recipe.slug}`} className="relative h-64 overflow-hidden block">
+                                                <Image
+                                                    src={getImageUrl(recipe.image, '/recipe-placeholder.png')}
+                                                    alt={recipe.title}
+                                                    className="object-cover transition-transform duration-1000 group-hover:scale-105"
+                                                    fill
+                                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                                />
+                                                <div className="absolute top-5 left-5 z-20 flex flex-col gap-2">
+                                                    <span className="bg-white/90 backdrop-blur-md text-black/80 px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-[0.15em] shadow-sm w-fit">
+                                                        {recipe.category}
+                                                    </span>
+                                                    {recipe.is_featured && (
+                                                        <span className="bg-primary text-white px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-[0.15em] flex items-center gap-1.5 shadow-lg shadow-primary/20 w-fit">
+                                                            <Star size={9} fill="currentColor" />
+                                                            Signature
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            </Link>
+
+                                            {/* Content */}
+                                            <div className="p-6 md:p-7 flex-1 flex flex-col">
+                                                <div className="space-y-3 flex-1">
+                                                    <Link href={`/recipes/${recipe.slug}`} className="block">
+                                                        <h3 className="text-xl md:text-2xl font-semibold text-black group-hover:text-primary transition-colors leading-tight">
+                                                            {recipe.title}
+                                                        </h3>
+                                                    </Link>
+                                                </div>
+
+                                                <div className="pt-6 flex items-center justify-between border-t border-black/5 mt-6">
+                                                    <div className="flex gap-4">
+                                                        <div className="flex items-center gap-1.5 text-black/30 text-[9px] font-bold uppercase tracking-widest">
+                                                            <Clock size={11} className="text-primary/40" />
+                                                            {formatCookingTime(recipe.cooking_time)}
+                                                        </div>
+                                                        <div className="flex items-center gap-1.5 text-black/30 text-[9px] font-bold uppercase tracking-widest">
+                                                            <Users size={11} className="text-primary/40" />
+                                                            {recipe.servings}
+                                                        </div>
+                                                    </div>
+                                                    <Link
+                                                        href={`/recipes/${recipe.slug}`}
+                                                        className="px-5 py-2 rounded-xl bg-primary text-white text-[10px] font-bold uppercase tracking-[0.15em] hover:bg-primary-dark transition-all duration-300 shadow-lg shadow-primary/20 hover:-translate-y-0.5 active:scale-95"
+                                                    >
+                                                        View
+                                                    </Link>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
+                        {/* Pagination */}
+                        <div className="luxe-reveal luxe-delay-4 pt-10">
+                            <Pagination meta={paginationMeta} onPageChange={handlePageChange} />
+                        </div>
+                    </div>
+                </main>
             </div>
         </div>
     );

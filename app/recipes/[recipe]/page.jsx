@@ -4,7 +4,7 @@ import { useState } from "react"
 import Image from "next/image"
 import { useParams } from "next/navigation"
 import Link from "next/link"
-import { Clock, Users, Star, ArrowLeft, Share2, Bookmark, ChefHat } from "lucide-react"
+import { Clock, Users, Star, ArrowLeft, Share2, Bookmark, ChefHat, Facebook, Twitter, Check, X, Link as LinkIcon } from "lucide-react"
 import ProductListing from "@/app/UI/ProductListing"
 import useSWR from "swr"
 import { fetcher } from "@/app/lib/data"
@@ -13,6 +13,8 @@ import { getImageUrl } from "@/app/lib/utils/image";
 export default function RecipeDetail() {
     const { recipe: slug } = useParams()
     const [activeTab, setActiveTab] = useState('ingredients')
+    const [showShareModal, setShowShareModal] = useState(false);
+    const [copySuccess, setCopySuccess] = useState(false);
 
     // Fetch recipe details using SWR
     const { data: recipeData, error, isLoading } = useSWR([`/recipes/${slug}`], fetcher, {
@@ -21,6 +23,38 @@ export default function RecipeDetail() {
 
     const recipe = recipeData?.recipe;
     const relatedRecipes = recipeData?.related || [];
+
+    const handleShare = async () => {
+        setShowShareModal(true);
+    };
+
+    const handleCopyLink = async () => {
+        try {
+            await navigator.clipboard.writeText(window.location.href);
+            setCopySuccess(true);
+            setTimeout(() => setCopySuccess(false), 2000);
+        } catch (err) {
+            console.error('Failed to copy: ', err);
+        }
+    };
+
+    const handleNativeShare = async () => {
+        const shareData = {
+            title: recipe.title,
+            text: `Check out this amazing recipe: ${recipe.title}`,
+            url: window.location.href,
+        };
+
+        try {
+            if (navigator.share && navigator.canShare(shareData)) {
+                await navigator.share(shareData);
+            } else {
+                handleCopyLink();
+            }
+        } catch (error) {
+            console.error("Error sharing:", error);
+        }
+    };
 
     const getDifficultyColor = (difficulty) => {
         switch (difficulty) {
@@ -64,6 +98,111 @@ export default function RecipeDetail() {
 
     return (
         <div className="min-h-screen bg-[#fcfcfb] text-black">
+            {/* Share Modal */}
+            {showShareModal && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                    <div 
+                        className="absolute inset-0 bg-black/60 backdrop-blur-sm luxe-reveal"
+                        onClick={() => setShowShareModal(false)}
+                    ></div>
+                    <div className="relative bg-white w-full max-w-md rounded-[2.5rem] p-8 md:p-10 shadow-[0_32px_80px_rgba(0,0,0,0.15)] luxe-reveal luxe-delay-1">
+                        <button 
+                            onClick={() => setShowShareModal(false)}
+                            className="absolute top-8 right-8 p-2 rounded-full hover:bg-black/5 transition-colors"
+                        >
+                            <X size={20} className="text-black/40" />
+                        </button>
+                        
+                        <div className="space-y-8">
+                            <div className="space-y-2">
+                                <p className="text-xs font-bold uppercase tracking-[0.4em] text-primary">Share Recipe</p>
+                                <h2 className="text-3xl font-semibold tracking-tight text-black capitalize">
+                                    Spread the flavor
+                                </h2>
+                            </div>
+
+                            <div className="space-y-4">
+                                <p className="text-[10px] font-bold text-black/40 uppercase tracking-[0.2em]">Share via link</p>
+                                <div className="relative flex items-center gap-2 p-2 bg-[#f9f9f7] rounded-2xl border border-black/5">
+                                    <a 
+                                        href={typeof window !== 'undefined' ? window.location.href : '#'}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex-1 px-4 py-2 text-xs text-primary hover:underline font-medium truncate"
+                                    >
+                                        {typeof window !== 'undefined' ? window.location.href : ''}
+                                    </a>
+                                    <button 
+                                        onClick={handleCopyLink}
+                                        className={`px-6 py-3 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all ${
+                                            copySuccess ? 'bg-green-500 text-white shadow-lg shadow-green-500/20' : 'bg-primary text-white hover:bg-primary-dark shadow-lg shadow-primary/20'
+                                        }`}
+                                    >
+                                        {copySuccess ? (
+                                            <span className="flex items-center gap-2">
+                                                <Check size={12} />
+                                                Copied
+                                            </span>
+                                        ) : (
+                                            'Copy Link'
+                                        )}
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div className="space-y-6 pt-4 border-t border-black/5">
+                                <p className="text-[10px] font-bold text-black/40 uppercase tracking-[0.2em]">Social Networks</p>
+                                <div className="grid grid-cols-3 gap-4">
+                                    <a 
+                                        href={`https://api.whatsapp.com/send?text=Check out this amazing recipe: ${recipe.title} - ${typeof window !== 'undefined' ? window.location.href : ''}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex flex-col items-center gap-3 group"
+                                    >
+                                        <div className="w-14 h-14 rounded-full bg-[#25D366]/10 text-[#25D366] flex items-center justify-center group-hover:bg-[#25D366] group-hover:text-white transition-all duration-300">
+                                            <span className="icon-[tabler--brand-whatsapp] w-6 h-6" />
+                                        </div>
+                                        <span className="text-[9px] font-bold uppercase tracking-widest text-black/40 group-hover:text-black transition-colors">WhatsApp</span>
+                                    </a>
+                                    <a 
+                                        href={`https://www.facebook.com/sharer/sharer.php?u=${typeof window !== 'undefined' ? window.location.href : ''}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex flex-col items-center gap-3 group"
+                                    >
+                                        <div className="w-14 h-14 rounded-full bg-[#1877F2]/10 text-[#1877F2] flex items-center justify-center group-hover:bg-[#1877F2] group-hover:text-white transition-all duration-300">
+                                            <Facebook size={24} />
+                                        </div>
+                                        <span className="text-[9px] font-bold uppercase tracking-widest text-black/40 group-hover:text-black transition-colors">Facebook</span>
+                                    </a>
+                                    <a 
+                                        href={`https://twitter.com/intent/tweet?text=Check out this amazing recipe: ${recipe.title}&url=${typeof window !== 'undefined' ? window.location.href : ''}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex flex-col items-center gap-3 group"
+                                    >
+                                        <div className="w-14 h-14 rounded-full bg-black/5 text-black flex items-center justify-center group-hover:bg-black group-hover:text-white transition-all duration-300">
+                                            <Twitter size={24} />
+                                        </div>
+                                        <span className="text-[9px] font-bold uppercase tracking-widest text-black/40 group-hover:text-black transition-colors">Twitter</span>
+                                    </a>
+                                </div>
+                            </div>
+
+                            {navigator.share && (
+                                <button 
+                                    onClick={handleNativeShare}
+                                    className="w-full py-4 rounded-2xl bg-[#f9f9f7] hover:bg-black/5 text-black/60 font-bold text-[10px] uppercase tracking-widest transition-all flex items-center justify-center gap-2"
+                                >
+                                    <Share2 size={14} />
+                                    More sharing options
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* Hero Section */}
             <section className="w-full px-4 pt-10 md:px-8 xl:max-w-[1400px] mx-auto pb-4">
                 <Link
@@ -139,7 +278,10 @@ export default function RecipeDetail() {
 
                             {/* Share/Actions */}
                             <div className="flex gap-4 luxe-reveal luxe-delay-4">
-                                <button className="flex-1 bg-black hover:bg-black/90 text-white py-4 rounded-[1.75rem] font-semibold uppercase text-xs tracking-[0.2em] transition-all flex items-center justify-center gap-2 shadow-[0_12px_40px_rgba(0,0,0,0.12)] hover:shadow-[0_16px_50px_rgba(0,0,0,0.15)] hover:-translate-y-0.5">
+                                <button 
+                                    onClick={handleShare}
+                                    className="flex-1 bg-primary hover:bg-primary-dark text-white py-4 rounded-[1.75rem] font-semibold uppercase text-xs tracking-[0.2em] transition-all flex items-center justify-center gap-2 shadow-[0_12px_40px_rgba(109,49,237,0.25)] hover:shadow-[0_16px_50px_rgba(109,49,237,0.35)] hover:-translate-y-0.5"
+                                >
                                     <Share2 size={16} />
                                     Share Recipe
                                 </button>
