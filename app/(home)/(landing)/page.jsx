@@ -161,6 +161,40 @@ export default function Home() {
                 />
 
                 <RunningBanner />
+
+                {!hasActiveSearch && (
+                    <section className="pt-6">
+                        {/* Brand logos — horizontally scrollable on mobile */}
+                        <div className="flex flex-row gap-6 md:gap-12 overflow-x-auto px-6 md:px-16 py-4 scrollbar-hide justify-start md:justify-center">
+                            {brandsList.map((brand) => (
+                                <Link
+                                    key={brand.id}
+                                    href={`/products/${brand.name.toLowerCase().trim().replaceAll(' ', '-')}`}
+                                    className="flex-none flex flex-col items-center gap-2 group"
+                                >
+                                    <div 
+                                        className="w-20 h-20 md:w-32 md:h-32 rounded-full border-[2px] bg-white shadow-[0_4px_20px_rgba(0,0,0,0.05)] transition-all duration-300 group-hover:scale-105 flex items-center justify-center overflow-hidden"
+                                        style={{ 
+                                            borderColor: brand.color_hex || '#e5e7eb',
+                                            boxShadow: `0 4px 20px rgba(0,0,0,0.05)`
+                                        }}
+                                    >
+                                        <div className="w-full h-full p-1.5 flex items-center justify-center relative">
+                                            <Image
+                                                src={getImageUrl(brand.logo)}
+                                                alt={brand.name}
+                                                fill
+                                                className="object-contain p-1"
+                                            />
+                                        </div>
+                                    </div>
+                                    <p className="text-[10px] md:text-xs font-bold text-black/80 tracking-wide group-hover:text-black transition-colors uppercase">{brand.name}</p>
+                                </Link>
+                            ))}
+                        </div>
+                    </section>
+                )}
+
                 <Carousel />
 
                 <div className="mx-2 md:mx-auto md:max-w-3xl px-4 pt-6 md:px-8">
@@ -173,38 +207,6 @@ export default function Home() {
 
 
 
-                    {!hasActiveSearch && (
-                        <section className="pt-8 md:pt-12">
-                            {/* Brand logos — horizontally scrollable on mobile */}
-                            <div className="flex flex-row gap-12 overflow-x-auto px-8 md:px-16 py-6 scrollbar-hide justify-start md:justify-center">
-                                {brandsList.map((brand) => (
-                                    <Link
-                                        key={brand.id}
-                                        href={`/products/${brand.name.toLowerCase().trim().replaceAll(' ', '-')}`}
-                                        className="flex-none flex flex-col items-center gap-3 group"
-                                    >
-                                        <div 
-                                            className="w-36 h-36 md:w-44 md:h-44 rounded-full border-[3px] bg-[#f5f5f3] shadow-[0_8px_30px_rgba(0,0,0,0.08)] transition-all duration-300 group-hover:scale-110 flex items-center justify-center overflow-hidden"
-                                            style={{ 
-                                                borderColor: brand.color_hex || '#e5e7eb',
-                                                boxShadow: `0 8px 30px rgba(0,0,0,0.08)`
-                                            }}
-                                        >
-                                            <div className="w-full h-full p-3 flex items-center justify-center relative">
-                                                <Image
-                                                    src={getImageUrl(brand.logo)}
-                                                    alt={brand.name}
-                                                    fill
-                                                    className="object-contain p-3"
-                                                />
-                                            </div>
-                                        </div>
-                                        <p className="text-sm font-semibold text-black/70 tracking-wide group-hover:text-black transition-colors">{brand.name}</p>
-                                    </Link>
-                                ))}
-                            </div>
-                        </section>
-                    )}
 
                     {/* Offers Band hidden as requested */}
                     {/* {!hasActiveSearch && <OffersSection products={offerProductsList} />} */}

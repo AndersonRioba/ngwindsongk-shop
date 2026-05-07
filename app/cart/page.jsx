@@ -228,7 +228,7 @@ export default function CartPage(){
                             <p className="text-primary font-bold">{total} <span className="text-sm uppercase">kes</span> </p>
                         </div>
                         <button onClick={e=>checkout()} className="bg-primary text-white block text-center w-full py-4 rounded-xl font-bold hover:bg-opacity-90 transition-all">
-                            Proceed to Checkout
+                            Proceed to buy
                         </button>
                     </section>
                 )}
