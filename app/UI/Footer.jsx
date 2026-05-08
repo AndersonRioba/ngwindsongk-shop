@@ -10,8 +10,14 @@ import Image from "next/image"
 import { getImageUrl } from "@/app/lib/utils/image"
 
 export default function Footer() {
-    const { data: response } = useSWR(['/settings', { group: 'footer' }], fetcher)
-    const { data: brands } = useSWR(['/brands', {}], fetcher)
+    const { data: response } = useSWR(['/settings', { group: 'footer' }], fetcher, {
+        revalidateOnFocus: false,
+        revalidateOnReconnect: false,
+    })
+    const { data: brands } = useSWR(['/brands', {}], fetcher, {
+        revalidateOnFocus: false,
+        revalidateOnReconnect: false,
+    })
     const settings = response?.data || {}
     const pathname = usePathname()
 

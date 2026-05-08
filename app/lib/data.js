@@ -4,7 +4,6 @@ import { popupE } from "@/app/lib/trigger"
 export function getData(setData, endpoint, parameters, baseURL = process.env.NEXT_PUBLIC_API_URL, token = load('token')) {
     //map parameters to get parameter format
     let params = new URLSearchParams(parameters).toString();
-    console.log('Payload :: ', params)
     const url = `${baseURL}${endpoint}?${params}`;
     fetch(url, {
         headers: {
@@ -31,17 +30,16 @@ export function getData(setData, endpoint, parameters, baseURL = process.env.NEX
         })
         .then(data => {
             if (!data) return;
-            console.log(`From ${endpoint}`, data)
             if (data.error) popupE('Error', data.error)
             else
                 try {
                     setData(data);
                 } catch (err) {
-                    console.log(err)
+                    // setData error
                 }
         })
         .catch(err => {
-            console.log(err)
+            // handle err
         });
 }
 
@@ -64,7 +62,6 @@ export function getFile(name, endpoint, parameters, token = load('token')) {
             return res.blob();
         })
         .then(blob => {
-            console.log(blob)
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.style.display = 'none';
@@ -76,7 +73,6 @@ export function getFile(name, endpoint, parameters, token = load('token')) {
             popupE('Success', 'File downloaded successfully');
         })
         .catch(err => {
-            console.log(err)
             popupE('Error', 'Server Error')
         });
 }
@@ -129,7 +125,6 @@ export function postFile(setData, files, key, data, endpoint, baseURL = process.
             try {
                 setData(data);
             } catch (err) {
-                console.log(err)
                 popupE('Error', 'Error in client worker')
             }
         })
@@ -180,7 +175,6 @@ export async function postData(setData, data, endpoint, baseURL = process.env.NE
         })
         .then((data) => {
             if (!data) return;
-            console.log(`From ${endpoint}`, data)
             if (data.success === false) popupE('Error', data.message || 'Error occurred')
             else if (data?.success) {
                 if (data?.message) popupE('Success', data.message)
@@ -189,7 +183,6 @@ export async function postData(setData, data, endpoint, baseURL = process.env.NE
             try {
                 setData(data);
             } catch (err) {
-                console.log(err)
                 popupE('Error', 'Error in client worker')
             }
         })
@@ -230,13 +223,11 @@ export async function putData(setData, data, endpoint, baseURL = process.env.NEX
             return res.json();
         })
         .then((data) => {
-            console.log(`From ${endpoint}`, data)
             if (data.success === false) popupE('Error', data.message)
             if (data?.success && data?.message) popupE('Success', data.message)
             try {
                 setData(data);
             } catch (err) {
-                console.log(err)
                 popupE('Error', 'Error in client worker')
             }
         })
@@ -277,7 +268,6 @@ export async function deleteData(setData, data, endpoint, baseURL = process.env.
             return res.json();
         })
         .then((data) => {
-            console.log(`From ${endpoint}`, data)
             if (data.success === false) popupE('Error', data.message)
             if (data?.success && data?.message) popupE('Success', data.message)
             setData(data);

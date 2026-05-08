@@ -29,7 +29,10 @@ export function MobileSideMenu({ isOpen, setIsOpen }){
     let pathname = usePathname();
     const { user, token, logout } = useAuth();
     const isLoggedIn = !!token;
-    const { data: navData } = useSWR(['/nav-menus', {}], fetcher)
+    const { data: navData } = useSWR(['/nav-menus', {}], fetcher, {
+        revalidateOnFocus: false,
+        revalidateOnReconnect: false,
+    })
 
     useEffect(()=>{
         setIsOpen(false);
@@ -129,8 +132,14 @@ export function TopMenu(){
     let pathname = usePathname();
     const { user, token, logout } = useAuth();
     const isLoggedIn = !!token;
-    const { data: navData } = useSWR(['/nav-menus', {}], fetcher)
-    const { data: settingsData } = useSWR(['/settings', { group: 'footer' }], fetcher)
+    const { data: navData } = useSWR(['/nav-menus', {}], fetcher, {
+        revalidateOnFocus: false,
+        revalidateOnReconnect: false,
+    })
+    const { data: settingsData } = useSWR(['/settings', { group: 'footer' }], fetcher, {
+        revalidateOnFocus: false,
+        revalidateOnReconnect: false,
+    })
     const settings = settingsData?.data || {}
     
     return(

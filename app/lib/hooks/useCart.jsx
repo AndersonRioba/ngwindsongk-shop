@@ -26,7 +26,7 @@ export default function useCart () {
         updateRecord('cart', newCart).then(() => {
             setCart(newCart);
         }).catch(error => {
-            console.log(error);
+            // handle error
         });
     }
 
@@ -40,7 +40,7 @@ export default function useCart () {
         updateRecord('cart', newCart).then(() => {
             setCart(newCart);
         }).catch(error => {
-            console.log(error);
+            // handle error
         });
     }
 
@@ -57,7 +57,7 @@ export default function useCart () {
         updateRecord('cart', newCart).then(() => {
             setCart(newCart);
         }).catch(error => {
-            console.log(error);
+            // handle error
         });
     }
 
@@ -65,7 +65,7 @@ export default function useCart () {
         clearDatabase().then(data=>{
             setCart([]);
         }).catch(error=>{
-            console.log(error);
+            // handle error
         });
     }
 

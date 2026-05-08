@@ -15,8 +15,18 @@ import PageTracker from "@/app/components/PageTracker";
 import GoogleTag from "@/app/components/GoogleTag";
 
 
-const poppins = Poppins({ subsets: ["latin"], weight: ['200', '300', '400', '600', '800'], style: 'normal' });
-const latto = Lato({ subsets: ["latin"], weight: ['300', '400', '700'], style: 'normal' });
+const poppins = Poppins({ 
+  subsets: ["latin"], 
+  weight: ['400', '600', '800'], 
+  style: 'normal',
+  display: 'swap' 
+});
+const latto = Lato({ 
+  subsets: ["latin"], 
+  weight: ['400', '700'], 
+  style: 'normal',
+  display: 'swap'
+});
 
 export const metadata = {
   title: {
