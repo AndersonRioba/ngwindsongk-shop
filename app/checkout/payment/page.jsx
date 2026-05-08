@@ -33,6 +33,8 @@ export default function CheckoutPaymentPage(){
     const [settings, setSettings] = useState({});
     const [idempotencyKey, setIdempotencyKey] = useState('');
     const [createdOrderId, setCreatedOrderId] = useState(null);
+    const [isPolling, setIsPolling] = useState(false);
+    const [pollingStatus, setPollingStatus] = useState('');
 
     const { cart } = useCart();
     const router = useRouter();
@@ -227,11 +229,12 @@ export default function CheckoutPaymentPage(){
         if (createdOrderId) {
             postData(
                 (mpesaResponse)=>{
-                    setIsProcessing(false);
                     if (mpesaResponse.success === false || mpesaResponse.ResponseCode !== "0") {
+                        setIsProcessing(false);
                         setErrorMsg(mpesaResponse.message || mpesaResponse.error || mpesaResponse.errorMessage || mpesaResponse.ResponseDescription || "Failed to initiate M-Pesa prompt. Please try again.");
                     } else {
-                        router.push('/checkout/success');
+                        // Start Polling
+                        startPolling(createdOrderId);
                     }
                 },
                 {
@@ -250,20 +253,22 @@ export default function CheckoutPaymentPage(){
         postData(
             (response)=>{
                 if(response.success){
-                    setCreatedOrderId(response.data.slug);
+                    const orderSlug = response.data.slug;
+                    setCreatedOrderId(orderSlug);
                     postData(
                         (mpesaResponse)=>{
-                            setIsProcessing(false);
                             if (mpesaResponse.success === false || mpesaResponse.ResponseCode !== "0") {
+                                setIsProcessing(false);
                                 setErrorMsg(mpesaResponse.message || mpesaResponse.error || mpesaResponse.errorMessage || mpesaResponse.ResponseDescription || "Failed to initiate M-Pesa prompt. Please try again.");
                             } else {
-                                router.push('/checkout/success');
+                                // Start Polling
+                                startPolling(orderSlug);
                             }
                         },
                         {
                             amount: finalTotal,
                             phone: contact,
-                            order_id: response.data.slug
+                            order_id: orderSlug
                         },
                         '/pay/mpesa',
                         process.env.NEXT_PUBLIC_API_URL,
@@ -292,6 +297,46 @@ export default function CheckoutPaymentPage(){
             load('token'),
             { 'Idempotency-Key': idempotencyKey }
         )
+    }
+
+    const startPolling = (orderSlug) => {
+        setIsPolling(true);
+        setPollingStatus('Waiting for you to enter M-Pesa PIN...');
+        
+        let attempts = 0;
+        const maxAttempts = 20; // 20 * 3 seconds = 1 minute
+        
+        const interval = setInterval(async () => {
+            attempts++;
+            try {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/pay/mpesa/status/${orderSlug}`, {
+                    headers: { 'Authorization': `Bearer ${load('token')}` }
+                });
+                const data = await res.json();
+                
+                if (data.status === 'success') {
+                    clearInterval(interval);
+                    setIsPolling(false);
+                    setIsProcessing(false);
+                    router.push('/checkout/success');
+                } else if (data.status === 'failed') {
+                    clearInterval(interval);
+                    setIsPolling(false);
+                    setIsProcessing(false);
+                    setErrorMsg("M-Pesa payment failed. Please try again.");
+                } else {
+                    // Still pending
+                    if (attempts >= maxAttempts) {
+                        clearInterval(interval);
+                        setIsPolling(false);
+                        setIsProcessing(false);
+                        setErrorMsg("Payment timeout. If you paid, your order will be updated shortly.");
+                    }
+                }
+            } catch (err) {
+                console.error("Polling error:", err);
+            }
+        }, 3000);
     }
 
     return(
@@ -394,8 +439,18 @@ export default function CheckoutPaymentPage(){
                         onClick={submitOrder} 
                         className="mt-6 bg-primary text-white block text-center w-full py-4 rounded-xl font-bold text-lg hover:bg-opacity-90 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all"
                     >
-                        {isProcessing ? 'Processing...' : 'Pay & Place Order'}
+                        {isPolling ? 'Confirming Payment...' : (isProcessing ? 'Processing...' : 'Pay & Place Order')}
                     </button>
+                    
+                    {isPolling && (
+                        <div className="mt-4 p-4 bg-primary/5 border border-primary/20 rounded-xl text-center">
+                            <div className="flex justify-center mb-3">
+                                <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+                            </div>
+                            <p className="text-sm font-semibold text-primary">{pollingStatus}</p>
+                            <p className="text-xs text-gray-500 mt-1">Please do not refresh this page.</p>
+                        </div>
+                    )}
                 </section>
             </section>
         </main>
