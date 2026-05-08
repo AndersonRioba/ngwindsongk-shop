@@ -143,8 +143,8 @@ export function postFile(setData, files, key, data, endpoint, baseURL = process.
         });
 }
 
-export async function postData(setData, data, endpoint, baseURL = process.env.NEXT_PUBLIC_API_URL, token = load('token'), customHeaders = {}) {
-    popupE('Processing', 'Please wait...')
+export async function postData(setData, data, endpoint, baseURL = process.env.NEXT_PUBLIC_API_URL, token = load('token'), customHeaders = {}, showPopups = true) {
+    if (showPopups) popupE('Processing', 'Please wait...')
     const url = `${baseURL}${endpoint}`;
     fetch(url, {
         method: "POST",
@@ -175,15 +175,19 @@ export async function postData(setData, data, endpoint, baseURL = process.env.NE
         })
         .then((data) => {
             if (!data) return;
-            if (data.success === false) popupE('Error', data.message || 'Error occurred')
+            if (data.success === false) {
+                if (showPopups) popupE('Error', data.message || 'Error occurred')
+            }
             else if (data?.success) {
-                if (data?.message) popupE('Success', data.message)
-                else popupE('Success', 'Completed') // Default success to override "Processing"
+                if (showPopups) {
+                    if (data?.message) popupE('Success', data.message)
+                    else popupE('Success', 'Completed') // Default success to override "Processing"
+                }
             }
             try {
                 setData(data);
             } catch (err) {
-                popupE('Error', 'Error in client worker')
+                if (showPopups) popupE('Error', 'Error in client worker')
             }
         })
         .catch(err => {
@@ -192,7 +196,7 @@ export async function postData(setData, data, endpoint, baseURL = process.env.NE
             if (err && err.errors) {
                 errorMessage = err.errors[Object.keys(err.errors)[0]];
             }
-            popupE('Error', errorMessage);
+            if (showPopups) popupE('Error', errorMessage);
             try {
                 setData({ success: false, message: errorMessage });
             } catch (e) {

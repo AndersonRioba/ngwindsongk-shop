@@ -245,7 +245,8 @@ export default function CheckoutPaymentPage(){
                 '/pay/mpesa',
                 process.env.NEXT_PUBLIC_API_URL,
                 load('token'),
-                { 'Idempotency-Key': idempotencyKey }
+                { 'Idempotency-Key': idempotencyKey },
+                false
             );
             return;
         }
@@ -273,7 +274,8 @@ export default function CheckoutPaymentPage(){
                         '/pay/mpesa',
                         process.env.NEXT_PUBLIC_API_URL,
                         load('token'),
-                        { 'Idempotency-Key': idempotencyKey }
+                        { 'Idempotency-Key': idempotencyKey },
+                        false
                     );
                 } else {
                     setIsProcessing(false);
@@ -295,7 +297,8 @@ export default function CheckoutPaymentPage(){
             '/orders',
             process.env.NEXT_PUBLIC_API_URL,
             load('token'),
-            { 'Idempotency-Key': idempotencyKey }
+            { 'Idempotency-Key': idempotencyKey },
+            false
         )
     }
 
