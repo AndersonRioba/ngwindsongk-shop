@@ -32,10 +32,6 @@ export default function CheckoutPaymentPage(){
     const [shippingLoading, setShippingLoading] = useState(true);
     const [settings, setSettings] = useState({});
     const [idempotencyKey, setIdempotencyKey] = useState('');
-    const [voucherCode, setVoucherCode] = useState('');
-    const [appliedVoucher, setAppliedVoucher] = useState(null);
-    const [voucherError, setVoucherError] = useState('');
-    const [isValidatingVoucher, setIsValidatingVoucher] = useState(false);
     const [createdOrderId, setCreatedOrderId] = useState(null);
 
     const { cart } = useCart();
@@ -189,46 +185,8 @@ export default function CheckoutPaymentPage(){
         }
     }, [products, contact, orderDetails.phone, setContact, setTotal]);
 
-    const handleApplyVoucher = async () => {
-        if (!voucherCode.trim()) return;
-        
-        setIsValidatingVoucher(true);
-        setVoucherError('');
-        
-        try {
-            const response = await postFetcher('/vouchers/validate', {
-                code: voucherCode,
-                subtotal: total
-            });
-            
-            if (response.success) {
-                setAppliedVoucher(response.voucher);
-                setVoucherCode('');
-            } else {
-                setVoucherError(response.message || 'Invalid voucher code.');
-            }
-        } catch (err) {
-            setVoucherError('Unable to validate voucher. Please try again.');
-        } finally {
-            setIsValidatingVoucher(false);
-        }
-    };
 
-    const removeVoucher = () => {
-        setAppliedVoucher(null);
-        setVoucherError('');
-    };
-
-    const calculateDiscount = () => {
-        if (!appliedVoucher) return 0;
-        if (appliedVoucher.discount_type === 'percentage') {
-            return (total * (parseFloat(appliedVoucher.discount_amount) / 100));
-        }
-        return parseFloat(appliedVoucher.discount_amount);
-    };
-
-    const discountAmount = calculateDiscount();
-    const finalOrderTotal = total + Number(shipping) - discountAmount;
+    const finalOrderTotal = total + Number(shipping);
 
     const submitOrder = () => {
         if (!contact || contact.trim() === '') {
@@ -326,7 +284,6 @@ export default function CheckoutPaymentPage(){
                 pickup_station: pickupStation,
                 delivery_method: deliveryMethod,
                 delivery_zone: deliveryZone,
-                voucher_id: appliedVoucher?.id || null,
                 latitude: coordinates.latitude,
                 longitude: coordinates.longitude
             },

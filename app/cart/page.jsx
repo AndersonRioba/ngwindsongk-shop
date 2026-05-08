@@ -199,10 +199,6 @@ export default function CartPage(){
 
                 {cart.length > 0 && (
                     <section className="md:w-1/3">
-                        <div className="flex border-2 border-gray-200 rounded-md mb-7">
-                            <input  className="w-full px-4 py-2 outline-none" placeholder="Enter coupon code" type="text" name="" id="" />
-                            <button className="bg-primary text-white py-2 px-4 rounded-r-md" >Apply</button>
-                        </div>
                         
                         <h6 className="font-semibold text-lg">Payment summary</h6>
                         <div className="border-b-2 py-3">
