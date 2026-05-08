@@ -36,6 +36,7 @@ export default function CheckoutPaymentPage(){
     const [appliedVoucher, setAppliedVoucher] = useState(null);
     const [voucherError, setVoucherError] = useState('');
     const [isValidatingVoucher, setIsValidatingVoucher] = useState(false);
+    const [createdOrderId, setCreatedOrderId] = useState(null);
 
     const { cart } = useCart();
     const router = useRouter();
@@ -265,13 +266,41 @@ export default function CheckoutPaymentPage(){
         const deliveryMethod = pickup ? 'pickup' : 'delivery';
         const pickupStation = pickup ? (PICKUP_LOCATIONS.find(l => l.id === pickup)?.name) : null;
 
+        if (createdOrderId) {
+            postData(
+                (mpesaResponse)=>{
+                    setIsProcessing(false);
+                    if (mpesaResponse.success === false || mpesaResponse.ResponseCode !== "0") {
+                        setErrorMsg(mpesaResponse.message || mpesaResponse.error || mpesaResponse.errorMessage || mpesaResponse.ResponseDescription || "Failed to initiate M-Pesa prompt. Please try again.");
+                    } else {
+                        router.push('/checkout/success');
+                    }
+                },
+                {
+                    amount: finalTotal,
+                    phone: contact,
+                    order_id: createdOrderId
+                },
+                '/pay/mpesa',
+                process.env.NEXT_PUBLIC_API_URL,
+                load('token'),
+                { 'Idempotency-Key': idempotencyKey }
+            );
+            return;
+        }
+
         postData(
             (response)=>{
                 if(response.success){
+                    setCreatedOrderId(response.data.slug);
                     postData(
                         (mpesaResponse)=>{
                             setIsProcessing(false);
-                            router.push('/checkout/success');
+                            if (mpesaResponse.success === false || mpesaResponse.ResponseCode !== "0") {
+                                setErrorMsg(mpesaResponse.message || mpesaResponse.error || mpesaResponse.errorMessage || mpesaResponse.ResponseDescription || "Failed to initiate M-Pesa prompt. Please try again.");
+                            } else {
+                                router.push('/checkout/success');
+                            }
                         },
                         {
                             amount: finalTotal,

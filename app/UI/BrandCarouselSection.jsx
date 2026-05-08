@@ -3,6 +3,8 @@
 import Link from "next/link"
 import Image from "next/image"
 import { useRef } from "react"
+import useSWR from "swr"
+import { fetcher } from "@/app/lib/data"
 import useCart from "@/app/lib/hooks/useCart"
 
 import ProductListing, { ProductListingSkeleton } from "@/app/UI/ProductListing"
@@ -14,36 +16,30 @@ import { getImageUrl } from "@/app/lib/utils/image";
  * @param {string}  props.subtitle    — e.g. "Hearty oats & pantry staples"
  * @param {string}  props.barColor    — Tailwind bg class e.g. "bg-oats"
  * @param {string}  props.seeAllHref  — e.g. "/products/oats"
- * @param {Array}   props.products    — full products list (will be filtered)
  * @param {string[]} props.categories — category names to include
- * @param {boolean} props.isLoading
  */
 export default function BrandCarouselSection({
     title,
     subtitle,
     barColor,
     seeAllHref,
-    products = [],
     categories = [],
-    isLoading = false,
     logoSrc,
     customStyle = {},
 }) {
     const scrollRef = useRef(null)
 
-    const filtered = products.filter(p => {
-        const catName = p?.category?.name?.toLowerCase() || "";
-        const brandName = p?.brand?.name?.toLowerCase() || "";
-        const sectionTitle = title.toLowerCase();
-        
-        const catMatch = categories.some(c => catName.includes(c.toLowerCase()));
-        const brandMatch = brandName === sectionTitle || catName.includes(sectionTitle);
-        
-        return catMatch || brandMatch;
-    });
+    // Fetch products specifically for this brand (max 15 for the carousel)
+    const { data: brandData, error, isLoading } = useSWR(
+        ['/products', { brand: title, per_page: 15 }],
+        fetcher,
+        { revalidateOnFocus: false }
+    );
+
+    const filtered = Array.isArray(brandData) ? brandData : (brandData?.data || []);
 
     // Auto-hide: only render once data has loaded and there are no products
-    if (!isLoading && filtered.length === 0) return null
+    if (!isLoading && !error && filtered.length === 0) return null
 
     function scroll(dir) {
         if (!scrollRef.current) return

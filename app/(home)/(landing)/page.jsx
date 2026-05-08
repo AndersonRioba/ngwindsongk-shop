@@ -50,15 +50,23 @@ function getProductPrice(product) {
 }
 
 export default function Home() {
-    let { data: products, error, isLoading } = useSWR(['/products', { per_page: 500 }], fetcher, {
-        revalidateOnFocus: false,
-        revalidateOnReconnect: false,
-        revalidateOnMount: true,
-        errorRetryInterval: 300000
-    });
+    const { search } = useSearch();
+    const normalizedSearch = search.trim().toLowerCase();
+    const hasActiveSearch = normalizedSearch.length > 0;
+
+    let { data: products, error, isLoading } = useSWR(
+        ['/products', { per_page: 24, ...(hasActiveSearch ? { search: normalizedSearch } : {}) }], 
+        fetcher, 
+        {
+            revalidateOnFocus: false,
+            revalidateOnReconnect: false,
+            revalidateOnMount: true,
+            errorRetryInterval: 300000
+        }
+    );
 
     // Fetch offers separately to ensure the bar always appears regardless of pagination
-    let { data: offersData, isLoading: offersLoading } = useSWR(['/products', { offers: true, per_page: 500 }], fetcher, {
+    let { data: offersData, isLoading: offersLoading } = useSWR(['/products', { offers: true, per_page: 20 }], fetcher, {
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
         revalidateOnMount: true,
@@ -71,7 +79,6 @@ export default function Home() {
     });
 
     let [overlay, setOverlay] = useState('');
-    const { search } = useSearch();
 
     const productsList = Array.isArray(products) ? products : (products?.data || []);
     const offerProductsList = Array.isArray(offersData) ? offersData : (offersData?.data || []);
@@ -91,22 +98,9 @@ export default function Home() {
     const featuredProducts = getFeaturedProducts(productsList);
     const heroProduct = featuredProducts[0];
     const spotlightProducts = featuredProducts.slice(1, 5);
-    const normalizedSearch = search.trim().toLowerCase();
-    const hasActiveSearch = normalizedSearch.length > 0;
-    const filteredProducts = productsList.filter((product) => {
-        if (!normalizedSearch) return true;
-
-        const searchableFields = [
-            product?.name,
-            product?.about,
-            product?.category?.name,
-            product?.brand?.name,
-        ];
-
-        return searchableFields.some((field) =>
-            field?.toLowerCase().includes(normalizedSearch)
-        );
-    });
+    
+    // API now handles search filtering directly
+    const filteredProducts = productsList;
     const masonryBreakpoints = {
         default: 4,
         768: 3,
@@ -222,9 +216,7 @@ export default function Home() {
                                     barColor={""} // Pass empty or specific style if needed, but we'll use inline style in the component if possible
                                     customStyle={{ backgroundColor: brand.color_hex }} // We might need to update the component to accept this
                                     seeAllHref={`/products/${brand.name.toLowerCase().trim().replaceAll(' ', '-')}`}
-                                    products={productsList}
                                     categories={[brand.name.toLowerCase()].concat(brand.categories?.map(c => c.name.toLowerCase()) || [])}
-                                    isLoading={isLoading || brandsLoading}
                                     logoSrc={brand.logo}
                                 />
                             ))}

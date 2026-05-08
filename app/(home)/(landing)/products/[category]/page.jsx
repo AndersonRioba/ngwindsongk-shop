@@ -60,6 +60,10 @@ export default function Products(){
     const spacedSlug = rawSlug.replaceAll('-', ' ').replaceAll('%20', ' ');
     const hyphenatedSlug = rawSlug.replaceAll(' ', '-').replaceAll('%20', '-');
 
+    const { categorySearch } = useCategorySearch();
+    const normalizedSearch = categorySearch.trim().toLowerCase();
+    const hasActiveSearch = normalizedSearch.length > 0;
+
     let { data: productsData, error, isLoading } = useSWR(['/products', {
         page,
         per_page: 12,
@@ -67,6 +71,7 @@ export default function Products(){
         // Send both brand & category filters — the API will match whichever is relevant
         brand: spacedSlug,
         category: spacedSlug,
+        ...(hasActiveSearch ? { search: normalizedSearch } : {})
     }], fetcher, {
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
@@ -74,41 +79,10 @@ export default function Products(){
         errorRetryInterval: 300000
     });
 
-    const { categorySearch } = useCategorySearch();
     const productsList = Array.isArray(productsData) ? productsData : (productsData?.data || []);
 
-    const normalizedSearch = categorySearch.trim().toLowerCase();
-
-    // Client-side fallback filter — ensures slug matching even if server doesn't filter
-    const filteredProducts = productsList.filter((product) => {
-        const catName = product?.category?.name?.toLowerCase() || "";
-        const catSlug = catName.replaceAll(' ', '-');
-        
-        const brandName = product?.brand?.name?.toLowerCase() || "";
-        const brandSlug = brandName.replaceAll(' ', '-');
-        
-        const productName = product?.name?.toLowerCase() || "";
-        const productSlug = (product?.slug || productName).replaceAll(' ', '-');
-
-        const isMatchForSlug = 
-            catName === spacedSlug || 
-            catName === hyphenatedSlug ||
-            catSlug === rawSlug ||
-            brandName === spacedSlug || 
-            brandName === hyphenatedSlug ||
-            brandSlug === rawSlug ||
-            productName === spacedSlug ||
-            productSlug === rawSlug;
-
-        if (!isMatchForSlug) return false;
-
-        // Search bar filter (if active)
-        if (!normalizedSearch) return true;
-        const searchableFields = [productName, catName, brandName, product?.about];
-        return searchableFields.some((field) =>
-            field?.toLowerCase().includes(normalizedSearch)
-        );
-    });
+    // API handles search and pagination directly
+    const filteredProducts = productsList;
 
     const handlePageChange = (newPage) => {
         const params = new URLSearchParams(searchParams.toString());
