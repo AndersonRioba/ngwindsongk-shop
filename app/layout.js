@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { Poppins, Lato } from "next/font/google";
+import { Outfit } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import ContextProvider from "@/app/lib/ContextProvider";
@@ -15,17 +15,11 @@ import PageTracker from "@/app/components/PageTracker";
 import GoogleTag from "@/app/components/GoogleTag";
 
 
-const poppins = Poppins({ 
+const outfit = Outfit({ 
   subsets: ["latin"], 
-  weight: ['400', '600', '800'], 
+  weight: ['300', '400', '500', '600', '700'], 
   style: 'normal',
   display: 'swap' 
-});
-const latto = Lato({ 
-  subsets: ["latin"], 
-  weight: ['400', '700'], 
-  style: 'normal',
-  display: 'swap'
 });
 
 export const metadata = {
@@ -164,7 +158,7 @@ export default function RootLayout({ children }) {
           }}
         />
       </head>
-      <body suppressHydrationWarning className={`${latto.className} lg:text-sm 2xl:text-base`}>
+      <body suppressHydrationWarning className={`${outfit.className} lg:text-sm 2xl:text-base`}>
       <Analytics/>
       <SpeedInsights />
         <SearchProvider>
