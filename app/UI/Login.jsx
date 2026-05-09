@@ -1,6 +1,7 @@
 'use client'
 import { useState } from "react"
 import useUser from "@/app/lib/hooks/useUser"
+import { getAdminUrl } from "@/app/lib/urls"
 
 export default function Login({control}){
     const [phone, setPhone] = useState('')
@@ -14,7 +15,7 @@ export default function Login({control}){
             if(response.success && response.token) {
                 control('')
                 if (response.user?.role === 'admin' || response.user?.role === 'super_admin') {
-                    window.location.href = `http://localhost:3001/login?token=${response.token}`
+                    window.location.href = `${getAdminUrl()}/login?token=${response.token}`
                 } else {
                     router.push('/')
                 }

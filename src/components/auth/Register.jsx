@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import useAuth from '@/src/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { getAdminUrl } from "@/app/lib/urls";
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -23,7 +24,7 @@ export default function Register() {
     if (!isAuthLoading && token && user) {
       if (user?.role === 'admin' || user?.role === 'super_admin') {
         console.log('Admin detected at shop register, redirecting to admin panel...');
-        window.location.href = `http://localhost:3001/login?token=${token}`;
+        window.location.href = `${getAdminUrl()}/login?token=${token}`;
       } else {
         console.log('Regular user detected at register, going home...');
         router.push('/');
@@ -57,7 +58,7 @@ export default function Register() {
 
     if (result.success) {
       if (result.user?.role === 'admin' || result.user?.role === 'super_admin') {
-        window.location.href = `http://localhost:3001/login?token=${result.token}`;
+        window.location.href = `${getAdminUrl()}/login?token=${result.token}`;
       } else {
         router.push('/');
       }

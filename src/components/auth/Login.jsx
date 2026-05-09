@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import useAuth from '@/src/hooks/useAuth';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import { getAdminUrl } from "@/app/lib/urls";
 
 export default function Login() {
   const [phone, setPhone] = useState('');
@@ -27,7 +28,7 @@ export default function Login() {
     if (!isAuthLoading && token && user) {
       if (isAdmin) {
         console.log('Admin detected, redirecting to admin');
-        window.location.href = `${process.env.NEXT_PUBLIC_ADMIN_URL}/login?token=${token}`;
+        window.location.href = `${getAdminUrl()}/login?token=${token}`;
       } else {
         router.push('/');
       }
@@ -49,8 +50,8 @@ export default function Login() {
 
     if (result.success) {
       if (result.user?.role === 'admin' || result.user?.role === 'superadmin' || result.user?.role === 'super_admin') {
-        console.log('Login success - Admin detected, redirecting to 3001');
-        window.location.href = `http://localhost:3001/login?token=${result.token}`;
+        console.log('Login success - Admin detected, redirecting via getAdminUrl');
+        window.location.href = `${getAdminUrl()}/login?token=${result.token}`;
       } else {
         router.push('/');
       }
