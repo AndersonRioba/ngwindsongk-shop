@@ -71,18 +71,21 @@ export function MobileSideMenu({ isOpen, setIsOpen }){
             )}
             <div className="space-y-1">
                 {/* Dynamic Navigation Items */}
-                {navData?.data?.map((item) => (
-                    <Link 
-                        key={item.id}
-                        href={item.url} 
-                        className={`flex items-center py-3 rounded-xl transition-colors ${pathname === item.url ? 'text-primary bg-primary/5' : 'text-gray-600'}`}
-                    >
-                        <div className="mx-3">
-                            <span className={`icon-[solar--maximize-square-minimalistic-linear] w-6 h-6`}/>
-                        </div>
-                        <span className="truncate text-xs font-bold">{item.label}</span>
-                    </Link>
-                ))}
+                {navData?.data?.map((item) => {
+                    const href = item.url.startsWith('http') || item.url.startsWith('/') ? item.url : `/${item.url}`;
+                    return (
+                        <Link 
+                            key={item.id}
+                            href={href} 
+                            className={`flex items-center py-3 rounded-xl transition-colors ${pathname === href ? 'text-primary bg-primary/5' : 'text-gray-600'}`}
+                        >
+                            <div className="mx-3">
+                                <span className={`icon-[solar--maximize-square-minimalistic-linear] w-6 h-6`}/>
+                            </div>
+                            <span className="truncate text-xs font-bold">{item.label}</span>
+                        </Link>
+                    )
+                })}
 
                 {/* Conditional Orders Link */}
                 {user && (
@@ -149,15 +152,18 @@ export function TopMenu(){
                 
                 <div className="flex gap-4 lg:gap-8 items-center">
                     {/* Dynamic Navigation Items */}
-                    {navData?.data?.map((item) => (
-                        <Link 
-                            key={item.id}
-                            className={`${pathname === item.url ? 'text-primary' : 'text-gray-600'} font-bold text-sm hover:text-primary transition-colors`} 
-                            href={item.url}
-                        >
-                            {item.label}
-                        </Link>
-                    ))}
+                    {navData?.data?.map((item) => {
+                        const href = item.url.startsWith('http') || item.url.startsWith('/') ? item.url : `/${item.url}`;
+                        return (
+                            <Link 
+                                key={item.id}
+                                className={`${pathname === href ? 'text-primary' : 'text-gray-600'} font-bold text-sm hover:text-primary transition-colors`} 
+                                href={href}
+                            >
+                                {item.label}
+                            </Link>
+                        )
+                    })}
 
                     {/* Conditional Orders Link */}
                     {
@@ -227,10 +233,15 @@ export function SubMenu({page}){
     if(categoriesError) return <div className="text-Error">Error loading categories</div>
 
     const subMenu = categories.reduce((acc, category) => {
-        acc[category.name] = category.brands.reduce((brandAcc, brand) => {
-            brandAcc[brand.name] = brand.products.map(product => product.name);
-            return brandAcc;
-        }, {});
+        // The API returns category.brand (singular) with its products
+        const brand = category.brand;
+        if (brand) {
+            acc[category.name] = {
+                [brand.name]: (brand.products || []).map(product => product.name)
+            };
+        } else {
+            acc[category.name] = {};
+        }
         return acc;
     }, {});
     
@@ -265,18 +276,18 @@ export function SubMenu({page}){
                                                 return (
                                                     <div key={j} className=''>
                                                         <Link 
-                                                            href={`/products/${catSlug}/${brandSlug}`}
+                                                            href={`/products/${brandSlug}`}
                                                             className="block py-2 px-2 text-sm font-medium text-gray-600 hover:text-primary hover:bg-gray-50 rounded"
                                                         >
                                                             {brand}
                                                         </Link>
                                                         <ul className="pl-9 space-y-1 list-disc">
-                                                            {subMenu[category][brand].map((item, k) => {
+                                                            {(subMenu[category][brand] || []).map((item, k) => {
                                                                 const productSlug = item.toLowerCase().trim().replaceAll(' ', '-');
                                                                 return (
                                                                     <li key={k} >
                                                                         <Link 
-                                                                            href={`/products/${catSlug}/${productSlug}`} 
+                                                                            href={`/products/${brandSlug}/${productSlug}`} 
                                                                             className={`block py-1 text-xs text-gray-500 hover:text-primary hover:bg-gray-50 rounded transition-colors`}
                                                                         >
                                                                             {item}

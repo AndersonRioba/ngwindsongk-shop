@@ -154,21 +154,27 @@ export default function Footer() {
                 {/* Col 2: About */}
                 <div className="flex flex-col gap-3">
                     <p className="text-[10px] font-black uppercase tracking-[0.25em] text-black/35 mb-3">About</p>
-                    {aboutMenu.map((item, i) => (
-                        <Link key={i} href={item.link} className="text-sm text-black/55 hover:text-primary hover:translate-x-1 transition-all duration-300 font-medium">
-                            {item.label}
-                        </Link>
-                    ))}
+                    {aboutMenu.map((item, i) => {
+                        const href = item.link.startsWith('http') || item.link.startsWith('/') ? item.link : `/${item.link}`;
+                        return (
+                            <Link key={i} href={href} className="text-sm text-black/55 hover:text-primary hover:translate-x-1 transition-all duration-300 font-medium">
+                                {item.label}
+                            </Link>
+                        )
+                    })}
                 </div>
 
                 {/* Col 3: Shop */}
                 <div className="flex flex-col gap-3">
                     <p className="text-[10px] font-black uppercase tracking-[0.25em] text-black/35 mb-3">Shop</p>
-                    {shopMenu.map((item, i) => (
-                        <Link key={i} href={item.link} className="text-sm text-black/55 hover:text-primary hover:translate-x-1 transition-all duration-300 font-medium">
-                            {item.label}
-                        </Link>
-                    ))}
+                    {shopMenu.map((item, i) => {
+                        const href = item.link.startsWith('http') || item.link.startsWith('/') ? item.link : `/${item.link}`;
+                        return (
+                            <Link key={i} href={href} className="text-sm text-black/55 hover:text-primary hover:translate-x-1 transition-all duration-300 font-medium">
+                                {item.label}
+                            </Link>
+                        )
+                    })}
                 </div>
 
                 {/* Col 4: Partnerships + Social */}
