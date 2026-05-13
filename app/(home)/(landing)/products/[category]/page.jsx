@@ -11,6 +11,7 @@ import ProductListing, {ProductListingSkeleton} from "@/app/UI/ProductListing"
 import { useCategorySearch } from "@/app/lib/providers/CategorySearchProvider"
 import Pagination from "@/app/UI/Pagination"
 import { useSearchParams, useRouter } from "next/navigation"
+import { useScrollRestoration } from "@/app/lib/hooks/useScrollRestoration"
 
 export default function Products(){
     let { category } = useParams();
@@ -78,6 +79,8 @@ export default function Products(){
         revalidateOnMount: true,
         errorRetryInterval: 300000
     });
+
+    useScrollRestoration(`category-${category}`, isLoading);
 
     const productsList = Array.isArray(productsData) ? productsData : (productsData?.data || []);
 

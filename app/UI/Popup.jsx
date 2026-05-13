@@ -65,16 +65,16 @@ export default function Popup() {
     const config = POPUP_STATES[state] || POPUP_STATES.Processing;
 
     return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center px-4 pointer-events-none">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center px-4 pointer-events-none" style={{ colorScheme: 'light' }}>
             {/* Backdrop Blur */}
             <div 
-                className="absolute inset-0 bg-gray-900/10 backdrop-blur-[2px] transition-opacity duration-500 pointer-events-auto"
+                className="absolute inset-0 bg-gray-900/20 backdrop-blur-[4px] transition-opacity duration-500 pointer-events-auto"
                 onClick={() => state !== 'Processing' && setHidden(true)}
             />
 
             {/* Modal Content */}
-            <div className="relative w-full max-w-sm bg-white rounded-[2.5rem] shadow-2xl shadow-indigo-900/20 border border-gray-50 overflow-hidden animate-in fade-in zoom-in slide-in-from-bottom-8 duration-500 pointer-events-auto">
-                <div className="p-8">
+            <div className="relative w-full max-w-sm bg-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-white overflow-hidden animate-in fade-in zoom-in slide-in-from-bottom-8 duration-500 pointer-events-auto">
+                <div className="p-8 bg-white">
                     <div className="flex flex-col items-center text-center">
                         <div className={`w-20 h-20 rounded-[1.8rem] ${config.bg} flex items-center justify-center ${config.color} mb-6 shadow-inner`}>
                             <span className={`${config.icon} w-10 h-10`} />
@@ -92,7 +92,7 @@ export default function Popup() {
                     {state !== 'Processing' && (
                         <button 
                             onClick={() => setHidden(true)}
-                            className="mt-8 w-full py-4 rounded-2xl bg-gray-50 text-gray-400 font-black uppercase tracking-widest text-[10px] hover:bg-gray-100 hover:text-gray-600 transition-all"
+                            className="mt-8 w-full py-4 rounded-2xl bg-gray-900 text-white font-black uppercase tracking-widest text-[10px] hover:bg-black active:scale-[0.98] transition-all shadow-lg shadow-gray-200"
                         >
                             Dismiss
                         </button>

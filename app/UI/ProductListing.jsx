@@ -127,7 +127,7 @@ export default function ProductListing({data}){
                                             Select {attributeName}
                                         </span>
                                         <select
-                                            className="w-full rounded-xl border border-black/10 bg-[#f9f9f7] px-3 py-2.5 text-sm font-medium text-black outline-none transition-colors focus:border-black/30 focus:bg-white"
+                                            className="w-full rounded-xl border border-black/10 bg-[#f9f9f7] px-3 py-3 text-sm font-medium text-black outline-none transition-colors focus:border-black/30 focus:bg-white"
                                             name={attributeName}
                                             value={selectedValue}
                                             onChange={(e)=>handleVariationChange(attributeName, e.target.value)}
@@ -176,16 +176,16 @@ export default function ProductListing({data}){
 
                         <div className="flex flex-col gap-2 shrink-0">
                             {/* Quantity Control */}
-                            <div className="flex items-center h-8 rounded-xl border border-black/10 bg-white overflow-hidden shadow-sm">
+                            <div className="flex items-center h-11 rounded-xl border border-black/10 bg-white overflow-hidden shadow-sm">
                                 <button
                                     type="button"
                                     onClick={() => setQuantity(prev => Math.max(1, prev - 1))}
-                                    className="w-8 h-full flex items-center justify-center text-black/60 hover:text-black hover:bg-black/5 transition-colors"
+                                    className="w-11 h-full flex items-center justify-center text-black/60 hover:text-black hover:bg-black/5 transition-colors"
                                 >
                                     -
                                 </button>
                                 <input
-                                    className="w-8 h-full text-center text-sm font-semibold text-black bg-transparent outline-none p-0"
+                                    className="w-10 h-full text-center text-sm font-semibold text-black bg-transparent outline-none p-0"
                                     value={quantity}
                                     min={1}
                                     type="number"
@@ -197,7 +197,7 @@ export default function ProductListing({data}){
                                 <button
                                     type="button"
                                     onClick={() => setQuantity(prev => prev + 1)}
-                                    className="w-8 h-full flex items-center justify-center text-black/60 hover:text-black hover:bg-black/5 transition-colors"
+                                    className="w-11 h-full flex items-center justify-center text-black/60 hover:text-black hover:bg-black/5 transition-colors"
                                 >
                                     +
                                 </button>
@@ -206,9 +206,9 @@ export default function ProductListing({data}){
                             {/* Add Button */}
                             <button
                                 onClick={()=>addToCart(quantity, data.name, variation)}
-                                className="h-9 px-4 rounded-xl bg-primary text-white text-xs font-bold uppercase tracking-wider shadow-md hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
+                                className="h-11 px-6 rounded-xl bg-primary text-white text-xs font-bold uppercase tracking-wider shadow-md hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 active:scale-95"
                             >
-                                <span className="icon-[ri--shopping-cart-line] w-3.5 h-3.5"/>
+                                <span className="icon-[ri--shopping-cart-line] w-4 h-4"/>
                                 Add
                             </button>
                         </div>

@@ -8,6 +8,7 @@ import ProductListing, { ProductListingSkeleton } from "@/app/UI/ProductListing"
 import Search from "@/app/UI/Search"
 import BreadCrump from "@/app/UI/BreadCrump"
 import { useSearch } from "@/app/lib/providers/SearchProvider"
+import { useScrollRestoration } from "@/app/lib/hooks/useScrollRestoration"
 
 const BrandRow = ({ brandName, products }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -127,6 +128,7 @@ export default function Products() {
     });
 
     const { search } = useSearch();
+    useScrollRestoration('products-list', isLoading);
     const productsList = Array.isArray(products) ? products : (products?.data || []);
     const normalizedSearch = search.trim().toLowerCase();
     const hasActiveSearch = normalizedSearch.length > 0;

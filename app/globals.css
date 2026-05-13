@@ -166,10 +166,21 @@ input[type=file]{
     color 180ms ease,
     box-shadow 180ms ease,
     opacity 180ms ease;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .ui-pressable:active {
-  transform: scale(0.97);
+  transform: scale(0.96) !important;
+}
+
+/* Accessibility: High contrast utility for secondary text */
+.text-contrast-safe {
+  color: rgba(0, 0, 0, 0.65) !important;
+}
+
+.text-contrast-high {
+  color: rgba(0, 0, 0, 0.85) !important;
 }
 
 .ui-card-lift {

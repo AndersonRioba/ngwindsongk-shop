@@ -28,7 +28,7 @@ export default function CheckoutInfoPage(){
     // 'pickup' holds the selected location id string, or null for delivery
     const [deliveryMode, setDeliveryMode] = useState(pickup ? 'pickup' : 'delivery');
     let [isReturning, setIsReturning] = useState(false);
-    const [error, setError] = useState('');
+    const [errors, setErrors] = useState({});
     const router = useRouter();
 
     // Zone picker state
@@ -112,27 +112,39 @@ export default function CheckoutInfoPage(){
 
     const continueToPayment = (e) => {
         e.preventDefault();
+        const newErrors = {};
+
+        if (!orderDetails.full_name || orderDetails.full_name.trim() === '') {
+            newErrors.full_name = 'Full name is required.';
+        }
         if (!orderDetails.phone || orderDetails.phone.trim() === '') {
-            setError('Phone number is required.');
-            return;
+            newErrors.phone = 'Phone number is required.';
         }
         if (!orderDetails.email || orderDetails.email.trim() === '') {
-            setError('Email address is required for your invoice.');
-            return;
+            newErrors.email = 'Email address is required.';
         }
         if (deliveryMode === 'pickup' && !pickup) {
-            setError('Please select a pickup location.');
-            return;
+            newErrors.pickup = 'Please select a pickup location.';
         }
         if (deliveryMode === 'delivery') {
             if (!selectedCounty) {
-                setError('Please select your delivery county.');
-                return;
+                newErrors.county = 'Please select your delivery county.';
             }
             if (selectedUrban === 'other' && !manualTown.trim()) {
-                setError('Please enter your town name.');
-                return;
+                newErrors.manual_town = 'Please enter your town name.';
             }
+        }
+
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            // Scroll to the first error
+            const firstError = Object.keys(newErrors)[0];
+            const element = document.getElementById(firstError);
+            if (element) element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+        }
+
+        if (deliveryMode === 'delivery') {
             const finalZone = selectedUrban === 'other' ? manualTown.trim() : (selectedUrban ? (selectedCounty?.children?.find(c => c.id === parseInt(selectedUrban))?.name) : selectedCounty?.name);
             const finalFee = deliveryFee ?? 0;
 
@@ -148,7 +160,7 @@ export default function CheckoutInfoPage(){
                 shipping: finalFee,
             }));
         }
-        setError('');
+        setErrors({});
         router.push('/checkout/payment');
     }
 
@@ -186,11 +198,15 @@ export default function CheckoutInfoPage(){
                                         id="full_name"
                                         type="text" 
                                         required
-                                        className="block w-full p-2 border-[1px] border-primary rounded-md mt-1 focus:outline-none focus:ring-2 focus:ring-primary" 
+                                        className={`block w-full h-11 px-4 border-[1px] rounded-xl mt-1 focus:outline-none focus:ring-2 transition-all ${errors.full_name ? 'border-red-500 focus:ring-red-200' : 'border-primary focus:ring-primary/20'}`} 
                                         placeholder="Jane Doe" 
                                         value={orderDetails.full_name}
-                                        onChange={e=>setOrderDetails({...orderDetails, full_name:e.target.value})}
+                                        onChange={e=>{
+                                            setOrderDetails({...orderDetails, full_name:e.target.value});
+                                            if(errors.full_name) setErrors({...errors, full_name:null});
+                                        }}
                                     />
+                                    {errors.full_name && <p className="text-red-500 text-xs mt-1 font-medium">{errors.full_name}</p>}
                                 </div>
                                 <div>
                                     <label htmlFor="email">
@@ -199,12 +215,17 @@ export default function CheckoutInfoPage(){
                                     <input 
                                         id="email"
                                         type="email" 
+                                        inputMode="email"
                                         required
-                                        className="block w-full p-2 border-[1px] border-primary rounded-md mt-1 focus:outline-none focus:ring-2 focus:ring-primary" 
+                                        className={`block w-full h-11 px-4 border-[1px] rounded-xl mt-1 focus:outline-none focus:ring-2 transition-all ${errors.email ? 'border-red-500 focus:ring-red-200' : 'border-primary focus:ring-primary/20'}`} 
                                         placeholder="jane@example.com" 
                                         value={orderDetails.email}
-                                        onChange={e=>setOrderDetails({...orderDetails, email:e.target.value})}
+                                        onChange={e=>{
+                                            setOrderDetails({...orderDetails, email:e.target.value});
+                                            if(errors.email) setErrors({...errors, email:null});
+                                        }}
                                     />
+                                    {errors.email && <p className="text-red-500 text-xs mt-1 font-medium">{errors.email}</p>}
                                 </div>
                                 <div>
                                     <label htmlFor="phone">
@@ -213,12 +234,17 @@ export default function CheckoutInfoPage(){
                                     <input 
                                         id="phone"
                                         type="tel" 
+                                        inputMode="tel"
                                         required
-                                        className="block w-full p-2 border-[1px] border-primary rounded-md mt-1 focus:outline-none focus:ring-2 focus:ring-primary" 
+                                        className={`block w-full h-11 px-4 border-[1px] rounded-xl mt-1 focus:outline-none focus:ring-2 transition-all ${errors.phone ? 'border-red-500 focus:ring-red-200' : 'border-primary focus:ring-primary/20'}`} 
                                         placeholder="0712345678" 
                                         value={orderDetails.phone}
-                                        onChange={e=>setOrderDetails({...orderDetails, phone:e.target.value})}
+                                        onChange={e=>{
+                                            setOrderDetails({...orderDetails, phone:e.target.value});
+                                            if(errors.phone) setErrors({...errors, phone:null});
+                                        }}
                                     />
+                                    {errors.phone && <p className="text-red-500 text-xs mt-1 font-medium">{errors.phone}</p>}
                                 </div>
                             </div>
 
@@ -265,12 +291,14 @@ export default function CheckoutInfoPage(){
                             {/* Pickup: show location cards */}
                             {deliveryMode === 'pickup' && (
                                 <div className="mb-6">
-                                    <p className="text-sm font-semibold mb-3 text-black/70">Select a pickup location:</p>
-                                    <div className="flex flex-col gap-3">
+                                    <div className="flex flex-col gap-3" id="pickup">
                                         {PICKUP_LOCATIONS.map(loc => (
                                             <div 
                                                 key={loc.id}
-                                                onClick={() => selectPickupLocation(loc.id)}
+                                                onClick={() => {
+                                                    selectPickupLocation(loc.id);
+                                                    if(errors.pickup) setErrors({...errors, pickup:null});
+                                                }}
                                                 className={`flex items-start gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all ${pickup === loc.id ? 'border-primary bg-primary/5' : 'border-gray-200 hover:border-gray-300'}`}
                                             >
                                                 {pickup === loc.id
@@ -284,6 +312,7 @@ export default function CheckoutInfoPage(){
                                                 <span className="text-xs font-bold text-green-700 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full shrink-0 self-center">FREE</span>
                                             </div>
                                         ))}
+                                        {errors.pickup && <p className="text-red-500 text-xs font-medium">{errors.pickup}</p>}
                                     </div>
                                 </div>
                             )}
@@ -308,8 +337,11 @@ export default function CheckoutInfoPage(){
                                     <select
                                         id="county"
                                         value={selectedCounty?.id || ''}
-                                        onChange={handleCountyChange}
-                                        className="block w-full p-2 border-[1px] border-primary rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                                        onChange={(e) => {
+                                            handleCountyChange(e);
+                                            if(errors.county) setErrors({...errors, county:null});
+                                        }}
+                                        className={`block w-full h-11 px-4 border-[1px] rounded-xl focus:outline-none focus:ring-2 transition-all ${errors.county ? 'border-red-500 focus:ring-red-200' : 'border-primary focus:ring-primary/20'}`}
                                     >
                                         <option value="">-- Select County --</option>
                                         {counties.map(c => (
@@ -318,6 +350,7 @@ export default function CheckoutInfoPage(){
                                             </option>
                                         ))}
                                     </select>
+                                    {errors.county && <p className="text-red-500 text-xs mt-1 font-medium">{errors.county}</p>}
                                 </div>
 
                                 {/* Step 2: Urban center (shown after county selected) */}
@@ -330,7 +363,7 @@ export default function CheckoutInfoPage(){
                                             id="urban"
                                             value={selectedUrban}
                                             onChange={handleUrbanChange}
-                                            className="block w-full p-2 border-[1px] border-primary rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                                            className="block w-full h-11 px-4 border-[1px] border-primary rounded-xl focus:outline-none focus:ring-2 focus:ring-primary transition-all"
                                         >
                                             <option value="">-- Select Town/Urban Center --</option>
                                             {(selectedCounty.children || []).map(u => (
@@ -353,10 +386,14 @@ export default function CheckoutInfoPage(){
                                             id="manual_town"
                                             type="text"
                                             value={manualTown}
-                                            onChange={e => setManualTown(e.target.value)}
-                                            className="block w-full p-2 border-[1px] border-primary rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                                            onChange={e => {
+                                                setManualTown(e.target.value);
+                                                if(errors.manual_town) setErrors({...errors, manual_town:null});
+                                            }}
+                                            className={`block w-full h-11 px-4 border-[1px] rounded-xl focus:outline-none focus:ring-2 transition-all ${errors.manual_town ? 'border-red-500 focus:ring-red-200' : 'border-primary focus:ring-primary/20'}`}
                                             placeholder="e.g. Eldoret, Kisii, Thika..."
                                         />
+                                        {errors.manual_town && <p className="text-red-500 text-xs mt-1 font-medium">{errors.manual_town}</p>}
                                         <p className="text-xs text-black/50 mt-1">County-level fee applies.</p>
                                     </div>
                                 )}
@@ -385,7 +422,7 @@ export default function CheckoutInfoPage(){
                                             setAddressComponents(place.address_components || []);
                                         }}
                                         value={orderDetails.address}
-                                        className="block w-full p-2 border-[1px] border-primary rounded-md mt-1 focus:outline-none focus:ring-2 focus:ring-primary" 
+                                        className="block w-full h-11 px-4 border-[1px] border-primary rounded-xl mt-1 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all" 
                                         placeholder="Building, Apartment, or Street, City" 
                                     />
                                 </div>
@@ -439,8 +476,8 @@ export default function CheckoutInfoPage(){
                                 placeholder="Any notes on your order, or an alternative phone number in case you're unavailable during delivery"
                             />
 
-                            {error && (
-                                <p className="text-red-500 text-sm mt-3 font-semibold">{error}</p>
+                            {Object.keys(errors).length > 0 && (
+                                <p className="text-red-500 text-sm mt-3 font-semibold">Please correct the errors above to continue.</p>
                             )}
 
                             <div className="mt-8 flex justify-end">
