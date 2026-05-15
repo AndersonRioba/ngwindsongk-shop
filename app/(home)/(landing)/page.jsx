@@ -85,7 +85,7 @@ export default function Home() {
     const brandsList = (Array.isArray(brandsData) ? brandsData : brandsData?.data || [])
         .filter(b => b.is_active)
         .sort((a, b) => {
-            const order = ['grainmill', 'nanacare', 'nutmill'];
+            const order = ['nutmill', 'grainmill', 'nanacare'];
             const aIndex = order.indexOf(a.name.toLowerCase().trim());
             const bIndex = order.indexOf(b.name.toLowerCase().trim());
             
@@ -94,6 +94,15 @@ export default function Home() {
             if (bIndex !== -1) return 1;
             return 0;
         });
+
+    const getBrandDisplayName = (name) => {
+        const mapping = {
+            'grainmill': 'OATS',
+            'nanacare': 'BABY CARE',
+            'nutmill': 'NUTMILL'
+        };
+        return mapping[name.toLowerCase().trim()] || name;
+    };
 
     const featuredProducts = getFeaturedProducts(productsList);
     const heroProduct = featuredProducts[0];
@@ -159,12 +168,12 @@ export default function Home() {
                 {!hasActiveSearch && (
                     <section className="pt-6">
                         {/* Brand logos — horizontally scrollable on mobile */}
-                        <div className="flex flex-row gap-6 md:gap-12 overflow-x-auto px-6 md:px-16 py-4 scrollbar-hide justify-start md:justify-center">
+                        <div className="flex flex-row gap-6 md:gap-12 overflow-x-auto px-6 md:px-16 py-4 scrollbar-hide justify-around md:justify-center">
                             {brandsList.map((brand) => (
                                 <Link
                                     key={brand.id}
                                     href={`/products/${brand.name.toLowerCase().trim().replaceAll(' ', '-')}`}
-                                    className="flex-none flex flex-col items-center gap-2 group"
+                                    className="flex-none flex flex-col items-center gap-1 group"
                                 >
                                     <div 
                                         className="w-20 h-20 md:w-32 md:h-32 rounded-full border-[2px] bg-white shadow-[0_4px_20px_rgba(0,0,0,0.05)] transition-all duration-300 group-hover:scale-105 flex items-center justify-center overflow-hidden"
@@ -173,28 +182,32 @@ export default function Home() {
                                             boxShadow: `0 4px 20px rgba(0,0,0,0.05)`
                                         }}
                                     >
-                                        <div className="w-full h-full p-1.5 flex items-center justify-center relative">
+                                        <div className="w-full h-full p-1 flex items-center justify-center relative">
                                             <Image
                                                 src={getImageUrl(brand.logo)}
                                                 alt={brand.name}
                                                 fill
-                                                className="object-contain p-1"
+                                                className="object-contain"
                                             />
                                         </div>
                                     </div>
-                                    <p className="text-[10px] md:text-xs font-bold text-black/80 tracking-wide group-hover:text-black transition-colors uppercase">{brand.name}</p>
+                                    <p className="text-[10px] md:text-xs font-bold text-black/80 tracking-wide group-hover:text-black transition-colors uppercase">
+                                        {getBrandDisplayName(brand.name)}
+                                    </p>
                                 </Link>
                             ))}
                         </div>
                     </section>
                 )}
 
-                <Carousel />
-
-                <div className="mx-2 md:mx-auto md:max-w-3xl px-4 pt-6 md:px-8">
+                <div className="mx-2 md:mx-auto md:max-w-3xl px-4 pt-4 md:pt-8 md:px-8">
                     <Search />
                     <p className="mt-7 text-center text-sm text-black/70">Search oats, baby care, and pantry essentials in seconds.</p>
                 </div>
+
+                <Carousel />
+
+
 
                 <section className="relative">
                     <div className="absolute inset-x-0 top-0 -z-10 h-[30rem] luxe-glow bg-[radial-gradient(circle_at_top_left,_rgba(24,119,242,0.14),_transparent_38%),radial-gradient(circle_at_top_right,_rgba(249,115,22,0.14),_transparent_32%),linear-gradient(to_bottom,_rgba(255,255,255,0.9),_rgba(252,252,251,1))]" />

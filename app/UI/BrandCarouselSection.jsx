@@ -53,9 +53,9 @@ export default function BrandCarouselSection({
                 className={`${barColor} rounded-t-2xl px-5 md:px-8 py-4 flex items-center justify-between`}
                 style={customStyle}
             >
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
                     {logoSrc && (
-                        <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center p-1.5 shrink-0 overflow-hidden shadow-sm">
+                        <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center p-1 shrink-0 overflow-hidden shadow-sm">
                             <Image 
                                 src={getImageUrl(logoSrc)} 
                                 alt={`${title} logo`} 
