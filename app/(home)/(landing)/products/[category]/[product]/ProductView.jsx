@@ -56,6 +56,7 @@ function Details({product, initialData}){
                                     src={getImageUrl(images[currentIndex]?.url)} 
                                     alt={displayData?.product?.name || "Product detail image"} 
                                     fill
+                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
                                 />
                             </div>
                             {images.length > 1 && (
@@ -265,6 +266,7 @@ function ProductRecipes({product}){
                                 src={getImageUrl(recipe.image, '/recipe-placeholder.png')}
                                 alt={recipe.title}
                                 fill
+                                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 400px"
                                 className="object-cover group-hover:scale-110 transition-transform duration-700"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent"></div>
@@ -356,6 +358,7 @@ export default function ProductView({params, initialProduct, initialDescription}
                                 className="object-contain" 
                                 alt={displayProduct.name || "Product Image"} 
                                 fill
+                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
                                 priority
                             />
                         )}
@@ -373,6 +376,7 @@ export default function ProductView({params, initialProduct, initialDescription}
                                             src={getImageUrl(image.url)} 
                                             alt={`${displayProduct.name} Thumbnail ${thumbStart + i + 1}`}
                                             fill
+                                            sizes="112px"
                                         />
                                     </button>
                                 ))}

@@ -19,12 +19,12 @@ export default function Carousel() {
   // Create items from dynamic banners or fallback to hardcoded ones
   const items = dynamicBanners.length > 0 
     ? dynamicBanners.map((banner, i) => (
-        <div key={i} className="relative w-full">
+        <div key={i} className="relative w-full aspect-[16/9] md:aspect-[21/9] lg:aspect-[1920/700]">
             <Image 
                 src={getImageUrl(banner.image)}
-                width={1920}
-                height={700}
-                className="w-full h-auto block"
+                fill
+                sizes="100vw"
+                className="object-cover block"
                 alt={banner.title || 'Hero Banner'} 
                 priority={i === 0}
             />
@@ -44,9 +44,15 @@ export default function Carousel() {
         </div>
     ))
     : [
-        <Image key="fall1" src={getImageUrl("/carousel/OatsPoster.webp")} width={1920} height={700} className="w-full h-auto block" alt="Oats" priority />,
-        <Image key="fall2" src={getImageUrl("/carousel/nanacare.jpeg")} width={1920} height={700} className="w-full h-auto block" alt="Nanacare" />,
-        <Image key="fall3" src={getImageUrl("/carousel/nutmill.jpeg")} width={1920} height={700} className="w-full h-auto block" alt="Nutmill" />
+        <div key="fall1" className="relative w-full aspect-[16/9] md:aspect-[21/9] lg:aspect-[1920/700]">
+            <Image src={getImageUrl("/carousel/OatsPoster.webp")} fill sizes="100vw" className="object-cover block" alt="Oats" priority />
+        </div>,
+        <div key="fall2" className="relative w-full aspect-[16/9] md:aspect-[21/9] lg:aspect-[1920/700]">
+            <Image src={getImageUrl("/carousel/nanacare.jpeg")} fill sizes="100vw" className="object-cover block" alt="Nanacare" />
+        </div>,
+        <div key="fall3" className="relative w-full aspect-[16/9] md:aspect-[21/9] lg:aspect-[1920/700]">
+            <Image src={getImageUrl("/carousel/nutmill.jpeg")} fill sizes="100vw" className="object-cover block" alt="Nutmill" />
+        </div>
     ];
 
   useEffect(() => {

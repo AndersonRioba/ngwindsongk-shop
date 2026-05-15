@@ -101,9 +101,18 @@ export default function Home() {
         const mapping = {
             'grainmill': 'OATS',
             'nanacare': 'BABY CARE',
-            'nutmill': 'NUTMILL'
+            'nutmill': 'NUTMILL',
+            'oats': 'OATS',
+            'baby care': 'BABY CARE'
         };
         return mapping[name.toLowerCase().trim()] || name;
+    };
+
+    const getBrandSlug = (name) => {
+        const n = name.toLowerCase().trim();
+        if (n === 'baby care' || n === 'nanacare') return 'nanacare';
+        if (n === 'oats' || n === 'grainmill') return 'grainmill';
+        return n.replaceAll(' ', '-');
     };
 
     const featuredProducts = getFeaturedProducts(productsList);
@@ -174,7 +183,7 @@ export default function Home() {
                             {brandsList.map((brand) => (
                                 <Link
                                     key={brand.id}
-                                    href={`/products/${brand.name.toLowerCase().trim().replaceAll(' ', '-')}`}
+                                    href={`/products/${getBrandSlug(brand.name)}`}
                                     className="flex-none flex flex-col items-center gap-1 group"
                                 >
                                     <div 
@@ -189,6 +198,7 @@ export default function Home() {
                                                 src={getImageUrl(brand.logo)}
                                                 alt={brand.name}
                                                 fill
+                                                sizes="(max-width: 768px) 80px, 128px"
                                                 className="object-contain"
                                             />
                                         </div>
@@ -226,11 +236,11 @@ export default function Home() {
                             {brandsList.map((brand) => (
                                 <BrandCarouselSection
                                     key={brand.id}
-                                    title={brand.name}
+                                    title={getBrandDisplayName(brand.name)}
                                     subtitle={brand.description || `Explore the ${brand.name} collection`}
                                     barColor={""} // Pass empty or specific style if needed, but we'll use inline style in the component if possible
                                     customStyle={{ backgroundColor: brand.color_hex }} // We might need to update the component to accept this
-                                    seeAllHref={`/products/${brand.name.toLowerCase().trim().replaceAll(' ', '-')}`}
+                                    seeAllHref={`/products/${getBrandSlug(brand.name)}`}
                                     categories={[brand.name.toLowerCase()].concat(brand.categories?.map(c => c.name.toLowerCase()) || [])}
                                     logoSrc={brand.logo}
                                 />
