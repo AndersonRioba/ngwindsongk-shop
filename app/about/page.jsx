@@ -285,7 +285,7 @@ export default async function About(){
                         Discover our products and experience the difference.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <Link href={'/products/all'} className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 px-8 rounded-xl shadow-lg shadow-purple-200 transition duration-300">
+                        <Link href={'/products'} className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 px-8 rounded-xl shadow-lg shadow-purple-200 transition duration-300">
                             Explore Our Products
                         </Link>
                         <Link href="/contact" className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-xl shadow-lg shadow-blue-200 transition duration-300">
