@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { getImageUrl } from "@/app/lib/utils/image";
@@ -31,7 +31,13 @@ export function ProductListingSkeleton(){
 export default function ProductListing({data}){
     let category = data.category?.name || "Product";
     let {addToCart} = useCart();
-    const [variation, setVariation] = useState(null);
+    const [variation, setVariation] = useState(() => {
+        if(data.product_variations && data.product_variations.length > 0) {
+            const offerVariation = data.product_variations.find(v => Number(v.discount) > 0);
+            return offerVariation || data.product_variations[0];
+        }
+        return null;
+    });
     const [quantity, setQuantity] = useState(1);
     const [imgSrc, setImgSrc] = useState(null);
 
@@ -44,13 +50,13 @@ export default function ProductListing({data}){
         }
     },[data])
 
-    const groupedVariations = (data.product_variations || []).reduce((grouped, item) => {
+    const groupedVariations = useMemo(() => (data.product_variations || []).reduce((grouped, item) => {
         if (!grouped[item.attribute_name]) {
             grouped[item.attribute_name] = [];
         }
         grouped[item.attribute_name].push(item);
         return grouped;
-    }, {});
+    }, {}), [data.product_variations]);
 
     const handleVariationChange = (attributeName, selectedValue) => {
         const matchedVariation = (groupedVariations[attributeName] || []).find(item => item.attribute_value === selectedValue);
@@ -123,12 +129,13 @@ export default function ProductListing({data}){
 
                                 return (
                                     <div key={attributeName} className="flex flex-col gap-1.5">
-                                        <span className="text-xs font-semibold text-black/70 tracking-wide">
+                                        <label htmlFor={`${data.id}-${attributeName}`} className="text-xs font-semibold text-black/70 tracking-wide">
                                             Select {attributeName}
-                                        </span>
+                                        </label>
                                         <select
                                             className="w-full rounded-xl border border-black/10 bg-[#f9f9f7] px-3 py-3 text-sm font-medium text-black outline-none transition-colors focus:border-black/30 focus:bg-white"
                                             name={attributeName}
+                                            id={`${data.id}-${attributeName}`}
                                             value={selectedValue}
                                             onChange={(e)=>handleVariationChange(attributeName, e.target.value)}
                                         >

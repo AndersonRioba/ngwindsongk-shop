@@ -12,15 +12,22 @@ export function useScrollRestoration(key, isLoading) {
 
   // Save scroll position on unmount or before navigation
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      scrollPositions.set(fullKey, window.scrollY)
-    }
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          scrollPositions.set(fullKey, window.scrollY);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
 
-    window.addEventListener('scroll', handleScroll)
+    window.addEventListener('scroll', handleScroll);
     return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
-  }, [fullKey])
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [fullKey]);
 
   // Restore scroll position after loading is complete
   useLayoutEffect(() => {

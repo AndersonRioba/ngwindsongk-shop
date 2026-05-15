@@ -36,7 +36,7 @@ export default function Cart() {
     }
 
     return (
-      <button id="cart-icon" ref={buttonRef}
+      <button id="cart-icon" ref={buttonRef} aria-label="View Cart"
       className="bg-gray-100 block p-4 rounded-full border-primary  w-16 h-16 hover:scale-110"
       onClick={e=>openCart(e)}
       >

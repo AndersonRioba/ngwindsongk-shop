@@ -13,10 +13,18 @@ import { useSearch } from "@/app/lib/providers/SearchProvider";
 import Carousel from "@/app/UI/Hero"
 import RunningBanner from "@/app/UI/RunningBanner";
 import Search from "@/app/UI/Search";
-import BrandCarouselSection from "@/app/UI/BrandCarouselSection";
+import dynamic from "next/dynamic";
 import { getImageUrl } from "@/app/lib/utils/image";
-import OffersSection from "@/app/UI/OffersSection";
-import TestimonialsSection from "@/app/UI/TestimonialsSection";
+
+const BrandCarouselSection = dynamic(() => import("@/app/UI/BrandCarouselSection"), {
+    loading: () => <div className="h-96 animate-pulse bg-gray-50" />
+});
+
+const TestimonialsSection = dynamic(() => import("@/app/UI/TestimonialsSection"), {
+    ssr: false
+});
+
+const OffersSection = dynamic(() => import("@/app/UI/OffersSection"), { ssr: false });
 
 function getFeaturedProducts(products) {
     return products
@@ -85,7 +93,7 @@ export default function Home() {
     const brandsList = (Array.isArray(brandsData) ? brandsData : brandsData?.data || [])
         .filter(b => b.is_active)
         .sort((a, b) => {
-            const order = ['nutmill', 'grainmill', 'nanacare'];
+            const order = ['grainmill', 'nanacare', 'nutmill'];
             const aIndex = order.indexOf(a.name.toLowerCase().trim());
             const bIndex = order.indexOf(b.name.toLowerCase().trim());
             

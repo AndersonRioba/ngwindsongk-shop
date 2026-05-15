@@ -83,21 +83,35 @@ export default function CategoryLayout({ children, params }) {
         ? getImageUrl(dynamicBanners[0].image)
         : getImageUrl(theme.banner);
 
-    // Individual product page — just show breadcrumb + content
+    // Individual product page — show search + breadcrumb + content
     if (path.split("/").length === 4) return (
         <CategorySearchProvider>
             <section className="px-4 pt-8 md:px-8">
-                <div className="mx-2 md:mx-10 luxe-reveal">
+                <div className="mx-2 md:mx-10 luxe-reveal flex flex-col gap-6">
+                    <div className="w-full max-w-2xl mx-auto">
+                        <CategorySearch />
+                    </div>
                     <BreadCrump />
                 </div>
             </section>
-            {children}
+            <div className="w-full px-4 pb-16 pt-2 md:px-8">
+                <div className="mx-2 md:mx-10">
+                    {children}
+                </div>
+            </div>
         </CategorySearchProvider>
     );
 
     return (
         <CategorySearchProvider>
             <section className="relative">
+
+            {/* ── Search bar centered ABOVE banner ── */}
+            <div className="w-full flex justify-center pt-10 pb-6 px-4 luxe-reveal">
+                <div className="w-full max-w-2xl">
+                    <CategorySearch />
+                </div>
+            </div>
 
             {/* ── Full-width pure image banner ── */}
             <div className="w-full relative bg-[#f5f5f3]">
@@ -120,15 +134,8 @@ export default function CategoryLayout({ children, params }) {
                 </div>
             </div>
 
-            {/* ── Search bar centered below banner ── */}
-            <div className="w-full flex justify-center pt-10 pb-4 px-4 luxe-reveal luxe-delay-1">
-                <div className="w-full max-w-2xl">
-                    <CategorySearch />
-                </div>
-            </div>
-
             {/* ── Products grid ── */}
-            <div className="w-full px-4 pb-16 pt-2 md:px-8">
+            <div className="w-full px-4 pb-16 pt-10 md:px-8">
                 <div className="mx-2 md:mx-10 luxe-reveal luxe-delay-4">
                     {children}
                 </div>

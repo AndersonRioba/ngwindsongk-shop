@@ -114,6 +114,15 @@ export default function RootLayout({ children }) {
         <meta name="geo.position" content="-1.2921;36.8219" />
         <meta name="ICBM" content="-1.2921, 36.8219" />
 
+        {/* Preload Hero Banners */}
+        <link rel="preload" as="image" href="/carousel/OatsPoster.webp" fetchPriority="high" />
+        <link rel="preload" as="image" href="/carousel/nanacare.jpeg" />
+        <link rel="preload" as="image" href="/carousel/nutmill.jpeg" />
+
+        <link rel="preconnect" href="https://api.ngwindsongk.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+
         <GoogleTag />
 
 
@@ -171,7 +180,7 @@ export default function RootLayout({ children }) {
               <div className="fixed z-50 bottom-24 md:top-40 right-[3vw] lg:right-[0.5vw] 2xl:right-[3vw] w-fit h-fit">
                   <Cart />
               </div>
-              <a href="https://wa.me/254718156421" className="block fixed z-50 bottom-10 right-[3vw] lg:right-[0.5vw] 2xl:right-[3vw] icon-[logos--whatsapp-icon] w-12 h-12 md:w-14 md:h-14">
+              <a href="https://wa.me/254718156421" aria-label="Chat on WhatsApp" className="block fixed z-50 bottom-10 right-[3vw] lg:right-[0.5vw] 2xl:right-[3vw] icon-[logos--whatsapp-icon] w-12 h-12 md:w-14 md:h-14">
               </a>
               {children}
             </ContextProvider>

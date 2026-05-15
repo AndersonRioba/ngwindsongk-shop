@@ -114,15 +114,11 @@ export default function CheckoutInfoPage(){
         e.preventDefault();
         const newErrors = {};
 
-        if (!orderDetails.full_name || orderDetails.full_name.trim() === '') {
-            newErrors.full_name = 'Full name is required.';
-        }
+        // Full Name and Email are now optional
         if (!orderDetails.phone || orderDetails.phone.trim() === '') {
             newErrors.phone = 'Phone number is required.';
         }
-        if (!orderDetails.email || orderDetails.email.trim() === '') {
-            newErrors.email = 'Email address is required.';
-        }
+        // Email is now optional
         if (deliveryMode === 'pickup' && !pickup) {
             newErrors.pickup = 'Please select a pickup location.';
         }
@@ -192,12 +188,11 @@ export default function CheckoutInfoPage(){
                             <div className="grid md:grid-cols-2 gap-y-5 gap-x-5">
                                 <div className="md:col-span-2">
                                     <label htmlFor="full_name">
-                                        Full Name <span className="text-red-500">*</span>
+                                        Full Name <span className="text-black/40 text-xs">(optional)</span>
                                     </label>
                                     <input 
                                         id="full_name"
                                         type="text" 
-                                        required
                                         className={`block w-full h-11 px-4 border-[1px] rounded-xl mt-1 focus:outline-none focus:ring-2 transition-all ${errors.full_name ? 'border-red-500 focus:ring-red-200' : 'border-primary focus:ring-primary/20'}`} 
                                         placeholder="Jane Doe" 
                                         value={orderDetails.full_name}
@@ -210,13 +205,12 @@ export default function CheckoutInfoPage(){
                                 </div>
                                 <div>
                                     <label htmlFor="email">
-                                        Email <span className="text-red-500">*</span>
+                                        Email <span className="text-black/40 text-xs">(optional)</span>
                                     </label>
                                     <input 
                                         id="email"
                                         type="email" 
                                         inputMode="email"
-                                        required
                                         className={`block w-full h-11 px-4 border-[1px] rounded-xl mt-1 focus:outline-none focus:ring-2 transition-all ${errors.email ? 'border-red-500 focus:ring-red-200' : 'border-primary focus:ring-primary/20'}`} 
                                         placeholder="jane@example.com" 
                                         value={orderDetails.email}

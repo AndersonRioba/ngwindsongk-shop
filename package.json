@@ -33,6 +33,7 @@
     "@tiptap/starter-kit": "^3.2.0",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
+    "critters": "^0.0.22",
     "gsap": "^3.13.0",
     "idb": "^8.0.3",
     "lucide-react": "^0.525.0",
@@ -50,5 +51,11 @@
     "eslint-config-next": "14.2.5",
     "postcss": "^8",
     "tailwindcss": "^3.4.1"
-  }
+  },
+  "browserslist": [
+    "last 2 versions",
+    "> 0.5%",
+    "not dead",
+    "not ie 11"
+  ]
 }

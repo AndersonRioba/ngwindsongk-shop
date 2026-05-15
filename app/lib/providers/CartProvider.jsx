@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, createContext } from "react";
+import { useState, useEffect, createContext, useMemo } from "react";
 import { readRecord } from "@/app/lib/database";
 
 export let CartContext = createContext();
@@ -13,10 +13,10 @@ export default function CartProvider({ children }) {
         });
     },[])
 
+    const value = useMemo(() => ({ cart, setCart }), [cart]);
+
     return(
-        <CartContext.Provider value={{
-            cart, setCart
-        }}>
+        <CartContext.Provider value={value}>
         {children}
         </CartContext.Provider>
     )

@@ -15,15 +15,21 @@ const TestimonialsSection = () => {
   useEffect(() => {
     if (!scrollRef.current || testimonials.length === 0 || isPaused) return;
 
+    let cardWidth = 0;
+    const gap = 32;
+
     const interval = setInterval(() => {
       const { current } = scrollRef;
       if (!current) return;
 
-      const cardWidth = current.querySelector('.testimonial-card')?.offsetWidth || 400;
-      const gap = 32; // gap-8 = 2rem = 32px
+      // Only query offsetWidth if we haven't yet or if it might have changed
+      if (cardWidth === 0) {
+        cardWidth = current.querySelector('.testimonial-card')?.offsetWidth || 400;
+      }
+      
       const scrollAmount = cardWidth + gap;
-
-      const isAtEnd = current.scrollLeft + current.offsetWidth >= current.scrollWidth - 10;
+      const { scrollLeft, scrollWidth, offsetWidth } = current;
+      const isAtEnd = scrollLeft + offsetWidth >= scrollWidth - 10;
 
       if (isAtEnd) {
         current.scrollTo({ left: 0, behavior: 'smooth' });
@@ -82,7 +88,7 @@ const TestimonialsSection = () => {
                   {testimonial.name[0]}
                 </div>
                 <div>
-                  <h4 className="font-bold text-black text-lg">{testimonial.name}</h4>
+                  <h3 className="font-bold text-black text-lg">{testimonial.name}</h3>
                   <p className="text-xs text-black/40 font-bold uppercase tracking-widest mt-0.5">{testimonial.role}</p>
                 </div>
               </div>
