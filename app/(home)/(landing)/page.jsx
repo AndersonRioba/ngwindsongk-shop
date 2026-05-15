@@ -16,15 +16,9 @@ import Search from "@/app/UI/Search";
 import dynamic from "next/dynamic";
 import { getImageUrl } from "@/app/lib/utils/image";
 
-const BrandCarouselSection = dynamic(() => import("@/app/UI/BrandCarouselSection"), {
-    loading: () => <div className="h-96 animate-pulse bg-gray-50" />
-});
-
-const TestimonialsSection = dynamic(() => import("@/app/UI/TestimonialsSection"), {
-    ssr: false
-});
-
-const OffersSection = dynamic(() => import("@/app/UI/OffersSection"), { ssr: false });
+import BrandCarouselSection from "@/app/UI/BrandCarouselSection";
+import TestimonialsSection from "@/app/UI/TestimonialsSection";
+import OffersSection from "@/app/UI/OffersSection";
 
 function getFeaturedProducts(products) {
     return products
@@ -346,7 +340,7 @@ export default function Home() {
                     {/* All Products — search results only */}
                     {hasActiveSearch && (
                         <div className="w-full px-4 pb-16 pt-8 md:px-8 md:pt-12 max-w-7xl mx-auto">
-                            <div className="luxe-reveal luxe-delay-4 container mx-auto">
+                            <div className="container mx-auto">
                                 <h3 className="text-lg uppercase tracking-[0.32em] text-black/45 mb-10 text-center">Search Results</h3>
                                 <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 pt-4">
                                     {
