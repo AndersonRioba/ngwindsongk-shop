@@ -86,16 +86,7 @@ export default function Home() {
     const offerProductsList = Array.isArray(offersData) ? offersData : (offersData?.data || []);
     const brandsList = (Array.isArray(brandsData) ? brandsData : brandsData?.data || [])
         .filter(b => b.is_active)
-        .sort((a, b) => {
-            const order = ['grainmill', 'nanacare', 'nutmill'];
-            const aIndex = order.indexOf(a.name.toLowerCase().trim());
-            const bIndex = order.indexOf(b.name.toLowerCase().trim());
-            
-            if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex;
-            if (aIndex !== -1) return -1;
-            if (bIndex !== -1) return 1;
-            return 0;
-        });
+        .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
 
     const getBrandDisplayName = (name) => {
         const mapping = {
