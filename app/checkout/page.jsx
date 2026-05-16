@@ -33,6 +33,8 @@ export default function CheckoutInfoPage(){
 
     // Zone picker state
     const [selectedCounty, setSelectedCounty] = useState(null);
+    const [countySearch, setCountySearch] = useState('');
+    const [showCountyList, setShowCountyList] = useState(false);
     const [selectedUrban, setSelectedUrban] = useState('');
     const [manualTown, setManualTown] = useState('');
     const [deliveryFee, setDeliveryFee] = useState(null);
@@ -67,8 +69,12 @@ export default function CheckoutInfoPage(){
     };
 
     const handleCountyChange = (e) => {
-        const county = counties.find(c => c.id === parseInt(e.target.value));
+        const val = e.target.value;
+        const county = val ? counties.find(c => c.id === parseInt(val)) : null;
+        
         setSelectedCounty(county || null);
+        setCountySearch(county ? county.name : '');
+        setShowCountyList(false);
         setSelectedUrban('');
         setManualTown('');
         
@@ -246,10 +252,10 @@ export default function CheckoutInfoPage(){
                             <h5 className="my-5 py-2 uppercase text-sm font-semibold text-primary border-b-[1px]">Delivery Method</h5>
                             <p className="text-sm text-black/60 mb-4">How would you like to receive your order?</p>
 
-                            <div className="grid md:grid-cols-2 gap-4 mb-6">
+                            <div className={`grid gap-4 mb-6 ${deliveryMode === 'pickup' ? 'md:grid-cols-1' : 'md:grid-cols-2'}`}>
                                 {/* Pickup */}
                                 <div 
-                                    onClick={() => selectMode('pickup')} 
+                                    onClick={() => deliveryMode === 'pickup' ? selectMode('delivery') : selectMode('pickup')} 
                                     className={`gap-3 p-5 rounded-lg border-2 flex items-start cursor-pointer transition-all ${deliveryMode === 'pickup' ? 'border-primary bg-primary/5' : 'border-gray-200 hover:border-gray-400'}`}
                                 >
                                     {deliveryMode === 'pickup'
@@ -259,11 +265,13 @@ export default function CheckoutInfoPage(){
                                     <div className="flex-1">
                                         <p className="font-semibold text-base">Pickup</p>
                                         <p className="text-black/60 text-sm">Pick up at our head office or a station near you</p>
-                                        <span className="mt-1.5 inline-block text-xs font-bold text-green-700 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full">FREE</span>
+                                        <span className="mt-1.5 inline-block text-xs font-bold text-green-700 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full mr-2">FREE</span>
+                                        {deliveryMode === 'pickup' && <span className="text-xs text-primary underline mt-2 inline-block">Switch to Delivery</span>}
                                     </div>
                                 </div>
 
                                 {/* Delivery */}
+                                {deliveryMode !== 'pickup' && (
                                 <div 
                                     onClick={() => selectMode('delivery')} 
                                     className={`gap-3 p-5 rounded-lg border-2 flex items-start cursor-pointer transition-all ${deliveryMode === 'delivery' ? 'border-primary bg-primary/5' : 'border-gray-200 hover:border-gray-400'}`}
@@ -280,6 +288,7 @@ export default function CheckoutInfoPage(){
                                         </span>
                                     </div>
                                 </div>
+                                )}
                             </div>
 
                             {/* Pickup: show location cards */}
@@ -324,26 +333,51 @@ export default function CheckoutInfoPage(){
                                 </div>
 
                                 {/* Step 1: County */}
-                                <div>
-                                    <label htmlFor="county" className="block text-sm font-medium mb-1">
+                                <div className="relative">
+                                    <label htmlFor="countySearch" className="block text-sm font-medium mb-1">
                                         County <span className="text-red-500">*</span>
                                     </label>
-                                    <select
-                                        id="county"
-                                        value={selectedCounty?.id || ''}
+                                    <input
+                                        id="countySearch"
+                                        type="text"
+                                        autoComplete="off"
+                                        placeholder="Type to search county..."
+                                        value={countySearch}
                                         onChange={(e) => {
-                                            handleCountyChange(e);
-                                            if(errors.county) setErrors({...errors, county:null});
+                                            setCountySearch(e.target.value);
+                                            setShowCountyList(true);
+                                            if (errors.county) setErrors({...errors, county:null});
+                                            if (selectedCounty && e.target.value !== selectedCounty.name) {
+                                                handleCountyChange({target: {value: ''}});
+                                            }
                                         }}
+                                        onFocus={() => setShowCountyList(true)}
+                                        onBlur={() => setTimeout(() => setShowCountyList(false), 200)}
                                         className={`block w-full h-11 px-4 border-[1px] rounded-xl focus:outline-none focus:ring-2 transition-all ${errors.county ? 'border-red-500 focus:ring-red-200' : 'border-primary focus:ring-primary/20'}`}
-                                    >
-                                        <option value="">-- Select County --</option>
-                                        {counties.map(c => (
-                                            <option key={c.id} value={c.id}>
-                                                {c.name}
-                                            </option>
-                                        ))}
-                                    </select>
+                                    />
+                                    
+                                    {showCountyList && (
+                                        <ul className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg max-h-60 overflow-y-auto">
+                                            {counties
+                                                .filter(c => c.name.toLowerCase().includes(countySearch.toLowerCase()))
+                                                .map(c => (
+                                                    <li 
+                                                        key={c.id} 
+                                                        onMouseDown={(e) => {
+                                                            e.preventDefault(); 
+                                                            handleCountyChange({target: {value: c.id}});
+                                                        }}
+                                                        className="px-4 py-2.5 hover:bg-primary/10 cursor-pointer text-sm font-medium text-gray-700 transition-colors"
+                                                    >
+                                                        {c.name}
+                                                    </li>
+                                                ))
+                                            }
+                                            {counties.filter(c => c.name.toLowerCase().includes(countySearch.toLowerCase())).length === 0 && (
+                                                <li className="px-4 py-3 text-sm text-gray-500 italic text-center">No counties found</li>
+                                            )}
+                                        </ul>
+                                    )}
                                     {errors.county && <p className="text-red-500 text-xs mt-1 font-medium">{errors.county}</p>}
                                 </div>
 
