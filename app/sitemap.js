@@ -13,8 +13,8 @@ export default async function sitemap() {
     const products = data.data || data || []
 
     productEntries = products.map((product) => {
-      const categorySlug = (product.brand?.name || product.category?.name || 'Products').toLowerCase().trim().replaceAll(' ', '-');
-      const productSlug = (product.slug || product.name).toLowerCase().trim().replaceAll(' ', '-');
+      const categorySlug = product.brand?.slug || product.category?.slug || (product.brand?.name || product.category?.name || 'Products').toLowerCase().trim().replaceAll(' ', '-');
+      const productSlug = product.slug || product.name.toLowerCase().trim().replaceAll(' ', '-');
       return {
         url: `${baseUrl}/products/${categorySlug}/${productSlug}`,
         lastModified: product.updated_at ? new Date(product.updated_at) : new Date(),

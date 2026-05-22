@@ -41,8 +41,8 @@ function getProductImage(product) {
 }
 
 function getProductHref(product) {
-    const catSlug = (product?.category?.name || "Products").toLowerCase().trim().replaceAll(' ', '-');
-    const prodSlug = (product?.slug || product?.name || "").toLowerCase().trim().replaceAll(' ', '-');
+    const catSlug = product?.brand?.slug || product?.category?.slug || (product?.brand?.name || product?.category?.name || "Products").toLowerCase().trim().replaceAll(' ', '-');
+    const prodSlug = product?.slug || (product?.name || "").toLowerCase().trim().replaceAll(' ', '-');
     return `/products/${catSlug}/${prodSlug}`;
 }
 
@@ -99,8 +99,9 @@ export default function Home() {
         return mapping[name.toLowerCase().trim()] || name;
     };
 
-    const getBrandSlug = (name) => {
-        const n = name.toLowerCase().trim();
+    const getBrandSlug = (brand) => {
+        if (brand.slug) return brand.slug;
+        const n = brand.name.toLowerCase().trim();
         if (n === 'baby care' || n === 'nanacare') return 'nanacare';
         if (n === 'oats' || n === 'grainmill') return 'grainmill';
         return n.replaceAll(' ', '-');
@@ -174,7 +175,7 @@ export default function Home() {
                             {brandsList.map((brand) => (
                                 <Link
                                     key={brand.id}
-                                    href={`/products/${getBrandSlug(brand.name)}`}
+                                    href={`/products/${getBrandSlug(brand)}`}
                                     className="flex-none flex flex-col items-center gap-1 group"
                                 >
                                     <div 
@@ -231,7 +232,8 @@ export default function Home() {
                                     subtitle={brand.description || `Explore the ${brand.name} collection`}
                                     barColor={""} // Pass empty or specific style if needed, but we'll use inline style in the component if possible
                                     customStyle={{ backgroundColor: brand.color_hex }} // We might need to update the component to accept this
-                                    seeAllHref={`/products/${getBrandSlug(brand.name)}`}
+                                    seeAllHref={`/products/${getBrandSlug(brand)}`}
+                                    fetchSlug={getBrandSlug(brand)}
                                     categories={[brand.name.toLowerCase()].concat(brand.categories?.map(c => c.name.toLowerCase()) || [])}
                                     logoSrc={brand.logo}
                                 />

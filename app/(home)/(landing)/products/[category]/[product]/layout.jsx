@@ -20,8 +20,8 @@ export async function generateMetadata({ params }) {
       };
     }
 
-    const categorySlug = (productData.brand?.name || productData.category?.name || 'Products').toLowerCase().trim().replaceAll(' ', '-');
-    const productSlug = (productData.slug || productData.name).toLowerCase().trim().replaceAll(' ', '-');
+    const categorySlug = productData.brand?.slug || productData.category?.slug || (productData.brand?.name || productData.category?.name || 'Products').toLowerCase().trim().replaceAll(' ', '-');
+    const productSlug = productData.slug || productData.name.toLowerCase().trim().replaceAll(' ', '-');
     const productUrl = `${SITE_URL}/products/${categorySlug}/${productSlug}`;
     const primaryImage = productData.product_images?.find(img => img.is_primary)?.url || productData.product_images?.[0]?.url;
     const metaDescription = productData.about?.substring(0, 160) || `Shop ${productData.name} from ngwindsongk. Premium healthy oats and Nanacare products.`;
@@ -60,8 +60,8 @@ export async function generateMetadata({ params }) {
 export default async function ProductDescription({children, params}){
     const { productData } = await fetchProduct(params);
 
-    const categorySlug = productData ? (productData.brand?.name || productData.category?.name || 'products').toLowerCase().trim().replaceAll(' ', '-') : 'products';
-    const productSlug = productData ? (productData.slug || productData.name).toLowerCase().trim().replaceAll(' ', '-') : '';
+    const categorySlug = productData ? (productData.brand?.slug || productData.category?.slug || (productData.brand?.name || productData.category?.name || 'products').toLowerCase().trim().replaceAll(' ', '-')) : 'products';
+    const productSlug = productData ? (productData.slug || productData.name.toLowerCase().trim().replaceAll(' ', '-')) : '';
 
     // Build Product JSON-LD for search engines and AI crawlers
     const jsonLd = productData ? {

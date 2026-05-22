@@ -78,8 +78,8 @@ export default function ProductListing({data}){
         setImgSrc(primaryImage);
     }, [primaryImage]);
 
-    const categorySlug = (data.brand?.name || category).toLowerCase().trim().replaceAll(' ', '-');
-    const productSlug = (data.slug || data.name).toLowerCase().trim().replaceAll(' ', '-');
+    const categorySlug = data.brand?.slug || data.category?.slug || (data.brand?.name || category).toLowerCase().trim().replaceAll(' ', '-');
+    const productSlug = data.slug || data.name.toLowerCase().trim().replaceAll(' ', '-');
     const href = `/products/${categorySlug}/${productSlug}`;
 
     return(

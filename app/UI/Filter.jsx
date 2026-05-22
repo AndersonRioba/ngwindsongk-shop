@@ -9,7 +9,10 @@ export default function Filter() {
     const [isOpen, setIsOpen] = useState(false);
     const pathname = usePathname();
     
-    const { data: categories, isLoading } = useSWR(['/categories', {}], fetcher, {
+    const { data: categories, isLoading: categoriesLoading } = useSWR(['/categories', {}], fetcher, {
+        revalidateOnFocus: false,
+    });
+    const { data: brands, isLoading: brandsLoading } = useSWR(['/brands', {}], fetcher, {
         revalidateOnFocus: false,
     });
 
@@ -56,7 +59,7 @@ export default function Filter() {
                             <div>
                                 <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-primary mb-6">Product Categories</h3>
                                 <div className="grid gap-3">
-                                    {isLoading ? (
+                                    {categoriesLoading ? (
                                         [...Array(5)].map((_, i) => (
                                             <div key={i} className="h-11 w-full bg-gray-50 animate-pulse rounded-xl" />
                                         ))
@@ -79,15 +82,21 @@ export default function Filter() {
                             <div>
                                 <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-primary mb-6">Our Brands</h3>
                                 <div className="grid grid-cols-2 gap-3">
-                                    {['Grainmill', 'Nanacare', 'Nutmill'].map((brand) => (
-                                        <Link 
-                                            key={brand}
-                                            href={`/products/${brand.toLowerCase()}`}
-                                            className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-gray-50 border border-transparent hover:border-primary/20 hover:bg-primary/[0.02] transition-all group"
-                                        >
-                                            <span className="text-xs font-bold text-gray-700 group-hover:text-primary">{brand}</span>
-                                        </Link>
-                                    ))}
+                                    {brandsLoading ? (
+                                        [...Array(4)].map((_, i) => (
+                                            <div key={i} className="h-12 w-full bg-gray-50 animate-pulse rounded-2xl" />
+                                        ))
+                                    ) : (
+                                        (brands || []).filter(b => b.is_active).map((brand) => (
+                                            <Link 
+                                                key={brand.id}
+                                                href={`/products/${brand.slug || brand.name.toLowerCase().trim().replaceAll(' ', '-')}`}
+                                                className={`flex flex-col items-center gap-2 p-4 rounded-2xl border transition-all group ${pathname.includes(brand.slug || brand.name.toLowerCase().trim().replaceAll(' ', '-')) ? 'bg-primary/5 border-primary/20 text-primary' : 'bg-gray-50 border-transparent text-gray-700 hover:border-gray-200'}`}
+                                            >
+                                                <span className="text-xs font-bold">{brand.name}</span>
+                                            </Link>
+                                        ))
+                                    )}
                                 </div>
                             </div>
                         </div>

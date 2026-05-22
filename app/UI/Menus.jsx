@@ -237,7 +237,13 @@ export function SubMenu({page}){
         const brand = category.brand;
         if (brand) {
             acc[category.name] = {
-                [brand.name]: (brand.products || []).map(product => product.name)
+                [brand.name]: {
+                    slug: brand.slug || brand.name.toLowerCase().trim().replaceAll(' ', '-'),
+                    products: (brand.products || []).map(product => ({
+                        name: product.name,
+                        slug: product.slug || product.name.toLowerCase().trim().replaceAll(' ', '-')
+                    }))
+                }
             };
         } else {
             acc[category.name] = {};
@@ -270,27 +276,27 @@ export function SubMenu({page}){
                                     
                                     {isExpanded && (
                                         <div className="ml-4 space-y-1 pb-2">
-                                            {Object.keys(subMenu[category]).map((brand, j) => { // category brands
-                                                const brandSlug = brand.toLowerCase().trim().replaceAll(' ', '-');
-                                                const catSlug = category.toLowerCase().trim().replaceAll(' ', '-');
+                                            {Object.keys(subMenu[category]).map((brandName, j) => { // category brands
+                                                const brandInfo = subMenu[category][brandName];
+                                                const brandSlug = brandInfo.slug;
                                                 return (
                                                     <div key={j} className=''>
                                                         <Link 
                                                             href={`/products/${brandSlug}`}
                                                             className="block py-2 px-2 text-sm font-medium text-gray-600 hover:text-primary hover:bg-gray-50 rounded"
                                                         >
-                                                            {brand}
+                                                            {brandName}
                                                         </Link>
                                                         <ul className="pl-9 space-y-1 list-disc">
-                                                            {(subMenu[category][brand] || []).map((item, k) => {
-                                                                const productSlug = item.toLowerCase().trim().replaceAll(' ', '-');
+                                                            {brandInfo.products.map((item, k) => {
+                                                                const productSlug = item.slug;
                                                                 return (
                                                                     <li key={k} >
                                                                         <Link 
                                                                             href={`/products/${brandSlug}/${productSlug}`} 
                                                                             className={`block py-1 text-xs text-gray-500 hover:text-primary hover:bg-gray-50 rounded transition-colors`}
                                                                         >
-                                                                            {item}
+                                                                            {item.name}
                                                                         </Link>
                                                                     </li>
                                                                 )

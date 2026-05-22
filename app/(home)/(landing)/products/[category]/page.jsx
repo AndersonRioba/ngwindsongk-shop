@@ -70,8 +70,8 @@ export default function Products(){
         per_page: 12,
         sort_by: 'newest',
         // Send both brand & category filters — the API will match whichever is relevant
-        brand: spacedSlug,
-        category: spacedSlug,
+        brand: rawSlug,
+        category: rawSlug,
         ...(hasActiveSearch ? { search: normalizedSearch } : {})
     }], fetcher, {
         revalidateOnFocus: false,

@@ -26,12 +26,13 @@ export default function BrandCarouselSection({
     categories = [],
     logoSrc,
     customStyle = {},
+    fetchSlug,
 }) {
     const scrollRef = useRef(null)
 
     // Fetch products specifically for this brand (max 15 for the carousel)
     const { data: brandData, error, isLoading } = useSWR(
-        ['/products', { brand: title, per_page: 15 }],
+        ['/products', { brand: fetchSlug || title, per_page: 15 }],
         fetcher,
         { revalidateOnFocus: false }
     );
