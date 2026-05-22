@@ -2,10 +2,19 @@ import Link from "next/link";
 import HeroCarousel from "./HeroCarousel";
 
 async function getAboutSettings() {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL;
+    if (!apiUrl) return {};
+
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/settings?group=about`, {
+        const res = await fetch(`${apiUrl}/settings?group=about`, {
             next: { revalidate: 3600 } // Cache for 1 hour
         });
+
+        const contentType = res.headers.get('content-type') || '';
+        if (!res.ok || !contentType.includes('application/json')) {
+            return {};
+        }
+
         const data = await res.json();
         return data?.data || {};
     } catch (err) {

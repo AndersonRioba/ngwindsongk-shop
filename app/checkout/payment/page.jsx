@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useRef } from "react";
 import Image from "next/image";
 import { CheckoutContext } from "@/app/lib/providers/CheckoutProvider";
 import { postData, fetcher, postFetcher } from "@/app/lib/data";
@@ -35,6 +35,11 @@ export default function CheckoutPaymentPage(){
     const [createdOrderId, setCreatedOrderId] = useState(null);
     const [isPolling, setIsPolling] = useState(false);
     const [pollingStatus, setPollingStatus] = useState('');
+    const [timeLeft, setTimeLeft] = useState(60);
+    const [paymentTimeout, setPaymentTimeout] = useState(false);
+    const [manualReceipt, setManualReceipt] = useState('');
+    const [manualSubmitting, setManualSubmitting] = useState(false);
+    const pollingIntervalRef = useRef(null);
 
     const { cart } = useCart();
     const router = useRouter();
@@ -42,6 +47,28 @@ export default function CheckoutPaymentPage(){
     useEffect(() => {
         if (cart && items.length === 0) setItems(Array.from(new Set(cart)));
     }, [cart, items.length, setItems])
+
+    // Timer Effect
+    useEffect(() => {
+        let timer;
+        if (isPolling && timeLeft > 0) {
+            timer = setInterval(() => {
+                setTimeLeft(prev => prev - 1);
+            }, 1000);
+        } else if (isPolling && timeLeft <= 0) {
+            setIsPolling(false);
+            setIsProcessing(false);
+            setPaymentTimeout(true);
+        }
+        return () => clearInterval(timer);
+    }, [isPolling, timeLeft]);
+
+    // Clear polling if timeout
+    useEffect(() => {
+        if (paymentTimeout && pollingIntervalRef.current) {
+            clearInterval(pollingIntervalRef.current);
+        }
+    }, [paymentTimeout]);
 
     useEffect(() => {
         // Generate Idempotency-Key once when the checkout component mounts
@@ -304,13 +331,13 @@ export default function CheckoutPaymentPage(){
 
     const startPolling = (orderSlug) => {
         setIsPolling(true);
+        setPaymentTimeout(false);
+        setTimeLeft(60);
         setPollingStatus('Waiting for you to enter M-Pesa PIN...');
         
-        let attempts = 0;
-        const maxAttempts = 20; // 20 * 3 seconds = 1 minute
+        if (pollingIntervalRef.current) clearInterval(pollingIntervalRef.current);
         
-        const interval = setInterval(async () => {
-            attempts++;
+        pollingIntervalRef.current = setInterval(async () => {
             try {
                 const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/pay/mpesa/status/${orderSlug}`, {
                     headers: { 'Authorization': `Bearer ${load('token')}` }
@@ -318,28 +345,55 @@ export default function CheckoutPaymentPage(){
                 const data = await res.json();
                 
                 if (data.status === 'success') {
-                    clearInterval(interval);
+                    clearInterval(pollingIntervalRef.current);
                     setIsPolling(false);
                     setIsProcessing(false);
-                    router.push('/checkout/success');
+                    router.push('/checkout/success?type=auto');
                 } else if (data.status === 'failed') {
-                    clearInterval(interval);
+                    clearInterval(pollingIntervalRef.current);
                     setIsPolling(false);
                     setIsProcessing(false);
                     setErrorMsg("M-Pesa payment failed. Please try again.");
-                } else {
-                    // Still pending
-                    if (attempts >= maxAttempts) {
-                        clearInterval(interval);
-                        setIsPolling(false);
-                        setIsProcessing(false);
-                        setErrorMsg("Payment timeout. If you paid, your order will be updated shortly.");
-                    }
                 }
             } catch (err) {
                 console.error("Polling error:", err);
             }
         }, 3000);
+    }
+
+    const submitManualPayment = async () => {
+        if (!manualReceipt || manualReceipt.trim().length < 5) {
+            setErrorMsg("Please enter a valid M-Pesa receipt number.");
+            return;
+        }
+        setManualSubmitting(true);
+        setErrorMsg('');
+
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/pay/mpesa/manual-receipt`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${load('token')}`
+                },
+                body: JSON.stringify({
+                    order_id: createdOrderId,
+                    receipt_number: manualReceipt
+                })
+            });
+            const data = await res.json();
+            
+            if (data.success) {
+                router.push('/checkout/success?type=manual');
+            } else {
+                setErrorMsg(data.message || "Failed to submit receipt.");
+                setManualSubmitting(false);
+            }
+        } catch (err) {
+            console.error("Manual receipt error:", err);
+            setErrorMsg("Network error. Please try again.");
+            setManualSubmitting(false);
+        }
     }
 
     return(
@@ -438,9 +492,9 @@ export default function CheckoutPaymentPage(){
                     )}
 
                     <button 
-                        disabled={isProcessing}
+                        disabled={isProcessing && !paymentTimeout}
                         onClick={submitOrder} 
-                        className="mt-6 bg-primary text-white block text-center w-full py-4 rounded-xl font-bold text-lg hover:bg-opacity-90 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all"
+                        className={`mt-6 text-white block text-center w-full py-4 rounded-xl font-bold text-lg hover:bg-opacity-90 transition-all ${paymentTimeout ? 'hidden' : 'bg-primary disabled:bg-gray-400 disabled:cursor-not-allowed'}`}
                     >
                         {isPolling ? 'Confirming Payment...' : (isProcessing ? 'Processing...' : 'Pay & Place Order')}
                     </button>
@@ -451,7 +505,65 @@ export default function CheckoutPaymentPage(){
                                 <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
                             </div>
                             <p className="text-sm font-semibold text-primary">{pollingStatus}</p>
-                            <p className="text-xs text-gray-500 mt-1">Please do not refresh this page.</p>
+                            
+                            {/* Visual Progress Bar & Timer */}
+                            <div className="mt-4 max-w-xs mx-auto">
+                                <div className="flex justify-between text-xs mb-1 font-medium">
+                                    <span className={timeLeft <= 15 ? 'text-red-500' : 'text-primary'}>Time remaining</span>
+                                    <span className={timeLeft <= 15 ? 'text-red-500' : 'text-gray-600'}>00:{timeLeft < 10 ? `0${timeLeft}` : timeLeft}</span>
+                                </div>
+                                <div className="w-full bg-gray-200 rounded-full h-1.5 overflow-hidden">
+                                    <div 
+                                        className={`h-1.5 rounded-full transition-all duration-1000 ease-linear ${timeLeft <= 15 ? 'bg-red-500' : 'bg-primary'}`} 
+                                        style={{ width: `${(timeLeft / 60) * 100}%` }}
+                                    ></div>
+                                </div>
+                            </div>
+                            <p className="text-xs text-gray-500 mt-3">Please keep this page open and wait for the prompt.</p>
+                        </div>
+                    )}
+
+                    {paymentTimeout && (
+                        <div className="mt-6 p-5 border-2 border-red-100 bg-red-50 rounded-xl">
+                            <h4 className="font-bold text-red-700 mb-2">Payment Prompt Timeout</h4>
+                            <p className="text-sm text-red-600 mb-4">
+                                We didn't receive a confirmation. Your network might be slow, or the M-Pesa prompt was missed.
+                            </p>
+                            
+                            <button 
+                                onClick={() => submitOrder()} 
+                                className="w-full py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition mb-4"
+                            >
+                                Resend M-Pesa Prompt
+                            </button>
+                            
+                            <div className="relative flex py-2 items-center">
+                                <div className="flex-grow border-t border-gray-300"></div>
+                                <span className="flex-shrink-0 mx-4 text-gray-400 text-sm font-medium">OR PAY MANUALLY</span>
+                                <div className="flex-grow border-t border-gray-300"></div>
+                            </div>
+
+                            <div className="mt-4 text-sm text-gray-700">
+                                <p className="mb-1">1. Go to M-Pesa &gt; Lipa na M-Pesa &gt; <strong>Buy Goods</strong></p>
+                                <p className="mb-1">2. Till Number: <strong>[YOUR TILL NUMBER]</strong></p>
+                                <p className="mb-3">3. Amount: <strong>KES {finalOrderTotal}</strong></p>
+                                
+                                <label className="block text-sm font-semibold mb-1">Enter M-Pesa Receipt Number</label>
+                                <input 
+                                    type="text" 
+                                    placeholder="e.g. SHX1234567" 
+                                    value={manualReceipt}
+                                    onChange={(e) => setManualReceipt(e.target.value.toUpperCase())}
+                                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary mb-3 uppercase"
+                                />
+                                <button 
+                                    onClick={submitManualPayment}
+                                    disabled={manualSubmitting}
+                                    className="w-full py-3 bg-black text-white font-semibold rounded-lg hover:bg-gray-800 transition disabled:bg-gray-400"
+                                >
+                                    {manualSubmitting ? 'Verifying...' : 'Submit Receipt'}
+                                </button>
+                            </div>
                         </div>
                     )}
                 </section>

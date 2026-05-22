@@ -4,6 +4,7 @@ import { useEffect, useContext } from "react";
 import { CheckoutContext } from "@/app/lib/providers/CheckoutProvider";
 import useCart from "@/app/lib/hooks/useCart";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { gsap } from "gsap";
 
 export default function CheckoutSuccessPage(){
@@ -12,6 +13,8 @@ export default function CheckoutSuccessPage(){
     } = useContext(CheckoutContext);
 
     const { clearCart } = useCart();
+    const searchParams = useSearchParams();
+    const paymentType = searchParams.get('type');
 
     useEffect(() => {
         // Animate success checkmark
@@ -76,12 +79,24 @@ export default function CheckoutSuccessPage(){
                     <span className="icon-[mdi--check-bold] w-12 h-12 text-green-500" />
                 </div>
                 
-                <h1 className="text-4xl font-bold text-gray-800">Order Placed!</h1>
+                <h1 className="text-4xl font-bold text-gray-800">
+                    {paymentType === 'manual' ? 'Receipt Submitted!' : 'Order Placed!'}
+                </h1>
                 
                 <p className="text-gray-600 text-lg">
-                    We've sent an M-Pesa payment prompt to your phone. 
-                    <br/><br/>
-                    Please enter your PIN on your mobile device to complete the transaction.
+                    {paymentType === 'manual' ? (
+                        <>
+                            Your M-Pesa receipt number has been successfully received. 
+                            <br/><br/>
+                            You will receive a confirmation notification of your order once it has been approved by the shop administrator.
+                        </>
+                    ) : (
+                        <>
+                            Your payment was successful and your order has been confirmed.
+                            <br/><br/>
+                            We have sent a receipt to your phone and email.
+                        </>
+                    )}
                 </p>
 
                 <div className="pt-6">
