@@ -9,10 +9,9 @@ import { fetcher } from "@/app/lib/data"
 import BreadCrump from "@/app/UI/BreadCrump"
 import ProductListing, { ProductListingSkeleton } from "@/app/UI/ProductListing"
 import Overlay from "@/app/UI/Overlay";
-import { useSearch } from "@/app/lib/providers/SearchProvider";
 import Carousel from "@/app/UI/Hero"
 import RunningBanner from "@/app/UI/RunningBanner";
-import Search from "@/app/UI/Search";
+
 import dynamic from "next/dynamic";
 import { getImageUrl } from "@/app/lib/utils/image";
 
@@ -52,12 +51,9 @@ function getProductPrice(product) {
 }
 
 export default function Home() {
-    const { search } = useSearch();
-    const normalizedSearch = search.trim().toLowerCase();
-    const hasActiveSearch = normalizedSearch.length > 0;
 
     let { data: products, error, isLoading } = useSWR(
-        ['/products', { per_page: 24, ...(hasActiveSearch ? { search: normalizedSearch } : {}) }], 
+        ['/products', { per_page: 24 }], 
         fetcher, 
         {
             revalidateOnFocus: false,
@@ -168,15 +164,14 @@ export default function Home() {
 
                 <RunningBanner />
 
-                {!hasActiveSearch && (
-                    <section className="pt-6">
+                <section className="pt-6">
                         {/* Brand logos — horizontally scrollable on mobile */}
-                        <div className="flex flex-row gap-6 md:gap-12 overflow-x-auto px-6 md:px-16 py-4 scrollbar-hide justify-around md:justify-center">
+                        <div className="flex flex-row gap-6 md:gap-12 overflow-x-auto px-6 md:px-16 py-4 scrollbar-hide snap-x snap-mandatory md:justify-center">
                             {brandsList.map((brand) => (
                                 <Link
                                     key={brand.id}
                                     href={`/products/${getBrandSlug(brand)}`}
-                                    className="flex-none flex flex-col items-center gap-1 group"
+                                    className="flex-none flex flex-col items-center gap-1 group snap-center"
                                 >
                                     <div 
                                         className="w-20 h-20 md:w-32 md:h-32 rounded-full border-[2px] bg-white shadow-[0_4px_20px_rgba(0,0,0,0.05)] transition-all duration-300 group-hover:scale-105 flex items-center justify-center overflow-hidden"
@@ -195,36 +190,26 @@ export default function Home() {
                                             />
                                         </div>
                                     </div>
-                                    <p className="text-[10px] md:text-xs font-bold text-black/80 tracking-wide group-hover:text-black transition-colors uppercase">
+                                    <p className="text-[11px] md:text-xs font-bold text-black/80 tracking-wide group-hover:text-black transition-colors uppercase">
                                         {getBrandDisplayName(brand.name)}
                                     </p>
                                 </Link>
                             ))}
                         </div>
                     </section>
-                )}
 
-                <div className="mx-2 md:mx-auto md:max-w-3xl px-4 pt-4 md:pt-8 md:px-8">
-                    <Search />
-                    <p className="mt-7 text-center text-sm text-black/70">Search oats, baby care, and pantry essentials in seconds.</p>
+                <div className="mt-4 md:mt-6">
+                    <Carousel />
                 </div>
-
-                <Carousel />
-
-
 
                 <section className="relative">
                     <div className="absolute inset-x-0 top-0 -z-10 h-[30rem] luxe-glow bg-[radial-gradient(circle_at_top_left,_rgba(24,119,242,0.14),_transparent_38%),radial-gradient(circle_at_top_right,_rgba(249,115,22,0.14),_transparent_32%),linear-gradient(to_bottom,_rgba(255,255,255,0.9),_rgba(252,252,251,1))]" />
-
-
-
 
                     {/* Offers Band hidden as requested */}
                     {/* {!hasActiveSearch && <OffersSection products={offerProductsList} />} */}
 
                     {/* ── Brand Carousel Sections ── */}
-                    {!hasActiveSearch && (
-                        <div className="flex flex-col gap-0">
+                    <div className="flex flex-col gap-0">
                             {brandsList.map((brand) => (
                                 <BrandCarouselSection
                                     key={brand.id}
@@ -239,10 +224,7 @@ export default function Home() {
                                 />
                             ))}
                         </div>
-                    )}
 
-                    {
-                        !hasActiveSearch &&
                         <>
                             <div className="mt-16 md:mt-24" />
                             <TestimonialsSection />
@@ -338,44 +320,7 @@ export default function Home() {
                                 </section>
                             }
                         </>
-                    }
 
-                    {/* All Products — search results only */}
-                    {hasActiveSearch && (
-                        <div className="w-full px-4 pb-16 pt-8 md:px-8 md:pt-12 max-w-7xl mx-auto">
-                            <div className="container mx-auto">
-                                <h3 className="text-lg uppercase tracking-[0.32em] text-black/45 mb-10 text-center">Search Results</h3>
-                                <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 pt-4">
-                                    {
-                                        isLoading || error ?
-                                            [...new Array(8)].map((_, i) => (
-                                                <div key={i} className="h-full">
-                                                    <ProductListingSkeleton />
-                                                </div>
-                                            ))
-                                            :
-                                            filteredProducts.map((product, i) => (
-                                                <div key={product.id || i} className="h-full">
-                                                    <ProductListing data={product} />
-                                                </div>
-                                            ))
-                                    }
-                                </div>
-                                {
-                                    (!isLoading && !error && filteredProducts.length === 0) &&
-                                    <div className="flex flex-col items-center justify-center py-16 px-4">
-                                        <div className="w-24 h-24 mb-6 text-gray-300">
-                                            <span className="icon-[weui--search-outlined] w-full h-full" />
-                                        </div>
-                                        <h2 className="text-2xl font-semibold text-gray-700 mb-2">No matching products found</h2>
-                                        <p className="text-gray-500 text-center max-w-md">
-                                            Try a different search term for the product name, category, brand, or description.
-                                        </p>
-                                    </div>
-                                }
-                            </div>
-                        </div>
-                    )}
                 </section>
             </div>
         </>

@@ -7,7 +7,6 @@ import Popup from "@/app/UI/Popup";
 import Header from "@/app/UI/Menus";
 import Footer from "@/app/UI/Footer";
 import Cart from "@/app/UI/Cart";
-import { SearchProvider } from "@/app/lib/providers/SearchProvider";
 // import Overlays from "@/app/UI/Overlays";
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
@@ -170,8 +169,7 @@ export default function RootLayout({ children }) {
       <body suppressHydrationWarning className={`${outfit.className} lg:text-sm 2xl:text-base`}>
       <Analytics/>
       <SpeedInsights />
-        <SearchProvider>
-          <AuthProvider>
+        <AuthProvider>
             <Suspense fallback={null}>
               <PageTracker />
             </Suspense>
@@ -185,7 +183,6 @@ export default function RootLayout({ children }) {
               {children}
             </ContextProvider>
           </AuthProvider>
-        </SearchProvider>
         <Footer />
         <Popup />
         {/* <Overlays/> */}

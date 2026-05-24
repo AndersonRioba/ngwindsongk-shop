@@ -8,7 +8,6 @@ import { useParams } from "next/navigation"
 import { fetcher } from "@/app/lib/data"
 import Masonry from "react-masonry-css"
 import ProductListing, {ProductListingSkeleton} from "@/app/UI/ProductListing"
-import { useCategorySearch } from "@/app/lib/providers/CategorySearchProvider"
 import Pagination from "@/app/UI/Pagination"
 import { useSearchParams, useRouter } from "next/navigation"
 import { useScrollRestoration } from "@/app/lib/hooks/useScrollRestoration"
@@ -61,18 +60,13 @@ export default function Products(){
     const spacedSlug = rawSlug.replaceAll('-', ' ').replaceAll('%20', ' ');
     const hyphenatedSlug = rawSlug.replaceAll(' ', '-').replaceAll('%20', '-');
 
-    const { categorySearch } = useCategorySearch();
-    const normalizedSearch = categorySearch.trim().toLowerCase();
-    const hasActiveSearch = normalizedSearch.length > 0;
-
     let { data: productsData, error, isLoading } = useSWR(['/products', {
         page,
         per_page: 12,
         sort_by: 'newest',
         // Send both brand & category filters — the API will match whichever is relevant
         brand: rawSlug,
-        category: rawSlug,
-        ...(hasActiveSearch ? { search: normalizedSearch } : {})
+        category: rawSlug
     }], fetcher, {
         revalidateOnFocus: false,
         revalidateOnReconnect: false,

@@ -545,7 +545,7 @@ export default function CheckoutPaymentPage(){
 
                             <div className="mt-4 text-sm text-gray-700">
                                 <p className="mb-1">1. Go to M-Pesa &gt; Lipa na M-Pesa &gt; <strong>Buy Goods</strong></p>
-                                <p className="mb-1">2. Till Number: <strong>[YOUR TILL NUMBER]</strong></p>
+                                <p className="mb-1">2. Till Number: <strong>960393</strong></p>
                                 <p className="mb-3">3. Amount: <strong>KES {finalOrderTotal}</strong></p>
                                 
                                 <label className="block text-sm font-semibold mb-1">Enter M-Pesa Receipt Number</label>

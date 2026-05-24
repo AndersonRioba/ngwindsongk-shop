@@ -179,7 +179,7 @@ export default function CheckoutInfoPage(){
                                 <p>Returning customer?</p>
                                 <span className={`w-7 h-7 ${isReturning?'icon-[humbleicons--chevron-up]':'icon-[humbleicons--chevron-down]'}`}/>
                             </div>
-                            <div className={`mx-2 md:mx-10 shadow-lg rounded-md mt-3 p-5 absolute top-full left-0 w-[90%] md:w-2/3 bg-white z-10 ${isReturning?'block':'hidden'}`}>
+                            <div className={`mx-2 md:mx-10 shadow-lg rounded-md mt-3 p-5 bg-white z-10 border border-gray-100 ${isReturning?'block':'hidden'}`}>
                                 <p className="text-sm mb-4">Enter phone number to retrieve shipping details</p>
                                 <div className="flex border-2 border-gray-200 rounded-md mb-4">
                                     <input onChange={e=>setOrderDetails({...orderDetails, phone:e.target.value})} className="w-full px-4 py-2" placeholder="Enter phone number" type="tel" />
@@ -490,7 +490,7 @@ export default function CheckoutInfoPage(){
                                         name="createAccount"
                                         id="createAccount"
                                     />
-                                    <p className="text-sm">Get notifactions on offers</p>
+                                    <p className="text-sm">Get notifications on offers</p>
                                 </div>
                                 </>
                             )}
@@ -508,8 +508,8 @@ export default function CheckoutInfoPage(){
                                 <p className="text-red-500 text-sm mt-3 font-semibold">Please correct the errors above to continue.</p>
                             )}
 
-                            <div className="mt-8 flex justify-end">
-                                <button type="submit" className="bg-primary text-white py-4 px-10 rounded-xl hover:bg-opacity-90 transition-all font-semibold">
+                            <div className="mt-8 flex flex-col md:flex-row md:justify-end">
+                                <button type="submit" className="w-full md:w-auto bg-primary text-white py-4 px-10 rounded-xl hover:bg-opacity-90 transition-all font-semibold">
                                     Continue to Payment
                                 </button>
                             </div>

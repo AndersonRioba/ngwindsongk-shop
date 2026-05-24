@@ -38,7 +38,7 @@ function Related({product, category='oats'}){
 }
 
 function CartItem({product, setTotal}){
-    console.log('cart ::', product)
+
     let [quantity, setQuantity] =useState(0);
     let [amount, setAmount] = useState(0);
     const { removeFromCart, updateCartQuantity } = useCart();

@@ -7,24 +7,43 @@ import Spinner from "@/app/UI/Spinner";
 import useSWR from "swr";
 import { fetcher } from "@/app/lib/data";
 import useAuth from "@/src/hooks/useAuth";
+import useCart from "@/app/lib/hooks/useCart";
+import GlobalSearch from "@/app/UI/GlobalSearch";
 
 export function MobileTopMenu({ onOpen }){
+    const { cart } = useCart();
+    const cartCount = cart?.reduce((total, item) => total + (item.quantity || 1), 0) || 0;
+
     return(
         <div className="block md:hidden">
             <div className="flex justify-between items-center px-4 py-5 mb-1 bg-white border-b border-gray-100 shadow-sm">
                 <div className='w-24'><Logo/></div>
-                <button
-                    type="button"
-                    aria-label="Open menu"
-                    onClick={onOpen}
-                    className="ui-pressable inline-flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white text-black shadow-sm"
-                >
-                    <span className="icon-[solar--hamburger-menu-outline] h-6 w-6"/>
-                </button>
+                <div className="flex items-center gap-3">
+                    <Link href="/cart" className="relative flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white text-black shadow-sm ui-pressable">
+                        <span className="icon-[ri--shopping-cart-2-line] h-5 w-5"/>
+                        {cartCount > 0 && (
+                            <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white shadow-sm">
+                                {cartCount}
+                            </span>
+                        )}
+                    </Link>
+                    <button
+                        type="button"
+                        aria-label="Open menu"
+                        onClick={onOpen}
+                        className="ui-pressable inline-flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white text-black shadow-sm"
+                    >
+                        <span className="icon-[solar--hamburger-menu-outline] h-6 w-6"/>
+                    </button>
+                </div>
+            </div>
+            <div className="px-4 pb-4 bg-white border-b border-gray-100 shadow-sm">
+                <GlobalSearch />
             </div>
         </div>
     )
 }
+
 export function MobileSideMenu({ isOpen, setIsOpen }){
     let pathname = usePathname();
     const { user, token, logout } = useAuth();
@@ -146,8 +165,9 @@ export function TopMenu(){
     const settings = settingsData?.data || {}
     
     return(
-        <div className="hidden md:block bg-white border-b border-gray-100 z-30 py-4 2xl:py-6 px-4 sticky top-0 shadow-sm">
-            <div className="flex justify-between items-center max-w-[1440px] mx-auto text-gray-900 h-16">
+        <div className="hidden md:block bg-white border-b border-gray-100 z-30 sticky top-0 shadow-sm flex-col">
+            <div className="py-4 2xl:py-6 px-4">
+                <div className="flex justify-between items-center max-w-[1440px] mx-auto text-gray-900 h-16">
                 <div className='w-32 2xl:w-40'><Logo/></div>
                 
                 <div className="flex gap-4 lg:gap-8 items-center">
@@ -171,6 +191,8 @@ export function TopMenu(){
                         <Link className={`${pathname==='/orders'?'text-primary':'text-gray-600'} font-bold text-sm hover:text-primary transition-colors`} href="/orders">Orders</Link>
                     }
                 </div>
+
+
 
                 <div className="flex items-center gap-6">
                     {/* Sales Contact */}
@@ -206,6 +228,13 @@ export function TopMenu(){
                             </Link>
                         </div>
                     }
+                </div>
+                </div>
+            </div>
+            {/* Secondary Row for Global Search */}
+            <div className="px-4 pb-4 bg-white border-t border-gray-50">
+                <div className="max-w-4xl mx-auto pt-4">
+                    <GlobalSearch />
                 </div>
             </div>
         </div>

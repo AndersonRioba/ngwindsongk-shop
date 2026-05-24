@@ -102,7 +102,7 @@ function Reviews({product}){
                 }}
                 product_id={product} 
             />
-            <div className="flex justify-between items-center mb-12 bg-white p-8 rounded-[2rem] border border-black/5 shadow-sm">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12 bg-white p-6 md:p-8 rounded-[2rem] border border-black/5 shadow-sm">
                 <div>
                     <p className="font-black text-3xl text-gray-900 tracking-tight mb-2">Customer Feedback</p>
                     <p className="text-gray-400 font-medium italic">What our community thinks of this product</p>
@@ -126,7 +126,7 @@ function Reviews({product}){
                                     <span key={i} className={`${i < Math.floor(data.rating) ? 'icon-[solar--star-bold]' : 'icon-[solar--star-linear] text-gray-200'} w-6 h-6 text-yellow-400`} />
                                 ))}
                             </div>
-                            <span className="text-gray-400 font-bold uppercase tracking-widest text-[10px]">{data.reviews} Approved Reviews</span> 
+                            <span className="text-gray-400 font-bold uppercase tracking-widest text-[11px] md:text-xs">{data.reviews} Approved Reviews</span> 
                         </div>
                     </div>
                     
@@ -351,7 +351,7 @@ export default function ProductView({params, initialProduct, initialDescription}
         <div className="animate-in fade-in duration-700">
             <div className="flex flex-col md:flex-row">
                 <div className="flex flex-col md:w-2/3 2xl:w-2/3">
-                    <div className="relative flex justify-center w-full h-96 mb-7">
+                    <div className="relative flex justify-center w-full h-72 md:h-96 mb-7">
                         {activeImage && (
                             <Image 
                                 src={getImageUrl(activeImage, '/product-placeholder.png')} 
@@ -439,7 +439,7 @@ export default function ProductView({params, initialProduct, initialDescription}
                                 <div key={attributeName} className="my-4">
                                     <p className="mb-3 font-semibold">Choose {attributeName}</p>
                                     <select
-                                        className="w-full md:w-1/2 lg:w-1/3 py-2.5 px-4 rounded-xl border border-black/10 bg-[#f9f9f7] text-sm font-medium focus:border-primary focus:bg-white transition-all shadow-sm outline-none"
+                                        className="w-full max-w-sm py-2.5 px-4 rounded-xl border border-black/10 bg-[#f9f9f7] text-sm font-medium focus:border-primary focus:bg-white transition-all shadow-sm outline-none"
                                         name={attributeName}
                                         id={attributeName}
                                         value={variation?.id}
@@ -477,11 +477,7 @@ export default function ProductView({params, initialProduct, initialDescription}
                         })()
                     }
                     <p>Quantity</p>
-                    <div className="flex gap-5 mb-6 mt-2">
-                        <button onClick={() => setQuantity(q => Math.max(1, q - 1))} className="bg-gray-200 px-4">-</button>
-                        <input className="bg-gray-200 p-2 w-10 text-center" value={quantity} onChange={e=>setQuantity(parseInt(e.target.value) || 1)} type="number" />
-                        <button onClick={() => setQuantity(q => q + 1)} className="bg-gray-200 px-4">+</button>
-                    </div>
+
                     <div className="flex flex-col-reverse md:flex-row gap-4">
                         <button 
                           onClick={()=>addToCart(quantity,displayProduct.name,variation)}
@@ -501,7 +497,7 @@ export default function ProductView({params, initialProduct, initialDescription}
                 <Related product={product} category={category} />
             </div>
             <div className="mb-20">
-                <div className="flex gap-4 overflow-y-scroll bg-gray-50 p-2 rounded-lg mb-6">
+                <div className="flex gap-4 overflow-x-auto scrollbar-hide bg-gray-50 p-2 rounded-lg mb-6 whitespace-nowrap">
                     <Link className={`text-primary font-bold text-lg px-6 hover:bg-white hover:shadow-sm py-2 rounded-md transition-all border-r-2 border-gray-200`} href={'#details'}>Details</Link>
                     {category?.toLowerCase() !== 'nanacare' && (
                         <Link className={`text-primary font-bold text-lg px-6 hover:bg-white hover:shadow-sm py-2 rounded-md transition-all border-r-2 border-gray-200`} href={'#recipes'}>Recipes</Link>

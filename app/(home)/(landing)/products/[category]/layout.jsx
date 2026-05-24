@@ -1,9 +1,7 @@
 'use client'
 import { usePathname } from "next/navigation";
 import Image from "next/image";
-import CategorySearch from "@/app/UI/CategorySearch";
 import BreadCrump from "@/app/UI/BreadCrump";
-import { CategorySearchProvider } from "@/app/lib/providers/CategorySearchProvider";
 import useSWR from 'swr'
 import { fetcher } from "@/app/lib/data"
 import { getImageUrl } from "@/app/lib/utils/image";
@@ -50,14 +48,11 @@ const categoryThemes = {
 
 function resolveTheme(categoryParam) {
     const key = decodeURIComponent(categoryParam || "")
-        .replaceAll("-", " ") // Handle hyphenated slugs
+        .replaceAll("-", " ")
         .trim()
         .toLowerCase();
-        
-    // Also try matching the slug version directly
     const slugKey = categoryParam?.toLowerCase() || "";
-    
-    const theme = categoryThemes[slugKey] || categoryThemes[key] || {
+    return categoryThemes[slugKey] || categoryThemes[key] || {
         brand: key.charAt(0).toUpperCase() + key.slice(1) || "Collection",
         tagline: "Discover products chosen for better everyday shopping.",
         logo: "",
@@ -66,8 +61,6 @@ function resolveTheme(categoryParam) {
         accentHex: "#6D31ED",
         gradientClass: "from-primary/10 to-white",
     };
-    
-    return theme;
 }
 
 export default function CategoryLayout({ children, params }) {
@@ -78,19 +71,15 @@ export default function CategoryLayout({ children, params }) {
     const { data: response } = useSWR(['/banners', { page: category.toLowerCase() }], fetcher)
     const dynamicBanners = response?.data || []
     
-    // Use first dynamic banner if available, else fallback to theme.banner
-    const bannerSrc = dynamicBanners.length > 0 
+    const bannerSrc = dynamicBanners.length > 0
         ? getImageUrl(dynamicBanners[0].image)
         : getImageUrl(theme.banner);
 
-    // Individual product page — show search + breadcrumb + content
+    // Individual product page — no banner, just breadcrumb + content
     if (path.split("/").length === 4) return (
-        <CategorySearchProvider>
+        <>
             <section className="px-4 pt-8 md:px-8">
                 <div className="mx-2 md:mx-10 luxe-reveal flex flex-col gap-6">
-                    <div className="w-full max-w-2xl mx-auto">
-                        <CategorySearch />
-                    </div>
                     <BreadCrump />
                 </div>
             </section>
@@ -99,21 +88,13 @@ export default function CategoryLayout({ children, params }) {
                     {children}
                 </div>
             </div>
-        </CategorySearchProvider>
+        </>
     );
 
     return (
-        <CategorySearchProvider>
-            <section className="relative">
+        <section className="relative">
 
-            {/* ── Search bar centered ABOVE banner ── */}
-            <div className="w-full flex justify-center pt-10 pb-6 px-4 luxe-reveal">
-                <div className="w-full max-w-2xl">
-                    <CategorySearch />
-                </div>
-            </div>
-
-            {/* ── Full-width pure image banner ── */}
+            {/* ── Full-width banner ── */}
             <div className="w-full relative bg-[#f5f5f3]">
                 {bannerSrc ? (
                     <Image
@@ -127,11 +108,20 @@ export default function CategoryLayout({ children, params }) {
                 ) : (
                     <div className={`w-full h-48 md:h-64 ${theme.accentBg}`} />
                 )}
-                
-                {/* Breadcrumb on top left of image for easy navigation */}
-                <div className="absolute top-6 left-6 md:left-12">
+
+                {/* Breadcrumb overlaid top-left */}
+                <div className="absolute top-4 left-4 md:top-6 md:left-12 z-10">
                     <BreadCrump light />
                 </div>
+                
+                {/* Tagline */}
+                {theme.tagline && (
+                    <div className="absolute bottom-4 left-0 right-0 z-10">
+                        <p className="text-center text-white/90 text-sm md:text-base drop-shadow-md font-semibold tracking-wide px-4">
+                            {theme.tagline}
+                        </p>
+                    </div>
+                )}
             </div>
 
             {/* ── Products grid ── */}
@@ -142,6 +132,5 @@ export default function CategoryLayout({ children, params }) {
             </div>
 
         </section>
-        </CategorySearchProvider>
     );
 }

@@ -13,10 +13,10 @@ export default function Carousel() {
   const [paused, setPaused] = useState(false);
   let pathname = usePathname();
   pathname = pathname.replaceAll('%20', ' ');
+  pathname = pathname.replaceAll('%20', ' ');
 
   const dynamicBanners = response?.data || []
   
-  // Create items from dynamic banners or fallback to hardcoded ones
   const items = dynamicBanners.length > 0 
     ? dynamicBanners.map((banner, i) => (
         <div key={i} className="relative w-full aspect-[16/9] md:aspect-[21/9] lg:aspect-[1920/700]">
@@ -63,9 +63,6 @@ export default function Carousel() {
     return () => clearInterval(interval);
   }, [items.length, paused]);
 
-  const handleNext = () => setActiveIndex((prevIndex) => (prevIndex + 1) % items.length);
-  const handlePrev = () => setActiveIndex((prevIndex) => prevIndex === 0 ? items.length - 1 : prevIndex - 1);
-
   if (pathname === '/')
     return (
       <div
@@ -73,6 +70,7 @@ export default function Carousel() {
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
       >
+        {/* Slides */}
         <div
           className="flex transition-transform duration-700 ease-in-out"
           style={{ transform: `translateX(-${activeIndex * 100}%)` }}
@@ -83,11 +81,13 @@ export default function Carousel() {
             </div>
           ))}
         </div>
-        
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-3">
+
+        {/* Dot indicators — lifted to sit above the search bar */}
+        <div className="absolute bottom-28 md:bottom-32 left-1/2 -translate-x-1/2 flex space-x-3 z-10">
           {items.map((_, index) => (
             <button
               key={index}
+              aria-label={`Go to slide ${index + 1}`}
               className={`h-1.5 transition-all duration-300 rounded-full ${
                 index === activeIndex ? "bg-primary w-8" : "bg-white/40 w-3 hover:bg-white/60"
               }`}
@@ -99,4 +99,3 @@ export default function Carousel() {
     );
   else return null;
 }
-
