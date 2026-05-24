@@ -165,13 +165,12 @@ export default function Home() {
                 <RunningBanner />
 
                 <section className="pt-6">
-                        {/* Brand logos — horizontally scrollable on mobile */}
-                        <div className="flex flex-row gap-6 md:gap-12 overflow-x-auto px-6 md:px-16 py-4 scrollbar-hide snap-x snap-mandatory md:justify-center">
+                        <div className="flex flex-row justify-evenly md:justify-center md:gap-16 w-full max-w-4xl mx-auto px-2 py-4">
                             {brandsList.map((brand) => (
                                 <Link
                                     key={brand.id}
                                     href={`/products/${getBrandSlug(brand)}`}
-                                    className="flex-none flex flex-col items-center gap-1 group snap-center"
+                                    className="flex-none flex flex-col items-center gap-1 group"
                                 >
                                     <div 
                                         className="w-20 h-20 md:w-32 md:h-32 rounded-full border-[2px] bg-white shadow-[0_4px_20px_rgba(0,0,0,0.05)] transition-all duration-300 group-hover:scale-105 flex items-center justify-center overflow-hidden"
