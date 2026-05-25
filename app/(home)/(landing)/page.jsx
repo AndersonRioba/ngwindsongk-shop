@@ -1,11 +1,5 @@
-'use client'
-
 import Link from "next/link"
 import Image from "next/image"
-import { useState, useEffect } from "react"
-import useSWR from "swr"
-import Masonry from "react-masonry-css"
-import { fetcher } from "@/app/lib/data"
 import BreadCrump from "@/app/UI/BreadCrump"
 import ProductListing, { ProductListingSkeleton } from "@/app/UI/ProductListing"
 import Overlay from "@/app/UI/Overlay";
@@ -50,33 +44,32 @@ function getProductPrice(product) {
     return variationPrice ?? product?.price ?? 0;
 }
 
-export default function Home() {
+async function getLandingData() {
+    const baseURL = process.env.NEXT_PUBLIC_API_URL;
+    try {
+        const [productsRes, offersRes, brandsRes] = await Promise.all([
+            fetch(`${baseURL}/products?per_page=24`, { next: { revalidate: 60 } }),
+            fetch(`${baseURL}/products?offers=true&per_page=20`, { next: { revalidate: 60 } }),
+            fetch(`${baseURL}/brands`, { next: { revalidate: 60 } })
+        ]);
 
-    let { data: products, error, isLoading } = useSWR(
-        ['/products', { per_page: 24 }], 
-        fetcher, 
-        {
-            revalidateOnFocus: false,
-            revalidateOnReconnect: false,
-            revalidateOnMount: true,
-            errorRetryInterval: 300000
-        }
-    );
+        const productsData = productsRes.ok ? await productsRes.json() : null;
+        const offersData = offersRes.ok ? await offersRes.json() : null;
+        const brandsData = brandsRes.ok ? await brandsRes.json() : null;
 
-    // Fetch offers separately to ensure the bar always appears regardless of pagination
-    let { data: offersData, isLoading: offersLoading } = useSWR(['/products', { offers: true, per_page: 20 }], fetcher, {
-        revalidateOnFocus: false,
-        revalidateOnReconnect: false,
-        revalidateOnMount: true,
-        errorRetryInterval: 300000
-    });
+        return {
+            products: productsData,
+            offers: offersData,
+            brands: brandsData
+        };
+    } catch (error) {
+        console.error("Failed to fetch landing data:", error);
+        return { products: null, offers: null, brands: null };
+    }
+}
 
-    // Fetch brands for dynamic homepage sections
-    let { data: brandsData, isLoading: brandsLoading } = useSWR(['/brands', {}], fetcher, {
-        revalidateOnFocus: false
-    });
-
-    let [overlay, setOverlay] = useState('');
+export default async function Home() {
+    const { products, offers: offersData, brands: brandsData } = await getLandingData();
 
     const productsList = Array.isArray(products) ? products : (products?.data || []);
     const offerProductsList = Array.isArray(offersData) ? offersData : (offersData?.data || []);
@@ -114,10 +107,6 @@ export default function Home() {
         768: 3,
         640: 1
     };
-
-    useEffect(() => {
-        // Any landing-page specific mount effects can go here
-    }, []);
 
     // Structured data for products
     const structuredData = {

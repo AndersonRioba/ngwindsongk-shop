@@ -115,8 +115,6 @@ export default function RootLayout({ children }) {
 
         {/* Preload Hero Banners */}
         <link rel="preload" as="image" href="/carousel/OatsPoster.webp" fetchPriority="high" />
-        <link rel="preload" as="image" href="/carousel/nanacare.jpeg" />
-        <link rel="preload" as="image" href="/carousel/nutmill.jpeg" />
 
         <link rel="preconnect" href="https://api.ngwindsongk.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
