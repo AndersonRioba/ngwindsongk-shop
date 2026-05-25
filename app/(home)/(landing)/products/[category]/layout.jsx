@@ -1,5 +1,6 @@
 'use client'
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import Link from "next/link";
 import Image from "next/image";
 import BreadCrump from "@/app/UI/BreadCrump";
 import useSWR from 'swr'
@@ -124,6 +125,9 @@ export default function CategoryLayout({ children, params }) {
                 )}
             </div>
 
+            {/* ── Mobile brand switcher pill bar ── */}
+            <BrandSwitcher currentCategory={category} />
+
             {/* ── Products grid ── */}
             <div className="w-full px-4 pb-16 pt-10 md:px-8">
                 <div className="mx-2 md:mx-10 luxe-reveal luxe-delay-4">
@@ -132,5 +136,49 @@ export default function CategoryLayout({ children, params }) {
             </div>
 
         </section>
+    );
+}
+
+function BrandSwitcher({ currentCategory }) {
+    const { data: brandsData } = useSWR(['/brands', {}], fetcher, { revalidateOnFocus: false });
+    const brands = (Array.isArray(brandsData) ? brandsData : brandsData?.data || [])
+        .filter(b => b.is_active)
+        .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
+
+    if (brands.length < 2) return null;
+
+    const getSlug = (brand) => {
+        if (brand.slug) return brand.slug;
+        return brand.name.toLowerCase().trim().replaceAll(' ', '-');
+    };
+
+    return (
+        <div className="w-full border-b border-gray-100 bg-white drop-shadow-md">
+            <div className="flex justify-center gap-0 overflow-x-auto scrollbar-hide px-4 md:px-8 py-3 scroll-px-4">
+                {brands.map((brand) => {
+                    const slug = getSlug(brand);
+                    const isActive = currentCategory?.toLowerCase() === slug.toLowerCase() ||
+                        currentCategory?.toLowerCase() === brand.name.toLowerCase();
+                    return (
+                        <Link
+                            key={brand.id}
+                            href={`/products/${slug}`}
+                            className={`flex-none flex items-center gap-2 mx-1 px-3 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap border shadow drop-shadow-sm ${
+                                isActive
+                                    ? 'bg-primary text-white border-primary shadow-md'
+                                    : 'bg-white text-gray-600 border-gray-200 hover:border-primary hover:text-primary hover:shadow-md'
+                            }`}
+                        >
+                            {brand.logo && (
+                                <div className="w-7 h-7 rounded overflow-hidden bg-white flex-shrink-0 shadow-sm">
+                                    <Image src={getImageUrl(brand.logo)} alt={brand.name} width={28} height={28} className="w-full h-full object-contain" />
+                                </div>
+                            )}
+                            {brand.name.toUpperCase()}
+                        </Link>
+                    );
+                })}
+            </div>
+        </div>
     );
 }

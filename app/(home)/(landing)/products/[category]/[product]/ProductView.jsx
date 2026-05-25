@@ -102,14 +102,14 @@ function Reviews({product}){
                 }}
                 product_id={product} 
             />
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12 bg-white p-6 md:p-8 rounded-[2rem] border border-black/5 shadow-sm">
+            <div className="flex flex-col gap-4 mb-12 bg-white p-6 md:p-8 rounded-[2rem] border border-black/5 shadow-sm sm:flex-row sm:justify-between sm:items-center">
                 <div>
                     <p className="font-black text-3xl text-gray-900 tracking-tight mb-2">Customer Feedback</p>
                     <p className="text-gray-400 font-medium italic">What our community thinks of this product</p>
                 </div>
                 <button 
                     onClick={() => setIsModalOpen(true)}
-                    className="flex items-center gap-3 px-8 py-4 text-primary font-black border-2 border-primary rounded-2xl hover:bg-primary hover:text-white transition-all shadow-lg shadow-primary/10 active:scale-95"
+                    className="flex items-center gap-3 px-6 py-3 text-primary font-black border-2 border-primary rounded-2xl hover:bg-primary hover:text-white transition-all shadow-lg shadow-primary/10 active:scale-95 self-start sm:self-center"
                 > 
                     <span className="icon-[solar--pen-new-square-bold] w-5 h-5"/> 
                     Write a review
@@ -142,7 +142,7 @@ function Reviews({product}){
                                             style={{ width: `${percentage}%` }}
                                         />
                                     </div>
-                                    <span className="text-[10px] font-black text-gray-400 w-8">{percentage}%</span>
+                                    <span className="text-xs font-black text-gray-400 w-8">{percentage}%</span>
                                 </div>
                             ))
                         }
@@ -160,7 +160,7 @@ function Reviews({product}){
                                         </div>
                                         <div>
                                             <h4 className="font-black text-gray-900 text-base uppercase tracking-tight">{reviewer.name}</h4>
-                                            <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{reviewer.date}</p>
+                                            <p className="text-xs text-gray-400 font-bold uppercase tracking-widest">{reviewer.date}</p>
                                         </div>
                                     </div>
                                     <div className="flex text-yellow-400 gap-0.5 bg-gray-50 px-3 py-1.5 rounded-xl border border-black/[0.03]">
@@ -334,6 +334,19 @@ export default function ProductView({params, initialProduct, initialDescription}
     
     const displayProduct = data || initialProduct;
     let {addToCart} = useCart();
+    const ctaRef = useRef(null);
+    const [showStickyBar, setShowStickyBar] = useState(false);
+
+    useEffect(() => {
+        const el = ctaRef.current;
+        if (!el) return;
+        const observer = new IntersectionObserver(
+            ([entry]) => setShowStickyBar(!entry.isIntersecting),
+            { threshold: 0 }
+        );
+        observer.observe(el);
+        return () => observer.disconnect();
+    }, [displayProduct]);
     
     useEffect(()=>{
         if(data && !isLoading && !error) {
@@ -348,6 +361,7 @@ export default function ProductView({params, initialProduct, initialDescription}
     if(!displayProduct && (isLoading || error)) return <div className="p-20 text-center"><Spinner/></div>
     
     return(
+        <>
         <div className="animate-in fade-in duration-700">
             <div className="flex flex-col md:flex-row">
                 <div className="flex flex-col md:w-2/3 2xl:w-2/3">
@@ -439,7 +453,7 @@ export default function ProductView({params, initialProduct, initialDescription}
                                 <div key={attributeName} className="my-4">
                                     <p className="mb-3 font-semibold">Choose {attributeName}</p>
                                     <select
-                                        className="w-full max-w-sm py-2.5 px-4 rounded-xl border border-black/10 bg-[#f9f9f7] text-sm font-medium focus:border-primary focus:bg-white transition-all shadow-sm outline-none"
+                                        className="w-full py-2.5 px-4 rounded-xl border border-black/10 bg-[#f9f9f7] text-sm font-medium focus:border-primary focus:bg-white transition-all shadow-sm outline-none"
                                         name={attributeName}
                                         id={attributeName}
                                         value={variation?.id}
@@ -478,7 +492,31 @@ export default function ProductView({params, initialProduct, initialDescription}
                     }
                     <p>Quantity</p>
 
-                    <div className="flex flex-col-reverse md:flex-row gap-4">
+                    <div className="flex items-center gap-3 my-3">
+                        <button
+                            onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                            className="flex items-center justify-center min-w-[44px] min-h-[44px] rounded-lg bg-gray-100 hover:bg-gray-200 text-xl font-bold transition-colors"
+                            aria-label="Decrease quantity"
+                        >−</button>
+                        <input
+                            className="bg-gray-100 rounded-lg w-14 text-center text-base font-semibold h-11"
+                            value={quantity}
+                            onChange={e => {
+                                const val = parseInt(e.target.value) || 1;
+                                setQuantity(Math.min(val, displayProduct?.stock || 999));
+                            }}
+                            type="number"
+                            min={1}
+                            max={displayProduct?.stock}
+                        />
+                        <button
+                            onClick={() => setQuantity(q => Math.min(q + 1, displayProduct?.stock || 999))}
+                            className="flex items-center justify-center min-w-[44px] min-h-[44px] rounded-lg bg-gray-100 hover:bg-gray-200 text-xl font-bold transition-colors"
+                            aria-label="Increase quantity"
+                        >+</button>
+                    </div>
+
+                    <div ref={ctaRef} className="flex flex-col-reverse md:flex-row gap-4 mt-2">
                         <button 
                           onClick={()=>addToCart(quantity,displayProduct.name,variation)}
                           className="flex items-center gap-2 justify-center flex-grow text-center py-3 lg:py-2 2xl:py-3 rounded-md hover:scale-105 hover:font-semibold border-2 border-primary text-primary"
@@ -497,13 +535,13 @@ export default function ProductView({params, initialProduct, initialDescription}
                 <Related product={product} category={category} />
             </div>
             <div className="mb-20">
-                <div className="flex gap-4 overflow-x-auto scrollbar-hide bg-gray-50 p-2 rounded-lg mb-6 whitespace-nowrap">
-                    <Link className={`text-primary font-bold text-lg px-6 hover:bg-white hover:shadow-sm py-2 rounded-md transition-all border-r-2 border-gray-200`} href={'#details'}>Details</Link>
+                <div className="flex gap-4 overflow-x-auto scrollbar-hide bg-gray-50 p-2 rounded-lg mb-6">
+                    <Link className={`flex-none whitespace-nowrap text-primary font-bold text-lg px-6 hover:bg-white hover:shadow-sm py-2 rounded-md transition-all border-r-2 border-gray-200`} href={'#details'}>Details</Link>
                     {category?.toLowerCase() !== 'nanacare' && (
-                        <Link className={`text-primary font-bold text-lg px-6 hover:bg-white hover:shadow-sm py-2 rounded-md transition-all border-r-2 border-gray-200`} href={'#recipes'}>Recipes</Link>
+                        <Link className={`flex-none whitespace-nowrap text-primary font-bold text-lg px-6 hover:bg-white hover:shadow-sm py-2 rounded-md transition-all border-r-2 border-gray-200`} href={'#recipes'}>Recipes</Link>
                     )}
-                    <Link className={`text-primary font-bold text-lg px-6 hover:bg-white hover:shadow-sm py-2 rounded-md transition-all border-r-2 border-gray-200`} href={'#reviews'}>Reviews</Link>
-                    <Link className={`text-primary font-bold text-lg px-6 hover:bg-white hover:shadow-sm py-2 rounded-md transition-all`} href={'#faqs'}>FAQs</Link>
+                    <Link className={`flex-none whitespace-nowrap text-primary font-bold text-lg px-6 hover:bg-white hover:shadow-sm py-2 rounded-md transition-all border-r-2 border-gray-200`} href={'#reviews'}>Reviews</Link>
+                    <Link className={`flex-none whitespace-nowrap text-primary font-bold text-lg px-6 hover:bg-white hover:shadow-sm py-2 rounded-md transition-all`} href={'#faqs'}>FAQs</Link>
                 </div>
                 <Details product={product} initialData={initialDescription}/>
                 {category?.toLowerCase() !== 'nanacare' && (
@@ -513,5 +551,37 @@ export default function ProductView({params, initialProduct, initialDescription}
                 <Faqs product={product}/>
             </div>
         </div>
+
+        {/* ── Sticky Add-to-Cart bar (mobile, appears when CTA scrolls off screen) ── */}
+        <div className={`fixed bottom-0 inset-x-0 z-50 md:hidden bg-white border-t border-gray-100 shadow-[0_-4px_20px_rgba(0,0,0,0.1)] px-4 py-3 flex items-center gap-3 transition-transform duration-300 ${
+            showStickyBar ? 'translate-y-0' : 'translate-y-full'
+        }`}>
+            <div className="flex-1 min-w-0">
+                <p className="text-xs text-gray-400 font-medium truncate">{displayProduct?.name}</p>
+                <p className="text-base font-bold text-primary">
+                    {(() => {
+                        const base = parseFloat(variation?.price || displayProduct?.price || 0);
+                        const disc = parseFloat(variation?.discount || displayProduct?.discount || 0);
+                        return `Ksh ${Math.max(0, base - disc).toLocaleString()}`;
+                    })()}
+                </p>
+            </div>
+            <button
+                onClick={() => addToCart(quantity, displayProduct?.name, variation)}
+                className="flex items-center gap-2 px-5 py-3 rounded-xl border-2 border-primary text-primary font-bold text-sm hover:bg-primary hover:text-white transition-colors"
+            >
+                <span className="icon-[ri--shopping-cart-line] w-5 h-5" />Cart
+            </button>
+            <button
+                onClick={() => {
+                    addToCart(quantity, displayProduct?.name, variation);
+                    router.push('/checkout');
+                }}
+                className="px-5 py-3 rounded-xl bg-primary text-white font-bold text-sm hover:bg-opacity-90 transition-colors"
+            >
+                Checkout
+            </button>
+        </div>
+        </>
     )
 }

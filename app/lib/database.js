@@ -18,20 +18,13 @@ async function getDB() {
   if (!dbPromise) {
     dbPromise = await openDB(DB_NAME, DB_VERSION, {
       upgrade(db, oldVersion, newVersion, transaction) {
-        console.log('upgrading db', oldVersion, newVersion, transaction);
         if (!db.objectStoreNames.contains(STORE_NAME)) {
           db.createObjectStore(STORE_NAME);
         }
       },
-      blocked() {
-        console.log('IndexedDB upgrade blocked');
-      },
-      blocking() {
-        console.log('IndexedDB upgrade blocking');
-      },
-      terminated() {
-        console.log('IndexedDB connection terminated');
-      },
+      blocked() {},
+      blocking() {},
+      terminated() {},
     });
   }
 

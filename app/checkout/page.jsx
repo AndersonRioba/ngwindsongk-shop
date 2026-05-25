@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useRef } from "react";
 import { CheckoutContext } from "@/app/lib/providers/CheckoutProvider";
 import { useRouter } from "next/navigation";
 import useAuth from "@/src/hooks/useAuth";
@@ -28,6 +28,7 @@ export default function CheckoutInfoPage(){
     // 'pickup' holds the selected location id string, or null for delivery
     const [deliveryMode, setDeliveryMode] = useState(pickup ? 'pickup' : 'delivery');
     let [isReturning, setIsReturning] = useState(false);
+    const returningRef = useRef(null);
     const [errors, setErrors] = useState({});
     const router = useRouter();
 
@@ -57,6 +58,18 @@ export default function CheckoutInfoPage(){
     }, [user, setOrderDetails]);
 
     useEffect(()=>{},[pickup])
+
+    // Click-outside handler for returning customer dropdown
+    useEffect(() => {
+        if (!isReturning) return;
+        const handleClickOutside = (e) => {
+            if (returningRef.current && !returningRef.current.contains(e.target)) {
+                setIsReturning(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [isReturning]);
 
     const selectMode = (mode) => {
         setDeliveryMode(mode);
@@ -168,13 +181,31 @@ export default function CheckoutInfoPage(){
 
     return(
         <>
-            <main className="md:max-w-[80vw] mx-auto md:my-10 p-2">
+            <main className="md:max-w-[80vw] mx-auto md:my-10 p-2 pb-28 md:pb-10">
                 <section className="flex flex-col md:flex-row md:justify-center">
                     <section className="md:w-2/3">
                         <h3 className="text-3xl mb-3">Checkout Details</h3>
 
+                        {/* ── Progress Stepper ── */}
+                        <div className="flex items-center gap-0 mb-8 mt-2">
+                            <div className="flex items-center gap-2">
+                                <div className="w-7 h-7 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center">1</div>
+                                <span className="text-xs font-bold text-primary">Details</span>
+                            </div>
+                            <div className="flex-1 h-[2px] bg-gray-200 mx-2"><div className="h-full bg-gray-200 w-0" /></div>
+                            <div className="flex items-center gap-2">
+                                <div className="w-7 h-7 rounded-full bg-gray-200 text-gray-400 text-xs font-bold flex items-center justify-center">2</div>
+                                <span className="text-xs font-bold text-gray-400">Payment</span>
+                            </div>
+                            <div className="flex-1 h-[2px] bg-gray-200 mx-2" />
+                            <div className="flex items-center gap-2">
+                                <div className="w-7 h-7 rounded-full bg-gray-200 text-gray-400 text-xs font-bold flex items-center justify-center">3</div>
+                                <span className="text-xs font-bold text-gray-400">Confirmation</span>
+                            </div>
+                        </div>
+
                         {/* Returning customer toggle */}
-                        <section className="relative mb-7">
+                        <section ref={returningRef} className="relative mb-7">
                             <div onClick={e=>setIsReturning(!isReturning)} className="flex justify-between items-center rounded-xl p-3 bg-gray-100 hover:bg-primary hover:text-white cursor-pointer">
                                 <p>Returning customer?</p>
                                 <span className={`w-7 h-7 ${isReturning?'icon-[humbleicons--chevron-up]':'icon-[humbleicons--chevron-down]'}`}/>
@@ -188,7 +219,7 @@ export default function CheckoutInfoPage(){
                             </div>
                         </section>
 
-                        <form onSubmit={continueToPayment}>
+                        <form id="checkout-form" onSubmit={continueToPayment}>
                             {/* Contact Details */}
                             <h5 className="my-5 py-2 uppercase text-sm font-semibold text-primary border-b-[1px]">Contact Details</h5>
                             <div className="grid md:grid-cols-2 gap-y-5 gap-x-5">
@@ -517,6 +548,21 @@ export default function CheckoutInfoPage(){
                     </section>
                 </section>
             </main>
+
+            {/* ── Sticky mobile CTA ── */}
+            <div className="fixed bottom-0 inset-x-0 z-50 md:hidden bg-white border-t border-gray-100 shadow-[0_-4px_20px_rgba(0,0,0,0.07)] px-4 py-3 flex items-center justify-between gap-3">
+                <div>
+                    <p className="text-xs text-gray-400 font-medium">Total</p>
+                    <p className="text-base font-bold text-primary">Review in next step</p>
+                </div>
+                <button
+                    form="checkout-form"
+                    type="submit"
+                    className="bg-primary text-white py-3 px-6 rounded-xl font-bold text-sm hover:bg-opacity-90 transition-all flex-1 max-w-[200px]"
+                >
+                    Continue to Payment
+                </button>
+            </div>
         </>
     )
 }

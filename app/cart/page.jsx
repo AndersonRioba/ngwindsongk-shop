@@ -159,7 +159,7 @@ export default function CartPage(){
     }
 
     return(
-        <main className="md:max-w-[80vw] mx-auto my-10 px-2">
+        <main className="md:max-w-[80vw] mx-auto my-10 px-2 pb-28 md:pb-10">
             <section className="flex flex-col gap-y-7 md:flex-row md:justify-between">
                 <section className="md:w-1/2">
                     <h3 className="text-3xl mb-3">Your Cart</h3>
@@ -233,6 +233,22 @@ export default function CartPage(){
             <div className="mt-5">
                 <Related product={1}/>
             </div>
+
+            {/* ── Sticky mobile proceed CTA ── */}
+            {cart.length > 0 && (
+                <div className="fixed bottom-0 inset-x-0 z-50 md:hidden bg-white border-t border-gray-100 shadow-[0_-4px_20px_rgba(0,0,0,0.07)] px-4 py-3 flex items-center justify-between gap-3">
+                    <div>
+                        <p className="text-xs text-gray-400 font-medium">Order Total</p>
+                        <p className="text-base font-bold text-primary">{total.toLocaleString()} KES</p>
+                    </div>
+                    <button
+                        onClick={checkout}
+                        className="bg-primary text-white py-3 px-6 rounded-xl font-bold text-sm hover:bg-opacity-90 transition-all flex-1 max-w-[220px]"
+                    >
+                        Proceed to Checkout
+                    </button>
+                </div>
+            )}
         </main>
     )
 }

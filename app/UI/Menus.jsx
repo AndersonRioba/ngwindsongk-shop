@@ -10,6 +10,23 @@ import useAuth from "@/src/hooks/useAuth";
 import useCart from "@/app/lib/hooks/useCart";
 import GlobalSearch from "@/app/UI/GlobalSearch";
 
+/** Maps a nav item's label or URL to a contextual Iconify icon class */
+function getNavIcon(label = '', url = '') {
+    const key = `${label} ${url}`.toLowerCase();
+    if (/shop|store|product|catalog/.test(key))     return 'icon-[solar--shop-linear]';
+    if (/recipe|cook|meal/.test(key))               return 'icon-[solar--chef-hat-linear]';
+    if (/blog|news|article|post/.test(key))         return 'icon-[solar--document-text-linear]';
+    if (/about|story|us/.test(key))                 return 'icon-[solar--info-circle-linear]';
+    if (/contact|reach|support|help/.test(key))     return 'icon-[solar--phone-linear]';
+    if (/sale|offer|deal|discount/.test(key))       return 'icon-[solar--tag-price-linear]';
+    if (/brand/.test(key))                          return 'icon-[solar--star-linear]';
+    if (/faq|question/.test(key))                   return 'icon-[solar--chat-round-dots-linear]';
+    if (/home/.test(key))                           return 'icon-[solar--home-linear]';
+    if (/gift|bundle/.test(key))                    return 'icon-[solar--gift-linear]';
+    if (/partner|distribut|wholesale/.test(key))    return 'icon-[solar--hand-shake-linear]';
+    return 'icon-[solar--square-arrow-right-linear]';
+}
+
 export function MobileTopMenu({ onOpen }){
     const { cart } = useCart();
     const cartCount = cart?.reduce((total, item) => total + (item.quantity || 1), 0) || 0;
@@ -76,7 +93,9 @@ export function MobileSideMenu({ isOpen, setIsOpen }){
             >
                 <span className="icon-[material-symbols-light--close] h-6 w-6"/>
             </button>
-            <div className="my-12"></div>
+            <div className="my-2 mb-4">
+                <GlobalSearch />
+            </div>
             {isLoggedIn && (
                 <div className="flex items-center gap-3 px-3 mb-4 pb-4 border-b border-gray-200">
                     <div className="w-10 h-10 rounded-full bg-primary/20 flex justify-center items-center text-primary font-bold shadow-sm text-sm">
@@ -84,7 +103,7 @@ export function MobileSideMenu({ isOpen, setIsOpen }){
                     </div>
                     <div>
                         <span className="font-semibold text-sm block">{user?.name?.split(' ')[0] || 'User'}</span>
-                        <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">{user?.role}</span>
+                        <span className="text-xs text-gray-400 font-bold uppercase tracking-wider">{user?.role}</span>
                     </div>
                 </div>
             )}
@@ -92,6 +111,7 @@ export function MobileSideMenu({ isOpen, setIsOpen }){
                 {/* Dynamic Navigation Items */}
                 {navData?.data?.map((item) => {
                     const href = item.url.startsWith('http') || item.url.startsWith('/') ? item.url : `/${item.url}`;
+                    const icon = getNavIcon(item.label, item.url);
                     return (
                         <Link 
                             key={item.id}
@@ -99,7 +119,7 @@ export function MobileSideMenu({ isOpen, setIsOpen }){
                             className={`flex items-center py-3 rounded-xl transition-colors ${pathname === href ? 'text-primary bg-primary/5' : 'text-gray-600'}`}
                         >
                             <div className="mx-3">
-                                <span className={`icon-[solar--maximize-square-minimalistic-linear] w-6 h-6`}/>
+                                <span className={`${icon} w-6 h-6`}/>
                             </div>
                             <span className="truncate text-xs font-bold">{item.label}</span>
                         </Link>

@@ -189,7 +189,7 @@ export default function Home() {
                                             />
                                         </div>
                                     </div>
-                                    <p className="text-[11px] md:text-xs font-bold text-black/80 tracking-wide group-hover:text-black transition-colors uppercase">
+                                    <p className="text-xs md:text-xs font-bold text-black/80 tracking-wide group-hover:text-black transition-colors uppercase">
                                         {getBrandDisplayName(brand.name)}
                                     </p>
                                 </Link>

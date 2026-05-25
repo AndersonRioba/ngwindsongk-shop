@@ -397,11 +397,29 @@ export default function CheckoutPaymentPage(){
     }
 
     return(
-        <main className="md:max-w-[80vw] mx-auto md:my-10 p-2">
-            <div className="mb-6">
+        <main className="md:max-w-[80vw] mx-auto md:my-10 p-2 pb-28 md:pb-10">
+            <div className="mb-6 flex items-center justify-between">
                 <button onClick={() => router.push('/checkout')} className="flex items-center text-sm font-semibold text-primary hover:underline">
                     <span className="icon-[humbleicons--chevron-left] w-5 h-5 mr-1" /> Back to Information
                 </button>
+            </div>
+
+            {/* ── Progress Stepper ── */}
+            <div className="flex items-center gap-0 mb-8 max-w-lg">
+                <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-full bg-gray-200 text-gray-400 text-xs font-bold flex items-center justify-center">✓</div>
+                    <span className="text-xs font-bold text-gray-400">Details</span>
+                </div>
+                <div className="flex-1 h-[2px] bg-primary mx-2" />
+                <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center">2</div>
+                    <span className="text-xs font-bold text-primary">Payment</span>
+                </div>
+                <div className="flex-1 h-[2px] bg-gray-200 mx-2" />
+                <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-full bg-gray-200 text-gray-400 text-xs font-bold flex items-center justify-center">3</div>
+                    <span className="text-xs font-bold text-gray-400">Confirmation</span>
+                </div>
             </div>
             
             <section className="flex flex-col md:flex-row md:justify-center items-start">
@@ -568,6 +586,23 @@ export default function CheckoutPaymentPage(){
                     )}
                 </section>
             </section>
+
+            {/* ── Sticky mobile pay CTA ── */}
+            {!isPolling && !paymentTimeout && (
+                <div className="fixed bottom-0 inset-x-0 z-50 md:hidden bg-white border-t border-gray-100 shadow-[0_-4px_20px_rgba(0,0,0,0.07)] px-4 py-3 flex items-center justify-between gap-3">
+                    <div>
+                        <p className="text-xs text-gray-400 font-medium">Total</p>
+                        <p className="text-base font-bold text-primary">{finalOrderTotal.toLocaleString()} KES</p>
+                    </div>
+                    <button
+                        disabled={isProcessing}
+                        onClick={submitOrder}
+                        className="bg-primary text-white py-3 px-6 rounded-xl font-bold text-sm hover:bg-opacity-90 transition-all disabled:bg-gray-400 disabled:cursor-not-allowed flex-1 max-w-[200px]"
+                    >
+                        {isProcessing ? 'Processing...' : 'Pay & Place Order'}
+                    </button>
+                </div>
+            )}
         </main>
     )
 }

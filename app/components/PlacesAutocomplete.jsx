@@ -103,7 +103,6 @@ export default function PlacesAutocomplete({ value, onChange, onSelect, classNam
             },
             (place, status) => {
                 if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-                    console.log('Selected place details:', place)
                     if (onSelect) {
                         onSelect({
                             name: place.name,

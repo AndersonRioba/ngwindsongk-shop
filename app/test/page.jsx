@@ -7,7 +7,6 @@ export default function Page() {
   let { data, error, isLoading } = useSWR(['/test/books',{}], fetcher);
  
   if (error){
-    console.log(error)
     return <div>failed to load</div>
   }
   if (isLoading) return <div>loading...</div>
