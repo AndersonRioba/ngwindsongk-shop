@@ -384,13 +384,13 @@ export default function ProductView({params, initialProduct, initialDescription}
                             </button>
                             <div className="flex gap-3 justify-center">
                                 {displayProduct.product_images.slice(thumbStart, thumbStart + 3).map((image, i) => (
-                                    <button onClick={() => setActiveImage(image.url)} key={thumbStart + i} className="relative flex items-center justify-center h-24 md:h-28 w-24 md:w-28">
+                                    <button onClick={() => setActiveImage(image.url)} key={thumbStart + i} className="relative flex items-center justify-center h-20 w-20 lg:h-28 lg:w-28">
                                         <Image 
                                             className="object-cover rounded-md hover:ring-2 hover:ring-primary transition-all" 
                                             src={getImageUrl(image.url)} 
                                             alt={`${displayProduct.name} Thumbnail ${thumbStart + i + 1}`}
                                             fill
-                                            sizes="112px"
+                                            sizes="(max-width: 1024px) 80px, 112px"
                                         />
                                     </button>
                                 ))}
