@@ -363,9 +363,9 @@ export default function ProductView({params, initialProduct, initialDescription}
     return(
         <>
         <div className="animate-in fade-in duration-700">
-            <div className="flex flex-col md:flex-row">
-                <div className="flex flex-col md:w-2/3 2xl:w-2/3">
-                    <div className="relative flex justify-center w-full h-72 md:h-96 mb-7">
+            <div className="flex flex-col md:flex-row md:gap-8 lg:gap-12">
+                <div className="flex flex-col md:w-1/2 lg:w-7/12">
+                    <div className="relative flex justify-center w-full h-72 md:h-96 mb-7 bg-gray-50/50 rounded-2xl">
                         {activeImage && (
                             <Image 
                                 src={getImageUrl(activeImage, '/product-placeholder.png')} 
@@ -378,7 +378,7 @@ export default function ProductView({params, initialProduct, initialDescription}
                         )}
                     </div>
                     {(displayProduct.product_images || []).length > 1 && (
-                        <div className="flex items-center gap-2 py-3 md:w-fit md:mx-auto">
+                        <div className="flex items-center justify-center gap-2 py-3 w-full md:w-fit md:mx-auto">
                             <button onClick={() => setThumbStart(i => Math.max(0, i - 1))} className={`p-1 rounded-full ${thumbStart === 0 ? 'opacity-30 cursor-default' : 'hover:bg-gray-100'}`}>
                                 <span className="icon-[ri--arrow-left-s-line] w-6 h-6"/>
                             </button>
@@ -401,7 +401,7 @@ export default function ProductView({params, initialProduct, initialDescription}
                         </div>
                     )}
                 </div>
-                <div className="md:w-5/12 mt-4 md:mt-0">
+                <div className="md:w-1/2 lg:w-5/12 mt-4 md:mt-0">
                     <p className="font-semibold text-3xl mb-4">{displayProduct.name}</p>
                     <p className="text-xs uppercase tracking-[0.25em] text-black/45">{displayProduct.category?.name}</p>
                     
@@ -553,10 +553,10 @@ export default function ProductView({params, initialProduct, initialDescription}
         </div>
 
         {/* ── Sticky Add-to-Cart bar (mobile, appears when CTA scrolls off screen) ── */}
-        <div className={`fixed bottom-0 inset-x-0 z-50 md:hidden bg-white border-t border-gray-100 shadow-[0_-4px_20px_rgba(0,0,0,0.1)] px-3 py-3 flex items-center justify-between gap-2 transition-transform duration-300 ${
+        <div className={`fixed bottom-0 inset-x-0 z-50 md:hidden bg-white border-t border-gray-100 shadow-[0_-4px_20px_rgba(0,0,0,0.1)] px-3 py-3 flex items-center justify-between gap-1 sm:gap-2 transition-transform duration-300 ${
             showStickyBar ? 'translate-y-0' : 'translate-y-full'
         }`}>
-            <div className="flex-none max-w-[100px] sm:max-w-[150px] min-w-0">
+            <div className="flex-1 min-w-[80px]">
                 <p className="text-[10px] sm:text-xs text-gray-400 font-medium truncate">{displayProduct?.name}</p>
                 <p className="text-sm sm:text-base font-bold text-primary truncate">
                     {(() => {
@@ -566,21 +566,21 @@ export default function ProductView({params, initialProduct, initialDescription}
                     })()}
                 </p>
             </div>
-            <div className="flex items-center gap-2 flex-shrink-0">
+            <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
                 <button
                     onClick={() => addToCart(quantity, displayProduct?.name, variation)}
-                    className="flex items-center justify-center w-10 h-10 sm:w-auto sm:px-4 sm:py-2.5 rounded-lg border-2 border-primary text-primary font-bold text-sm hover:bg-primary hover:text-white transition-colors"
+                    className="flex items-center justify-center w-9 h-9 sm:w-auto sm:px-4 sm:py-2.5 rounded-lg border-2 border-primary text-primary font-bold hover:bg-primary hover:text-white transition-colors"
                     aria-label="Add to cart"
                 >
-                    <span className="icon-[ri--shopping-cart-line] w-5 h-5" />
-                    <span className="hidden sm:inline ml-1">Cart</span>
+                    <span className="icon-[ri--shopping-cart-line] w-4 h-4 sm:w-5 sm:h-5" />
+                    <span className="hidden sm:inline ml-1 text-sm">Cart</span>
                 </button>
                 <button
                     onClick={() => {
                         addToCart(quantity, displayProduct?.name, variation);
                         router.push('/checkout');
                     }}
-                    className="px-4 py-2.5 sm:px-5 sm:py-3 rounded-lg bg-primary text-white font-bold text-sm hover:bg-opacity-90 transition-colors"
+                    className="px-3 py-2 sm:px-5 sm:py-2.5 rounded-lg bg-primary text-white font-bold text-[11px] sm:text-sm hover:bg-opacity-90 transition-colors whitespace-nowrap"
                 >
                     Checkout
                 </button>
