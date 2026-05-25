@@ -553,12 +553,12 @@ export default function ProductView({params, initialProduct, initialDescription}
         </div>
 
         {/* ── Sticky Add-to-Cart bar (mobile, appears when CTA scrolls off screen) ── */}
-        <div className={`fixed bottom-0 inset-x-0 z-50 md:hidden bg-white border-t border-gray-100 shadow-[0_-4px_20px_rgba(0,0,0,0.1)] px-4 py-3 flex items-center gap-3 transition-transform duration-300 ${
+        <div className={`fixed bottom-0 inset-x-0 z-50 md:hidden bg-white border-t border-gray-100 shadow-[0_-4px_20px_rgba(0,0,0,0.1)] px-3 py-3 flex items-center justify-between gap-2 transition-transform duration-300 ${
             showStickyBar ? 'translate-y-0' : 'translate-y-full'
         }`}>
-            <div className="flex-1 min-w-0">
-                <p className="text-xs text-gray-400 font-medium truncate">{displayProduct?.name}</p>
-                <p className="text-base font-bold text-primary">
+            <div className="flex-none max-w-[100px] sm:max-w-[150px] min-w-0">
+                <p className="text-[10px] sm:text-xs text-gray-400 font-medium truncate">{displayProduct?.name}</p>
+                <p className="text-sm sm:text-base font-bold text-primary truncate">
                     {(() => {
                         const base = parseFloat(variation?.price || displayProduct?.price || 0);
                         const disc = parseFloat(variation?.discount || displayProduct?.discount || 0);
@@ -566,21 +566,25 @@ export default function ProductView({params, initialProduct, initialDescription}
                     })()}
                 </p>
             </div>
-            <button
-                onClick={() => addToCart(quantity, displayProduct?.name, variation)}
-                className="flex items-center gap-2 px-5 py-3 rounded-xl border-2 border-primary text-primary font-bold text-sm hover:bg-primary hover:text-white transition-colors"
-            >
-                <span className="icon-[ri--shopping-cart-line] w-5 h-5" />Cart
-            </button>
-            <button
-                onClick={() => {
-                    addToCart(quantity, displayProduct?.name, variation);
-                    router.push('/checkout');
-                }}
-                className="px-5 py-3 rounded-xl bg-primary text-white font-bold text-sm hover:bg-opacity-90 transition-colors"
-            >
-                Checkout
-            </button>
+            <div className="flex items-center gap-2 flex-shrink-0">
+                <button
+                    onClick={() => addToCart(quantity, displayProduct?.name, variation)}
+                    className="flex items-center justify-center w-10 h-10 sm:w-auto sm:px-4 sm:py-2.5 rounded-lg border-2 border-primary text-primary font-bold text-sm hover:bg-primary hover:text-white transition-colors"
+                    aria-label="Add to cart"
+                >
+                    <span className="icon-[ri--shopping-cart-line] w-5 h-5" />
+                    <span className="hidden sm:inline ml-1">Cart</span>
+                </button>
+                <button
+                    onClick={() => {
+                        addToCart(quantity, displayProduct?.name, variation);
+                        router.push('/checkout');
+                    }}
+                    className="px-4 py-2.5 sm:px-5 sm:py-3 rounded-lg bg-primary text-white font-bold text-sm hover:bg-opacity-90 transition-colors"
+                >
+                    Checkout
+                </button>
+            </div>
         </div>
         </>
     )
