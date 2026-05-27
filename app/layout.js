@@ -4,7 +4,7 @@ import Script from "next/script";
 import "./globals.css";
 import ContextProvider from "@/app/lib/ContextProvider";
 import Popup from "@/app/UI/Popup";
-import Header from "@/app/UI/Menus";
+import Header from "@/app/UI/Header";
 import Footer from "@/app/UI/Footer";
 import Cart from "@/app/UI/Cart";
 // import Overlays from "@/app/UI/Overlays";

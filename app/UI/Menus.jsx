@@ -61,13 +61,15 @@ export function MobileTopMenu({ onOpen }){
     )
 }
 
-export function MobileSideMenu({ isOpen, setIsOpen }){
+export function MobileSideMenu({ isOpen, setIsOpen, fallbackNavData }){
     let pathname = usePathname();
     const { user, token, logout } = useAuth();
     const isLoggedIn = !!token;
     const { data: navData } = useSWR(['/nav-menus', {}], fetcher, {
+        fallbackData: fallbackNavData,
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
+        revalidateOnMount: false,
     })
 
     useEffect(()=>{
@@ -170,17 +172,21 @@ export function MobileSideMenu({ isOpen, setIsOpen }){
 
 import Search from "@/app/UI/Search";
 
-export function TopMenu(){
+export function TopMenu({ fallbackNavData, fallbackSettings }){
     let pathname = usePathname();
     const { user, token, logout } = useAuth();
     const isLoggedIn = !!token;
     const { data: navData } = useSWR(['/nav-menus', {}], fetcher, {
+        fallbackData: fallbackNavData,
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
+        revalidateOnMount: false,
     })
     const { data: settingsData } = useSWR(['/settings', { group: 'footer' }], fetcher, {
+        fallbackData: fallbackSettings,
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
+        revalidateOnMount: false,
     })
     const settings = settingsData?.data || {}
     
@@ -261,7 +267,7 @@ export function TopMenu(){
     )
 }
 
-export function SubMenu({page}){
+export function SubMenu({ page, fallbackCategories }){
     const [expandedCategories, setExpandedCategories] = useState({});
 
     const toggleCategory = (category) => {
@@ -272,9 +278,10 @@ export function SubMenu({page}){
     };
 
     const { data:categories, error:categoriesError, isLoading:categoriesLoading } = useSWR(['/categories',{}], fetcher,{
+        fallbackData: fallbackCategories,
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
-        revalidateOnMount: true,
+        revalidateOnMount: false,
         errorRetryInterval: 300000
     });
 
@@ -366,14 +373,14 @@ export function SubMenu({page}){
     )
 }
 
-export default function Header(){
+export default function Header({ fallbackNavData, fallbackSettings, fallbackCategories }){
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     return (
         <header className="">
-            <TopMenu/>
+            <TopMenu fallbackNavData={fallbackNavData} fallbackSettings={fallbackSettings}/>
             <MobileTopMenu onOpen={() => setIsMobileMenuOpen(true)}/>
-            <MobileSideMenu isOpen={isMobileMenuOpen} setIsOpen={setIsMobileMenuOpen}/>
+            <MobileSideMenu isOpen={isMobileMenuOpen} setIsOpen={setIsMobileMenuOpen} fallbackNavData={fallbackNavData}/>
         </header>
     )
 }
