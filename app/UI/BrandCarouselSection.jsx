@@ -27,6 +27,7 @@ export default function BrandCarouselSection({
     logoSrc,
     customStyle = {},
     fetchSlug,
+    fallbackData,
 }) {
     const scrollRef = useRef(null)
 
@@ -34,7 +35,11 @@ export default function BrandCarouselSection({
     const { data: brandData, error, isLoading } = useSWR(
         ['/products', { brand: fetchSlug || title, per_page: 15 }],
         fetcher,
-        { revalidateOnFocus: false }
+        { 
+            fallbackData: fallbackData,
+            revalidateOnFocus: false,
+            revalidateOnMount: !fallbackData, // Skip re-fetch if server already provided data
+        }
     );
 
     const filtered = Array.isArray(brandData) ? brandData : (brandData?.data || []);

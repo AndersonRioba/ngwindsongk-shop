@@ -198,19 +198,29 @@ export default async function Home() {
 
                     {/* ── Brand Carousel Sections ── */}
                     <div className="flex flex-col gap-0">
-                            {brandsList.map((brand) => (
-                                <BrandCarouselSection
-                                    key={brand.id}
-                                    title={getBrandDisplayName(brand.name)}
-                                    subtitle={brand.description || `Explore the ${brand.name} collection`}
-                                    barColor={""} // Pass empty or specific style if needed, but we'll use inline style in the component if possible
-                                    customStyle={{ backgroundColor: brand.color_hex }} // We might need to update the component to accept this
-                                    seeAllHref={`/products/${getBrandSlug(brand)}`}
-                                    fetchSlug={getBrandSlug(brand)}
-                                    categories={[brand.name.toLowerCase()].concat(brand.categories?.map(c => c.name.toLowerCase()) || [])}
-                                    logoSrc={brand.logo}
-                                />
-                            ))}
+                            {brandsList.map((brand) => {
+                                const slug = getBrandSlug(brand);
+                                // Pre-filter the server-fetched products for this brand so no client fetch is needed
+                                const brandProducts = productsList.filter(p =>
+                                    p?.brand?.slug === slug ||
+                                    p?.brand?.name?.toLowerCase() === brand.name.toLowerCase()
+                                ).slice(0, 15);
+
+                                return (
+                                    <BrandCarouselSection
+                                        key={brand.id}
+                                        title={getBrandDisplayName(brand.name)}
+                                        subtitle={brand.description || `Explore the ${brand.name} collection`}
+                                        barColor={""}
+                                        customStyle={{ backgroundColor: brand.color_hex }}
+                                        seeAllHref={`/products/${slug}`}
+                                        fetchSlug={slug}
+                                        categories={[brand.name.toLowerCase()].concat(brand.categories?.map(c => c.name.toLowerCase()) || [])}
+                                        logoSrc={brand.logo}
+                                        fallbackData={brandProducts.length > 0 ? brandProducts : null}
+                                    />
+                                );
+                            })}
                         </div>
 
                         <>
