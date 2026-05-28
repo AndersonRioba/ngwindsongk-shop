@@ -48,7 +48,7 @@ async function getLandingData() {
     const baseURL = process.env.NEXT_PUBLIC_API_URL;
     try {
         const [productsRes, offersRes, brandsRes] = await Promise.all([
-            fetch(`${baseURL}/products?per_page=24`, { next: { revalidate: 60 } }),
+            fetch(`${baseURL}/products?per_page=100`, { next: { revalidate: 60 } }),
             fetch(`${baseURL}/products?offers=true&per_page=20`, { next: { revalidate: 60 } }),
             fetch(`${baseURL}/brands`, { next: { revalidate: 60 } })
         ]);

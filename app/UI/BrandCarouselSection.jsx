@@ -38,7 +38,7 @@ export default function BrandCarouselSection({
         { 
             fallbackData: fallbackData,
             revalidateOnFocus: false,
-            revalidateOnMount: !fallbackData, // Skip re-fetch if server already provided data
+            revalidateOnMount: !fallbackData || fallbackData.length < 15, // Fetch more if server didn't provide enough
         }
     );
 
