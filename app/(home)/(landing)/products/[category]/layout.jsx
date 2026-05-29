@@ -115,14 +115,6 @@ export default function CategoryLayout({ children, params }) {
                     <BreadCrump light />
                 </div>
                 
-                {/* Tagline */}
-                {theme.tagline && (
-                    <div className="absolute bottom-4 left-0 right-0 z-10">
-                        <p className="text-center text-white/90 text-sm md:text-base drop-shadow-md font-semibold tracking-wide px-4">
-                            {theme.tagline}
-                        </p>
-                    </div>
-                )}
             </div>
 
             {/* ── Mobile brand switcher pill bar ── */}
