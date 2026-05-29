@@ -100,9 +100,9 @@ export default function CheckoutSuccessPage(){
                 </p>
 
                 <div className="pt-6">
-                    <Link href="/" className="inline-block bg-primary text-white font-semibold px-8 py-3 rounded-xl hover:bg-opacity-90 transition-all">
+                    <button onClick={() => window.location.href = '/'} className="inline-block bg-primary text-white font-semibold px-8 py-3 rounded-xl hover:bg-opacity-90 transition-all">
                         Continue Shopping
-                    </Link>
+                    </button>
                 </div>
             </div>
         </main>
