@@ -353,7 +353,8 @@ export default function CheckoutPaymentPage(){
                     clearInterval(pollingIntervalRef.current);
                     setIsPolling(false);
                     setIsProcessing(false);
-                    setErrorMsg("M-Pesa payment failed. Please try again.");
+                    setErrorMsg("M-Pesa payment failed or was cancelled. You can try again or pay manually.");
+                    setPaymentTimeout(true);
                 }
             } catch (err) {
                 console.error("Polling error:", err);
