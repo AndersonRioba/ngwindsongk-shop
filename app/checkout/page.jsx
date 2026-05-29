@@ -7,6 +7,7 @@ import useAuth from "@/src/hooks/useAuth";
 import PlacesAutocomplete from "../components/PlacesAutocomplete";
 import useSWR from "swr";
 import { fetcher } from "@/app/lib/data";
+import useCart from "@/app/lib/hooks/useCart";
 
 const PICKUP_LOCATIONS = [
     { id: 'industrial', name: 'Head Office / Factory (Industrial Area)', address: 'Industrial Area, Nairobi, Kenya', fee: 0 },
@@ -24,6 +25,9 @@ export default function CheckoutInfoPage(){
         shipping, setShipping,
         deliveryZone, setDeliveryZone
     } = useContext(CheckoutContext);
+
+    const { cart } = useCart();
+    const [showIndustrialPickup, setShowIndustrialPickup] = useState(false);
 
     // 'pickup' holds the selected location id string, or null for delivery
     const [deliveryMode, setDeliveryMode] = useState(pickup ? 'pickup' : 'delivery');
@@ -58,6 +62,54 @@ export default function CheckoutInfoPage(){
     }, [user, setOrderDetails]);
 
     useEffect(()=>{},[pickup])
+
+    useEffect(() => {
+        const checkCartForIndustrialPickup = async () => {
+            if (!cart || cart.length === 0) {
+                setShowIndustrialPickup(false);
+                return;
+            }
+
+            let allowed = false;
+            await Promise.all(cart.map(async (item) => {
+                try {
+                    const res = await fetcher([`/products/${item.product}`, {}]);
+                    const brandName = (res.brand?.name || '').toLowerCase();
+                    const categoryName = (res.category?.name || '').toLowerCase();
+                    const productSlug = (res.slug || '').toLowerCase();
+                    
+                    const isOatsOrNutmill = brandName.includes('oats') || brandName.includes('nutmill') ||
+                                            categoryName.includes('oats') || categoryName.includes('nutmill') ||
+                                            productSlug.includes('oats') || productSlug.includes('nutmill');
+                    
+                    if (isOatsOrNutmill) {
+                        const variation = item.variation && item.variation.id
+                            ? (res.product_variations || []).find(v => v.id === item.variation.id)
+                            : null;
+                        
+                        const weight = variation ? parseFloat(variation.weight_kg) : parseFloat(res.weight_kg);
+                        
+                        if (weight === 20 || weight === 25) {
+                            allowed = true;
+                        }
+                    }
+                } catch (err) {
+                    console.error("Error fetching product for pickup check:", err);
+                }
+            }));
+            
+            setShowIndustrialPickup(allowed);
+            
+            if (!allowed && pickup === 'industrial') {
+                setPickup(null);
+            }
+            if (allowed && pickup === 'bazaar') {
+                setPickup(null);
+            }
+        };
+
+        checkCartForIndustrialPickup();
+    }, [cart, pickup, setPickup]);
 
     // Click-outside handler for returning customer dropdown
     useEffect(() => {
@@ -326,7 +378,11 @@ export default function CheckoutInfoPage(){
                             {deliveryMode === 'pickup' && (
                                 <div className="mb-6">
                                     <div className="flex flex-col gap-3" id="pickup">
-                                        {PICKUP_LOCATIONS.map(loc => (
+                                        {PICKUP_LOCATIONS.filter(loc => {
+                                            if (loc.id === 'industrial') return showIndustrialPickup;
+                                            if (loc.id === 'bazaar') return !showIndustrialPickup;
+                                            return true;
+                                        }).map(loc => (
                                             <div 
                                                 key={loc.id}
                                                 onClick={() => {
