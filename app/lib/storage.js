@@ -1,10 +1,12 @@
 export function save(key, value) {
+  if (typeof window === 'undefined') return false;
   const stringValue = typeof value === 'string' ? value : JSON.stringify(value);
   localStorage.setItem(key, stringValue);
   return true;
 }
 
 export function load(key) {
+  if (typeof window === 'undefined') return null;
   const value = localStorage.getItem(key);
   if (!value || value === 'undefined') return null;
   try {
@@ -16,6 +18,7 @@ export function load(key) {
 
 
 export function remove(key) {
+  if (typeof window === 'undefined') return;
   localStorage.removeItem(key)
 }
 
