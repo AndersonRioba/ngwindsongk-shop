@@ -106,6 +106,9 @@ export default function CheckoutInfoPage(){
             if (allowed && pickup === 'bazaar') {
                 setPickup(null);
             }
+            if (allowed) {
+                setDeliveryMode('pickup');
+            }
         };
 
         checkCartForIndustrialPickup();
@@ -335,13 +338,16 @@ export default function CheckoutInfoPage(){
                             <h5 className="my-5 py-2 uppercase text-sm font-semibold text-primary border-b-[1px]">Delivery Method</h5>
                             <p className="text-sm text-black/60 mb-4">How would you like to receive your order?</p>
 
-                            <div className={`grid gap-4 mb-6 ${deliveryMode === 'pickup' ? 'md:grid-cols-1' : 'md:grid-cols-2'}`}>
+                            <div className={`grid gap-4 mb-6 ${deliveryMode === 'pickup' || showIndustrialPickup ? 'md:grid-cols-1' : 'md:grid-cols-2'}`}>
                                 {/* Pickup */}
                                 <div 
-                                    onClick={() => deliveryMode === 'pickup' ? selectMode('delivery') : selectMode('pickup')} 
-                                    className={`gap-3 p-5 rounded-lg border-2 flex items-start cursor-pointer transition-all ${deliveryMode === 'pickup' ? 'border-primary bg-primary/5' : 'border-gray-200 hover:border-gray-400'}`}
+                                    onClick={() => {
+                                        if (showIndustrialPickup) return;
+                                        deliveryMode === 'pickup' ? selectMode('delivery') : selectMode('pickup')
+                                    }} 
+                                    className={`gap-3 p-5 rounded-lg border-2 flex items-start ${showIndustrialPickup ? 'cursor-default border-primary bg-primary/5' : 'cursor-pointer ' + (deliveryMode === 'pickup' ? 'border-primary bg-primary/5' : 'border-gray-200 hover:border-gray-400')} transition-all`}
                                 >
-                                    {deliveryMode === 'pickup'
+                                    {deliveryMode === 'pickup' || showIndustrialPickup
                                         ? <span className="icon-[grommet-icons--radial-selected] w-5 h-5 text-primary mt-1 shrink-0"/>
                                         : <span className="icon-[grommet-icons--radial] w-5 h-5 mt-1 shrink-0"/>
                                     }
@@ -349,12 +355,12 @@ export default function CheckoutInfoPage(){
                                         <p className="font-semibold text-base">Pickup</p>
                                         <p className="text-black/60 text-sm">Pick up at our head office or a station near you</p>
                                         <span className="mt-1.5 inline-block text-xs font-bold text-green-700 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full mr-2">FREE</span>
-                                        {deliveryMode === 'pickup' && <span className="text-xs text-primary underline mt-2 inline-block">Switch to Delivery</span>}
+                                        {deliveryMode === 'pickup' && !showIndustrialPickup && <span className="text-xs text-primary underline mt-2 inline-block">Switch to Delivery</span>}
                                     </div>
                                 </div>
 
                                 {/* Delivery */}
-                                {deliveryMode !== 'pickup' && (
+                                {!showIndustrialPickup && deliveryMode !== 'pickup' && (
                                 <div 
                                     onClick={() => selectMode('delivery')} 
                                     className={`gap-3 p-5 rounded-lg border-2 flex items-start cursor-pointer transition-all ${deliveryMode === 'delivery' ? 'border-primary bg-primary/5' : 'border-gray-200 hover:border-gray-400'}`}
