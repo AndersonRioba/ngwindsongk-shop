@@ -9,6 +9,15 @@ import { getImageUrl } from "@/app/lib/utils/image";
 
 /* ─── Brand hero config ─────────────────────────────────── */
 const categoryThemes = {
+    all: {
+        brand: "All Products",
+        tagline: "Browse our full collection — oats, nuts & seeds, baby care and more.",
+        logo: "",
+        banner: null,
+        accentBg: "bg-primary",
+        accentHex: "#6D31ED",
+        gradientClass: "from-primary/10 to-white",
+    },
     oats: {
         brand: "Grainmill",
         tagline: "Hearty oats & nourishing grain essentials for everyday meals.",
@@ -90,6 +99,39 @@ export default function CategoryLayout({ children, params }) {
                 </div>
             </div>
         </>
+    );
+
+    /* ── "All products" — no banner, just a styled page header ── */
+    if (category === 'all') return (
+        <section className="relative">
+            {/* Elegant gradient header — no logo banner */}
+            <div className="w-full bg-gradient-to-br from-[#f3f0ff] via-white to-[#faf9ff] border-b border-primary/10">
+                <div className="mx-auto max-w-7xl px-6 md:px-10 pt-10 pb-8">
+                    <BreadCrump />
+                    <div className="mt-6 mb-2">
+                        <h1 className="text-3xl md:text-4xl font-black tracking-tight text-gray-900">
+                            All{' '}
+                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-400">
+                                Products
+                            </span>
+                        </h1>
+                        <p className="mt-2 text-sm md:text-base text-gray-500 max-w-xl">
+                            Browse our full collection — oats, nuts &amp; seeds, baby care and more.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            {/* ── Brand switcher pill bar ── */}
+            <BrandSwitcher currentCategory={category} />
+
+            {/* ── Products grid ── */}
+            <div className="w-full px-4 pb-16 pt-10 md:px-8">
+                <div className="mx-2 md:mx-10 luxe-reveal luxe-delay-4">
+                    {children}
+                </div>
+            </div>
+        </section>
     );
 
     return (

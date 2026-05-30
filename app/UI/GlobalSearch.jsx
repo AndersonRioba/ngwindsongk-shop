@@ -25,9 +25,11 @@ function SearchResultItem({ product, closeSearch }) {
         addToCart(quantity, product.name, variation);
     };
 
+    const categorySlug = product.brand?.slug || product.category?.slug || (product.brand?.name || product.category?.name || 'all').toLowerCase().trim().replaceAll(' ', '-');
+
     return (
         <div className="flex flex-col sm:flex-row sm:items-center justify-between p-3 border border-gray-100 rounded-xl hover:shadow-md transition-shadow bg-white gap-3 sm:gap-4">
-            <Link href={`/products/${product.category?.slug || 'all'}/${product.slug}`} onClick={closeSearch} className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
+            <Link href={`/products/${categorySlug}/${product.slug}`} onClick={closeSearch} className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
                 <div className="relative w-16 h-16 sm:w-20 sm:h-20 bg-gray-50 rounded-lg flex-shrink-0">
                     <Image 
                         src={getImageUrl(image, '/product-placeholder.png')} 
