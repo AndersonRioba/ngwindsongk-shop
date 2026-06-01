@@ -435,9 +435,12 @@ export default function CheckoutPaymentPage(){
                             return <p><span className="font-semibold">Pickup:</span> {loc ? `${loc.name} — ${loc.address}` : pickup}</p>;
                         })() : (
                             <>
+                                <p><span className="font-semibold">Delivery Town:</span> {orderDetails.delivery_zone || 'Not specified'}</p>
+                                <p><span className="font-semibold">Address:</span> {orderDetails.address || 'N/A'}</p>
+                                {/* COMMENTED OUT: County + Zone rows — replaced by free-text Delivery Town field
                                 <p><span className="font-semibold">County:</span> {orderDetails.delivery_county || 'Not selected'}</p>
                                 <p><span className="font-semibold">Town:</span> {orderDetails.delivery_zone || 'Not selected'}</p>
-                                <p><span className="font-semibold">Address:</span> {orderDetails.address || 'N/A'}</p>
+                                */}
                             </>
                         )}
                         <p className="pt-2 border-t border-gray-200 mt-2">

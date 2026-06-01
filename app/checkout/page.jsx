@@ -5,7 +5,7 @@ import { CheckoutContext } from "@/app/lib/providers/CheckoutProvider";
 import { useRouter } from "next/navigation";
 import useAuth from "@/src/hooks/useAuth";
 import PlacesAutocomplete from "../components/PlacesAutocomplete";
-import useSWR from "swr";
+// import useSWR from "swr"; // COMMENTED OUT: was used for counties fetch, no longer needed
 import { fetcher } from "@/app/lib/data";
 import useCart from "@/app/lib/hooks/useCart";
 
@@ -37,18 +37,25 @@ export default function CheckoutInfoPage(){
     const router = useRouter();
 
     // Zone picker state
+    /* COMMENTED OUT: County + urban center pickers — customer discovery (Kenya) showed
+       customers prefer to be called to confirm delivery options rather than select from
+       a predefined list. Keeping the code for potential future re-enablement.
     const [selectedCounty, setSelectedCounty] = useState(null);
     const [countySearch, setCountySearch] = useState('');
     const [showCountyList, setShowCountyList] = useState(false);
     const [selectedUrban, setSelectedUrban] = useState('');
     const [manualTown, setManualTown] = useState('');
+    */
     const [deliveryFee, setDeliveryFee] = useState(null);
+    // Single delivery town field (replaces county + urban center pickers)
+    const [deliveryTown, setDeliveryTown] = useState('');
 
-    // Fetch all counties + urban centers in one call
+    /* COMMENTED OUT: Counties SWR fetch — no longer needed with free-text town input.
     const { data: countiesData } = useSWR(['/locations/counties', {}], fetcher, {
         revalidateOnFocus: false,
     });
     const counties = countiesData?.data || [];
+    */
 
     useEffect(() => {
         if (!user) return;
@@ -130,12 +137,16 @@ export default function CheckoutInfoPage(){
         setDeliveryMode(mode);
         if (mode === 'delivery') setPickup(null);
         if (mode === 'pickup') {
-            setSelectedCounty(null);
-            setSelectedUrban('');
+            // COMMENTED OUT: county/urban state resets
+            // setSelectedCounty(null);
+            // setSelectedUrban('');
+            setDeliveryTown('');
             setDeliveryFee(null);
         }
     };
 
+    /* COMMENTED OUT: County + urban center change handlers
+       Keeping for potential future re-enablement.
     const handleCountyChange = (e) => {
         const val = e.target.value;
         const county = val ? counties.find(c => c.id === parseInt(val)) : null;
@@ -179,6 +190,15 @@ export default function CheckoutInfoPage(){
             setOrderDetails(prev => ({ ...prev, delivery_zone: '' }));
         }
     };
+    */
+
+    const handleDeliveryTownChange = (e) => {
+        const town = e.target.value;
+        setDeliveryTown(town);
+        setDeliveryZone(town || null);
+        setOrderDetails(prev => ({ ...prev, delivery_zone: town, delivery_county: '' }));
+        if (errors.delivery_town) setErrors({ ...errors, delivery_town: null });
+    };
 
     const selectPickupLocation = (locationId) => {
         setPickup(locationId);
@@ -197,11 +217,17 @@ export default function CheckoutInfoPage(){
             newErrors.pickup = 'Please select a pickup location.';
         }
         if (deliveryMode === 'delivery') {
+            /* COMMENTED OUT: county-based validation
             if (!selectedCounty) {
                 newErrors.county = 'Please select your delivery county.';
             }
             if (selectedUrban === 'other' && !manualTown.trim()) {
                 newErrors.manual_town = 'Please enter your town name.';
+            }
+            */
+            // New: require delivery town free-text field
+            if (!deliveryTown || deliveryTown.trim() === '') {
+                newErrors.delivery_town = 'Please enter your delivery town.';
             }
         }
 
@@ -215,19 +241,25 @@ export default function CheckoutInfoPage(){
         }
 
         if (deliveryMode === 'delivery') {
+            /* COMMENTED OUT: county/urban zone resolution
             const finalZone = selectedUrban === 'other' ? manualTown.trim() : (selectedUrban ? (selectedCounty?.children?.find(c => c.id === parseInt(selectedUrban))?.name) : selectedCounty?.name);
             const finalFee = deliveryFee ?? 0;
-
-            // Store final zone and fee into global context
             setDeliveryZone(finalZone);
             setShipping(finalFee);
-
-            // Store into orderDetails before navigating
             setOrderDetails(prev => ({
                 ...prev,
                 delivery_zone: finalZone,
                 delivery_county: selectedCounty?.name || '',
                 shipping: finalFee,
+            }));
+            */
+            // New: use free-text delivery town directly as delivery_zone
+            const finalTown = deliveryTown.trim();
+            setDeliveryZone(finalTown);
+            setOrderDetails(prev => ({
+                ...prev,
+                delivery_zone: finalTown,
+                delivery_county: '',
             }));
         }
         setErrors({});
@@ -373,7 +405,7 @@ export default function CheckoutInfoPage(){
                                         <p className="font-semibold text-base">Delivery</p>
                                         <p className="text-black/60 text-sm">Have your order delivered to your address — urban centres in Kenya</p>
                                         <span className="mt-1.5 inline-block text-xs font-bold text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-full">
-                                            {deliveryFee !== null ? `KES ${deliveryFee.toLocaleString()}` : 'Select zone'}
+                                            {deliveryTown ? `📍 ${deliveryTown}` : 'Enter your town'}
                                         </span>
                                     </div>
                                 </div>
@@ -413,111 +445,51 @@ export default function CheckoutInfoPage(){
                                 </div>
                             )}
 
-                        {/* Delivery: zone picker + address input */}
+                        {/* Delivery: town input + address input */}
                         {deliveryMode === 'delivery' && (
                             <div className="mb-6 space-y-4">
                                 {/* Info bar */}
                                 <div className="flex items-center gap-2 p-3 bg-blue-50 border border-blue-100 rounded-lg">
                                     <span className="icon-[fluent--vehicle-truck-24-regular] w-5 h-5 text-blue-600 shrink-0" />
                                     <p className="text-sm text-blue-800 font-medium">
-                                        Delivery fee is based on your selected county/zone.
-                                        {deliveryFee !== null && <span className="font-bold ml-1">Current fee: KES {deliveryFee.toLocaleString()}</span>}
+                                        Enter your delivery town — our team will call to confirm delivery details and fees.
                                     </p>
                                 </div>
 
-                                {/* Step 1: County */}
+                                {/* Delivery Town — free text input (replaces county + urban center pickers) */}
+                                {/* COMMENTED OUT: County search + urban center dropdowns
+                                    These were removed during Kenya customer discovery:
+                                    customers prefer a call-back to confirm delivery options.
+                                    The county/urban center components remain in the codebase below
+                                    for potential future re-enablement.
+
                                 <div className="relative">
                                     <label htmlFor="countySearch" className="block text-sm font-medium mb-1">
                                         County <span className="text-red-500">*</span>
                                     </label>
+                                    ... county search input with dropdown list ...
+                                    ... urban center select ...
+                                    ... manual town input ...
+                                </div>
+                                */}
+
+                                {/* New: single delivery town field */}
+                                <div>
+                                    <label htmlFor="delivery_town" className="block text-sm font-medium mb-1">
+                                        Delivery Town <span className="text-red-500">*</span>
+                                    </label>
                                     <input
-                                        id="countySearch"
+                                        id="delivery_town"
                                         type="text"
                                         autoComplete="off"
-                                        placeholder="Type to search county..."
-                                        value={countySearch}
-                                        onChange={(e) => {
-                                            setCountySearch(e.target.value);
-                                            setShowCountyList(true);
-                                            if (errors.county) setErrors({...errors, county:null});
-                                            if (selectedCounty && e.target.value !== selectedCounty.name) {
-                                                handleCountyChange({target: {value: ''}});
-                                            }
-                                        }}
-                                        onFocus={() => setShowCountyList(true)}
-                                        onBlur={() => setTimeout(() => setShowCountyList(false), 200)}
-                                        className={`block w-full h-11 px-4 border-[1px] rounded-xl focus:outline-none focus:ring-2 transition-all ${errors.county ? 'border-red-500 focus:ring-red-200' : 'border-primary focus:ring-primary/20'}`}
+                                        placeholder="e.g. Nairobi, Mombasa, Kisumu, Eldoret..."
+                                        value={deliveryTown}
+                                        onChange={handleDeliveryTownChange}
+                                        className={`block w-full h-11 px-4 border-[1px] rounded-xl focus:outline-none focus:ring-2 transition-all ${errors.delivery_town ? 'border-red-500 focus:ring-red-200' : 'border-primary focus:ring-primary/20'}`}
                                     />
-                                    
-                                    {showCountyList && (
-                                        <ul className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg max-h-60 overflow-y-auto">
-                                            {counties
-                                                .filter(c => c.name.toLowerCase().includes(countySearch.toLowerCase()))
-                                                .map(c => (
-                                                    <li 
-                                                        key={c.id} 
-                                                        onMouseDown={(e) => {
-                                                            e.preventDefault(); 
-                                                            handleCountyChange({target: {value: c.id}});
-                                                        }}
-                                                        className="px-4 py-2.5 hover:bg-primary/10 cursor-pointer text-sm font-medium text-gray-700 transition-colors"
-                                                    >
-                                                        {c.name}
-                                                    </li>
-                                                ))
-                                            }
-                                            {counties.filter(c => c.name.toLowerCase().includes(countySearch.toLowerCase())).length === 0 && (
-                                                <li className="px-4 py-3 text-sm text-gray-500 italic text-center">No counties found</li>
-                                            )}
-                                        </ul>
-                                    )}
-                                    {errors.county && <p className="text-red-500 text-xs mt-1 font-medium">{errors.county}</p>}
+                                    {errors.delivery_town && <p className="text-red-500 text-xs mt-1 font-medium">{errors.delivery_town}</p>}
+                                    <p className="text-xs text-black/50 mt-1">Our team will contact you to confirm exact delivery location and fee.</p>
                                 </div>
-
-                                {/* Step 2: Urban center (shown after county selected) */}
-                                {selectedCounty && (
-                                    <div>
-                                        <label htmlFor="urban" className="block text-sm font-medium mb-1">
-                                            Town / Urban Center <span className="text-black/40 text-xs">(optional — county fee applies if not listed)</span>
-                                        </label>
-                                        <select
-                                            id="urban"
-                                            value={selectedUrban}
-                                            onChange={handleUrbanChange}
-                                            className="block w-full h-11 px-4 border-[1px] border-primary rounded-xl focus:outline-none focus:ring-2 focus:ring-primary transition-all"
-                                        >
-                                            <option value="">-- Select Town/Urban Center --</option>
-                                            {(selectedCounty.children || []).map(u => (
-                                                <option key={u.id} value={u.id}>
-                                                    {u.name}
-                                                </option>
-                                            ))}
-                                            <option value="other">Other (enter town manually)</option>
-                                        </select>
-                                    </div>
-                                )}
-
-                                {/* Manual town input */}
-                                {selectedUrban === 'other' && (
-                                    <div>
-                                        <label htmlFor="manual_town" className="block text-sm font-medium mb-1">
-                                            Enter Your Town <span className="text-red-500">*</span>
-                                        </label>
-                                        <input
-                                            id="manual_town"
-                                            type="text"
-                                            value={manualTown}
-                                            onChange={e => {
-                                                setManualTown(e.target.value);
-                                                if(errors.manual_town) setErrors({...errors, manual_town:null});
-                                            }}
-                                            className={`block w-full h-11 px-4 border-[1px] rounded-xl focus:outline-none focus:ring-2 transition-all ${errors.manual_town ? 'border-red-500 focus:ring-red-200' : 'border-primary focus:ring-primary/20'}`}
-                                            placeholder="e.g. Eldoret, Kisii, Thika..."
-                                        />
-                                        {errors.manual_town && <p className="text-red-500 text-xs mt-1 font-medium">{errors.manual_town}</p>}
-                                        <p className="text-xs text-black/50 mt-1">County-level fee applies.</p>
-                                    </div>
-                                )}
 
                                 {/* Delivery Address */}
                                 <div>
