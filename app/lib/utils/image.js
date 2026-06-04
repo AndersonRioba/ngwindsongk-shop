@@ -41,6 +41,9 @@ export function getImageUrl(path, fallback = "/logo.png") {
 
     // 3. If the path starts with a slash, it's relative to the frontend public folder
     if (path.startsWith('/')) {
+        if (path.startsWith('/storage/')) {
+            return `${baseUrl}${path}`;
+        }
         return path;
     }
 

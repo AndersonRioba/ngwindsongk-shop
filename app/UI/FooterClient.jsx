@@ -14,13 +14,13 @@ export default function FooterClient({ fallbackSettings, fallbackBrands }) {
         fallbackData: fallbackSettings,
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
-        revalidateOnMount: false,
+        revalidateOnMount: true,
     })
     const { data: brands } = useSWR(['/brands', {}], fetcher, {
         fallbackData: fallbackBrands,
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
-        revalidateOnMount: false,
+        revalidateOnMount: true,
     })
     const settings = response?.data || {}
     const pathname = usePathname()
