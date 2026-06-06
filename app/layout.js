@@ -12,7 +12,7 @@ import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import PageTracker from "@/app/components/PageTracker";
 import GoogleTag from "@/app/components/GoogleTag";
-
+import { cookies } from "next/headers";
 
 const outfit = Outfit({ 
   subsets: ["latin"], 
@@ -100,6 +100,9 @@ export const metadata = {
 import { AuthProvider } from "@/src/context/AuthContext";
 
 export default function RootLayout({ children }) {
+  const cookieStore = cookies();
+  const disableAnalytics = cookieStore.get('disable_analytics')?.value === 'true';
+
   return (
     <html lang="en">
       <head>
@@ -120,7 +123,7 @@ export default function RootLayout({ children }) {
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
 
-        <GoogleTag />
+        <GoogleTag disableAnalytics={disableAnalytics} />
 
 
 
@@ -165,11 +168,11 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body suppressHydrationWarning className={`${outfit.className} lg:text-sm 2xl:text-base`}>
-      <Analytics/>
+      {!disableAnalytics && <Analytics/>}
       <SpeedInsights />
         <AuthProvider>
             <Suspense fallback={null}>
-              <PageTracker />
+              {!disableAnalytics && <PageTracker />}
             </Suspense>
             <ContextProvider>
               <Header />

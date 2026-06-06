@@ -1,7 +1,21 @@
 import { NextResponse } from 'next/server';
 
 export async function middleware(request) {
-    const { pathname } = request.nextUrl;
+    const { pathname, searchParams } = request.nextUrl;
+
+    // Handle admin override cookie
+    if (searchParams.get('no_track') === 'true') {
+        const newUrl = request.nextUrl.clone();
+        newUrl.searchParams.delete('no_track');
+        const response = NextResponse.redirect(newUrl);
+        response.cookies.set('disable_analytics', 'true', {
+            maxAge: 60 * 60 * 24 * 365, // 1 year
+            path: '/',
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+        });
+        return response;
+    }
 
     // 1. Skip assets, api routes, etc.
     const isAsset = pathname.match(/\.(png|jpg|jpeg|gif|svg|ico|css|js|woff|woff2)$/);
@@ -22,10 +36,14 @@ export async function middleware(request) {
     // Attempt to get session ID from cookie if it exists
     let sessionId = request.cookies.get('analytics_session_id')?.value;
     
+    // Check for admin override cookie
+    const disableAnalytics = request.cookies.get('disable_analytics')?.value === 'true';
+
     // We can fire a background request to the API
     // Fire and forget
-    try {
-        fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://api.ngwindsongk.com'}/api/pageviews`, {
+    if (!disableAnalytics) {
+        try {
+            fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://api.ngwindsongk.com'}/api/pageviews`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -39,8 +57,9 @@ export async function middleware(request) {
                 is_server_side: true,
             }),
         }).catch(() => {}); // Silent fail
-    } catch (e) {
-        // Silent fail
+        } catch (e) {
+            // Silent fail
+        }
     }
 
     return NextResponse.next();

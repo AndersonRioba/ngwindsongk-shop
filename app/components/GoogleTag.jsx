@@ -3,10 +3,12 @@
 import { useEffect, useState } from 'react';
 import Script from 'next/script';
 
-export default function GoogleTag() {
+export default function GoogleTag({ disableAnalytics }) {
     const [tagId, setTagId] = useState(null);
 
     useEffect(() => {
+        if (disableAnalytics) return;
+
         const fetchTrackingSettings = async () => {
             try {
                 const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/settings?group=tracking`);
@@ -20,9 +22,9 @@ export default function GoogleTag() {
         };
 
         fetchTrackingSettings();
-    }, []);
+    }, [disableAnalytics]);
 
-    if (!tagId) return null;
+    if (disableAnalytics || !tagId) return null;
 
     return (
         <>
