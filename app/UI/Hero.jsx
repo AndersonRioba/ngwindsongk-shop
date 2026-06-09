@@ -11,6 +11,7 @@ export default function Carousel() {
   const { data: response } = useSWR(['/banners', { page: 'homepage' }], fetcher)
   const [activeIndex, setActiveIndex] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [imgErrors, setImgErrors] = useState({});
   let pathname = usePathname();
   pathname = pathname.replaceAll('%20', ' ');
   pathname = pathname.replaceAll('%20', ' ');
@@ -21,7 +22,8 @@ export default function Carousel() {
     ? dynamicBanners.map((banner, i) => (
         <div key={i} className="relative w-full aspect-[16/9] md:aspect-[21/9] lg:aspect-[1920/700]">
             <Image 
-                src={getImageUrl(banner.image)}
+                src={imgErrors[i] ? getImageUrl("/carousel/OatsPoster.webp") : getImageUrl(banner.image)}
+                onError={() => setImgErrors(prev => ({ ...prev, [i]: true }))}
                 fill
                 sizes="100vw"
                 className="object-cover block"
