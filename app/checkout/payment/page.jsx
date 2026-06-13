@@ -39,6 +39,7 @@ export default function CheckoutPaymentPage(){
     const [paymentTimeout, setPaymentTimeout] = useState(false);
     const [manualReceipt, setManualReceipt] = useState('');
     const [manualSubmitting, setManualSubmitting] = useState(false);
+    const [paymentMode, setPaymentMode] = useState('stk');
     const pollingIntervalRef = useRef(null);
 
     const { cart } = useCart();
@@ -397,6 +398,106 @@ export default function CheckoutPaymentPage(){
         }
     }
 
+    const submitDirectManualPayment = () => {
+        if (!manualReceipt || manualReceipt.trim().length < 5) {
+            setErrorMsg("Please enter a valid M-Pesa receipt number.");
+            return;
+        }
+
+        // Client-side Constraints Validation
+        const brandTotals = {};
+        for (const p of products) {
+            if (p.is_bulk && p.quantity < p.min_order_quantity) {
+                setErrorMsg(`Wholesale minimum order quantity for ${p.name} is ${p.min_order_quantity}.`);
+                return;
+            }
+            if (p.brand && p.brand.id) {
+                if (!brandTotals[p.brand.id]) {
+                    brandTotals[p.brand.id] = { name: p.brand.name, max: parseFloat(p.brand.max_order_amount || 0), total: 0 };
+                }
+                brandTotals[p.brand.id].total += (p.price * p.quantity);
+            }
+        }
+        
+        for (const bId in brandTotals) {
+            const b = brandTotals[bId];
+            if (b.max > 0 && b.total > b.max) {
+                setErrorMsg(`Maximum order limit exceeded for ${b.name}. Limit is KES ${b.max}. (Your total: KES ${b.total})`);
+                return;
+            }
+        }
+
+        setIsProcessing(true);
+        setErrorMsg('');
+
+        const finalTotal = finalOrderTotal;
+        const deliveryMethod = pickup ? 'pickup' : 'delivery';
+        const pickupStation = pickup ? (PICKUP_LOCATIONS.find(l => l.id === pickup)?.name) : null;
+
+        const processManualReceipt = async (orderId) => {
+            try {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/pay/mpesa/manual-receipt`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${load('token')}`
+                    },
+                    body: JSON.stringify({
+                        order_id: orderId,
+                        receipt_number: manualReceipt
+                    })
+                });
+                const data = await res.json();
+                
+                if (data.success) {
+                    router.push('/checkout/success?type=manual');
+                } else {
+                    setErrorMsg(data.message || "Failed to submit receipt.");
+                    setIsProcessing(false);
+                }
+            } catch (err) {
+                console.error("Manual receipt error:", err);
+                setErrorMsg("Network error. Please try again.");
+                setIsProcessing(false);
+            }
+        };
+
+        if (createdOrderId) {
+            processManualReceipt(createdOrderId);
+            return;
+        }
+
+        postData(
+            (response)=>{
+                if(response.success){
+                    const orderSlug = response.data.slug;
+                    setCreatedOrderId(orderSlug);
+                    processManualReceipt(orderSlug);
+                } else {
+                    setIsProcessing(false);
+                    setErrorMsg("Failed to place order. Please try again.");
+                }
+            },
+            {
+                total: finalTotal,
+                payment_method: 'mpesa',
+                shipping: Number(shipping),
+                order_details: orderDetails,
+                sales: products,
+                pickup_station: pickupStation,
+                delivery_method: deliveryMethod,
+                delivery_zone: deliveryZone,
+                latitude: coordinates?.latitude,
+                longitude: coordinates?.longitude
+            },
+            '/orders',
+            process.env.NEXT_PUBLIC_API_URL,
+            load('token'),
+            { 'Idempotency-Key': idempotencyKey },
+            false
+        )
+    }
+
     return(
         <main className="md:max-w-[80vw] mx-auto md:my-10 p-2 pb-28 md:pb-10">
             <div className="mb-6 flex items-center justify-between">
@@ -490,36 +591,74 @@ export default function CheckoutPaymentPage(){
 
 
                     <h6 className="font-semibold capitalize mt-8 mb-2">How would you like to place your order ?</h6>
-                    <div className="my-3 p-4 border-[1px] border-green-500 rounded-lg bg-green-50">
-                        <div className="flex justify-center md:justify-start items-center mb-4">
-                            <Image 
-                                src="/mpesa.svg" 
-                                alt="M-Pesa" 
-                                width={120}
-                                height={56}
-                                className="h-12 sm:h-14 w-auto object-contain drop-shadow-sm" 
+                    {!isPolling && !paymentTimeout && (
+                        <div className="flex flex-col sm:flex-row gap-4 mb-4">
+                            <label className={`flex items-center gap-2 cursor-pointer p-3 rounded-lg border-2 flex-1 transition-all ${paymentMode === 'stk' ? 'border-primary bg-primary/5' : 'border-gray-200 hover:border-gray-300'}`}>
+                                <input type="radio" name="paymentMode" value="stk" checked={paymentMode === 'stk'} onChange={(e) => {setPaymentMode(e.target.value); setErrorMsg('');}} className="hidden" />
+                                {paymentMode === 'stk' ? <span className="icon-[grommet-icons--radial-selected] w-5 h-5 text-primary shrink-0"/> : <span className="icon-[grommet-icons--radial] w-5 h-5 shrink-0 text-gray-400"/>}
+                                <span className="font-semibold text-sm">M-Pesa Prompt (STK Push)</span>
+                            </label>
+                            <label className={`flex items-center gap-2 cursor-pointer p-3 rounded-lg border-2 flex-1 transition-all ${paymentMode === 'manual' ? 'border-primary bg-primary/5' : 'border-gray-200 hover:border-gray-300'}`}>
+                                <input type="radio" name="paymentMode" value="manual" checked={paymentMode === 'manual'} onChange={(e) => {setPaymentMode(e.target.value); setErrorMsg('');}} className="hidden" />
+                                {paymentMode === 'manual' ? <span className="icon-[grommet-icons--radial-selected] w-5 h-5 text-primary shrink-0"/> : <span className="icon-[grommet-icons--radial] w-5 h-5 shrink-0 text-gray-400"/>}
+                                <span className="font-semibold text-sm">Pay Manually</span>
+                            </label>
+                        </div>
+                    )}
+
+                    {(!isPolling && !paymentTimeout && paymentMode === 'stk') && (
+                        <div className="my-3 p-4 border-[1px] border-green-500 rounded-lg bg-green-50">
+                            <div className="flex justify-center md:justify-start items-center mb-4">
+                                <Image 
+                                    src="/mpesa.svg" 
+                                    alt="M-Pesa" 
+                                    width={120}
+                                    height={56}
+                                    className="h-12 sm:h-14 w-auto object-contain drop-shadow-sm" 
+                                />
+                            </div>
+                            <p className="text-sm text-green-700 mb-2">Enter the M-Pesa phone number that will receive the payment prompt.</p>
+                            <input 
+                              type="tel" name="mpesa_contact" placeholder="e.g. 0712345678" 
+                              className="block w-full p-3 border-[1px] border-green-400 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                              value={contact}
+                              onChange={e=>setContact(e.target.value)}
                             />
                         </div>
-                        <p className="text-sm text-green-700 mb-2">Enter the M-Pesa phone number that will receive the payment prompt.</p>
-                        <input 
-                          type="tel" name="mpesa_contact" placeholder="e.g. 0712345678" 
-                          className="block w-full p-3 border-[1px] border-green-400 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                          value={contact}
-                          onChange={e=>setContact(e.target.value)}
-                        />
-                    </div>
+                    )}
+
+                    {(!isPolling && !paymentTimeout && paymentMode === 'manual') && (
+                        <div className="my-3 p-4 border-[1px] border-gray-200 rounded-lg bg-gray-50">
+                            <div className="text-sm text-gray-700">
+                                <p className="mb-1">1. Go to M-Pesa &gt; Lipa na M-Pesa &gt; <strong>Buy Goods</strong></p>
+                                <p className="mb-1">2. Till Number: <strong>960393</strong></p>
+                                <p className="mb-3">3. Amount: <strong>KES {finalOrderTotal}</strong></p>
+                                
+                                <label className="block text-sm font-semibold mb-1">Enter M-Pesa Receipt Number</label>
+                                <input 
+                                    type="text" 
+                                    placeholder="e.g. SHX1234567" 
+                                    value={manualReceipt}
+                                    onChange={(e) => setManualReceipt(e.target.value.toUpperCase())}
+                                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary mb-3 uppercase"
+                                />
+                            </div>
+                        </div>
+                    )}
                     
                     {errorMsg && (
                         <p className="text-red-500 text-sm my-3 font-semibold text-center">{errorMsg}</p>
                     )}
 
-                    <button 
-                        disabled={isProcessing && !paymentTimeout}
-                        onClick={submitOrder} 
-                        className={`mt-6 text-white block text-center w-full py-4 rounded-xl font-bold text-lg hover:bg-opacity-90 transition-all ${paymentTimeout ? 'hidden' : 'bg-primary disabled:bg-gray-400 disabled:cursor-not-allowed'}`}
-                    >
-                        {isPolling ? 'Confirming Payment...' : (isProcessing ? 'Processing...' : 'Pay & Place Order')}
-                    </button>
+                    {(!isPolling && !paymentTimeout) && (
+                        <button 
+                            disabled={isProcessing}
+                            onClick={paymentMode === 'stk' ? submitOrder : submitDirectManualPayment} 
+                            className={`mt-6 text-white block text-center w-full py-4 rounded-xl font-bold text-lg hover:bg-opacity-90 transition-all bg-primary disabled:bg-gray-400 disabled:cursor-not-allowed`}
+                        >
+                            {isProcessing ? 'Processing...' : (paymentMode === 'stk' ? 'Pay & Place Order' : 'Submit Receipt')}
+                        </button>
+                    )}
                     
                     {isPolling && (
                         <div className="mt-4 p-4 bg-primary/5 border border-primary/20 rounded-xl text-center">
@@ -600,10 +739,10 @@ export default function CheckoutPaymentPage(){
                     </div>
                     <button
                         disabled={isProcessing}
-                        onClick={submitOrder}
+                        onClick={paymentMode === 'stk' ? submitOrder : submitDirectManualPayment}
                         className="bg-primary text-white py-3 px-6 rounded-xl font-bold text-sm hover:bg-opacity-90 transition-all disabled:bg-gray-400 disabled:cursor-not-allowed flex-1 max-w-[200px]"
                     >
-                        {isProcessing ? 'Processing...' : 'Pay & Place Order'}
+                        {isProcessing ? 'Processing...' : (paymentMode === 'stk' ? 'Pay & Place Order' : 'Submit Receipt')}
                     </button>
                 </div>
             )}

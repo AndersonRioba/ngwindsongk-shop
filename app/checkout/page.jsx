@@ -327,24 +327,7 @@ export default function CheckoutInfoPage(){
                                     />
                                     {errors.full_name && <p className="text-red-500 text-xs mt-1 font-medium">{errors.full_name}</p>}
                                 </div>
-                                <div>
-                                    <label htmlFor="email">
-                                        Email <span className="text-black/40 text-xs">(optional)</span>
-                                    </label>
-                                    <input 
-                                        id="email"
-                                        type="email" 
-                                        inputMode="email"
-                                        className={`block w-full h-11 px-4 border-[1px] rounded-xl mt-1 focus:outline-none focus:ring-2 transition-all ${errors.email ? 'border-red-500 focus:ring-red-200' : 'border-primary focus:ring-primary/20'}`} 
-                                        placeholder="jane@example.com" 
-                                        value={orderDetails.email}
-                                        onChange={e=>{
-                                            setOrderDetails({...orderDetails, email:e.target.value});
-                                            if(errors.email) setErrors({...errors, email:null});
-                                        }}
-                                    />
-                                    {errors.email && <p className="text-red-500 text-xs mt-1 font-medium">{errors.email}</p>}
-                                </div>
+
                                 <div>
                                     <label htmlFor="phone">
                                         Phone <span className="text-red-500">*</span>
