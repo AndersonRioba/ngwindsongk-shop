@@ -11,6 +11,10 @@ export default function usePageTracking() {
         // Ensure this only runs on the client
         if (typeof window === 'undefined') return;
 
+        // Check for admin override cookie
+        const disableAnalytics = document.cookie.includes('disable_analytics=true');
+        if (disableAnalytics) return;
+
         // 1. Session ID management (persists for the browser session)
         let sessionId = sessionStorage.getItem('analytics_session_id');
         if (!sessionId) {

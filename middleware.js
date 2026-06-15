@@ -26,43 +26,14 @@ export async function middleware(request) {
         return NextResponse.next();
     }
 
-    // 2. Prepare tracking data
-    // Note: We can't use document.referrer or sessionStorage here as it's server-side.
-    // We use headers.
-    const userAgent = request.headers.get('user-agent') || '';
-    const referrer = request.headers.get('referer') || '';
-    const ip = request.headers.get('x-forwarded-for') || request.ip || '';
-    
-    // Attempt to get session ID from cookie if it exists
-    let sessionId = request.cookies.get('analytics_session_id')?.value;
-    
-    // Check for admin override cookie
-    const disableAnalytics = request.cookies.get('disable_analytics')?.value === 'true';
+    const res = NextResponse.next();
+    // Add security headers
+    res.headers.set('X-Frame-Options', 'SAMEORIGIN');
+    res.headers.set('X-Content-Type-Options', 'nosniff');
+    res.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
+    res.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
 
-    // We can fire a background request to the API
-    // Fire and forget
-    if (!disableAnalytics) {
-        try {
-            fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://api.ngwindsongk.com'}/api/pageviews`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'User-Agent': userAgent,
-                'X-Forwarded-For': ip,
-            },
-            body: JSON.stringify({
-                path: pathname,
-                referrer: referrer,
-                session_id: sessionId || 'server-session-' + Math.random().toString(36).substring(7),
-                is_server_side: true,
-            }),
-        }).catch(() => {}); // Silent fail
-        } catch (e) {
-            // Silent fail
-        }
-    }
-
-    return NextResponse.next();
+    return res;
 }
 
 export const config = {
