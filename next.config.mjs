@@ -52,7 +52,7 @@ const nextConfig = {
                     },
                     {
                         key: 'Content-Security-Policy',
-                        value: "default-src 'self' 'unsafe-inline' 'unsafe-eval' http://localhost:8000 http://127.0.0.1:8000 https://api.ngwindsongk.com; img-src 'self' data: blob: http://localhost:8000 https://encrypted-tbn0.gstatic.com https://images.unsplash.com; font-src 'self' data:;",
+                        value: "default-src 'self' 'unsafe-inline' 'unsafe-eval' http://localhost:8000 http://127.0.0.1:8000 https://api.ngwindsongk.com; img-src 'self' data: blob: http://localhost:8000 https://encrypted-tbn0.gstatic.com https://images.unsplash.com; font-src 'self' data:; frame-src 'self' https://www.youtube.com https://youtube.com https://www.youtube-nocookie.com;",
                     }
                 ],
             },
