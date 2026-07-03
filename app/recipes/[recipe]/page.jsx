@@ -91,7 +91,7 @@ export default function RecipeDetail() {
 
     const getEmbedUrl = (url) => {
         if (!url) return null;
-        const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+        const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|shorts\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
         const videoId = match ? match[1] : null;
         return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
     }
