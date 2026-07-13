@@ -179,10 +179,15 @@ export default function CheckoutPaymentPage(){
                         : null;
                     
                     const variationPrice = parseFloat(variation?.price || 0);
-                    const variationDiscount = parseFloat(variation?.discount || 0);
+                    // Use nullish coalescing so a 0-discount on the variation is respected,
+                    // and null/undefined falls through to the product-level discount
+                    const variationDiscountRaw = variation?.discount ?? null;
+                    const variationDiscount = variationDiscountRaw !== null ? parseFloat(variationDiscountRaw) : null;
                     
-                    let basePrice = variationPrice || parseFloat(data.price || 0);
-                    let discountAmount = variationDiscount || parseFloat(data.discount || 0);
+                    let basePrice = variationPrice > 0 ? variationPrice : parseFloat(data.price || 0);
+                    let discountAmount = variationDiscount !== null
+                        ? variationDiscount
+                        : parseFloat(data.discount || 0);
                     
                     let itemPrice = Math.max(0, basePrice - discountAmount);
                     return {

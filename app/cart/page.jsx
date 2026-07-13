@@ -54,11 +54,23 @@ function CartItem({product, setTotal}){
 
     useEffect(()=>{
         if(data && !isLoading && !error && !initialized.current){
-            const variationPrice = parseFloat(product.variation?.price || 0);
-            const variationDiscount = parseFloat(product.variation?.discount || 0);
+            // Prefer fresh variation data from API over potentially stale stored cart data
+            const freshVariation = product.variation?.id
+                ? (data?.product_variations || []).find(v => v.id === product.variation.id)
+                : null;
+            const activeVariation = freshVariation || product.variation;
 
-            const basePrice = variationPrice || parseFloat(data?.price || 0);
-            const discountAmount = variationDiscount || parseFloat(data?.discount || 0);
+            const variationPrice = parseFloat(activeVariation?.price || 0);
+            // Use ?? (nullish coalescing) so a legitimate 0-discount is respected,
+            // and null/undefined falls through to product-level discount
+            const variationDiscountRaw = activeVariation?.discount ?? null;
+            const variationDiscount = variationDiscountRaw !== null ? parseFloat(variationDiscountRaw) : null;
+
+            const basePrice = variationPrice > 0 ? variationPrice : parseFloat(data?.price || 0);
+            // If variation has an explicit discount (even 0), use it; otherwise fall back to product discount
+            const discountAmount = variationDiscount !== null
+                ? variationDiscount
+                : parseFloat(data?.discount || 0);
             
             const finalPrice = Math.max(0, basePrice - discountAmount);
             const qty = parseInt(product?.quantity) || 1;
