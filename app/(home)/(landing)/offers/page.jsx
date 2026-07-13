@@ -6,8 +6,9 @@ import ProductListing, { ProductListingSkeleton } from "@/app/UI/ProductListing"
 
 export default function OffersPage() {
     let { data: products, error, isLoading } = useSWR(['/products', { offers: true }], fetcher, {
-        revalidateOnFocus: false,
-        revalidateOnReconnect: false,
+        // Revalidate on focus so backend discount updates appear immediately
+        revalidateOnFocus: true,
+        revalidateOnReconnect: true,
         revalidateOnMount: true,
         errorRetryInterval: 300000
     });

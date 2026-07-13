@@ -122,9 +122,10 @@ export default function ProductsClient({ fallbackData }) {
 
     let { data: products, error, isLoading } = useSWR(['/products', { per_page: 500 }], fetcher, {
         fallbackData: fallbackData,
-        revalidateOnFocus: false,
-        revalidateOnReconnect: false,
-        revalidateOnMount: false, // We already have fresh data from the server
+        // Revalidate on mount so price changes in the backend are always reflected
+        revalidateOnFocus: true,
+        revalidateOnReconnect: true,
+        revalidateOnMount: true,
         errorRetryInterval: 300000
     });
 

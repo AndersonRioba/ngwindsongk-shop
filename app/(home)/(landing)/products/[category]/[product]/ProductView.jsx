@@ -189,8 +189,9 @@ function Reviews({product}){
 
 function Related({product, category}){
     let { data, error, isLoading } = useSWR([`/products`,{category, exclude: product}], fetcher,{
-        revalidateOnFocus: false,
-        revalidateOnReconnect: false,
+        // Revalidate on mount so related product prices stay fresh
+        revalidateOnFocus: true,
+        revalidateOnReconnect: true,
         revalidateOnMount: true,
         errorRetryInterval: 300000
     });
@@ -326,9 +327,10 @@ export default function ProductView({params, initialProduct, initialDescription}
     
     let { data, error, isLoading } = useSWR([`/products/${product}`,{}], fetcher,{
         fallbackData: initialProduct,
-        revalidateOnFocus: false,
-        revalidateOnReconnect: false,
-        revalidateOnMount: false,
+        // Always revalidate so backend price/discount changes are immediately visible
+        revalidateOnFocus: true,
+        revalidateOnReconnect: true,
+        revalidateOnMount: true,
         errorRetryInterval: 300000
     });
     

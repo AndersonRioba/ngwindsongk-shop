@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useEffect, useState, useContext, useRef } from "react";
+import { useEffect, useState, useContext } from "react";
 import { CartContext } from "@/app/lib/providers/CartProvider";
 import { CheckoutContext } from "@/app/lib/providers/CheckoutProvider";
 import useSWR from "swr";
@@ -14,8 +14,8 @@ import { getImageUrl } from "@/app/lib/utils/image";
 
 function Related({product, category='oats'}){
     let { data, error, isLoading } = useSWR([`/products`,{category, exclude: product}], fetcher,{
-        revalidateOnFocus: false,
-        revalidateOnReconnect: false,
+        revalidateOnFocus: true,
+        revalidateOnReconnect: true,
         revalidateOnMount: true,
         errorRetryInterval: 300000
     });
@@ -44,30 +44,25 @@ function CartItem({product, setTotal}){
     const { removeFromCart, updateCartQuantity } = useCart();
 
     const { data, error, isLoading } = useSWR([`/products/${product.product}`,{}], fetcher,{
-        revalidateOnFocus: false,
-        revalidateOnReconnect: false,
-        revalidateOnMount: true,
+        // Let the global SWRConfig control revalidation so updates from the backend
+        // are always reflected (revalidateOnFocus / revalidateIfStale are set globally)
         errorRetryInterval: 300000
     })
 
-    const initialized = useRef(false);
-
     useEffect(()=>{
-        if(data && !isLoading && !error && !initialized.current){
-            // Prefer fresh variation data from API over potentially stale stored cart data
+        if(data && !isLoading && !error){
+            // Always recalculate from latest API data so price/discount changes
+            // made in the backend are immediately reflected here
             const freshVariation = product.variation?.id
                 ? (data?.product_variations || []).find(v => v.id === product.variation.id)
                 : null;
             const activeVariation = freshVariation || product.variation;
 
             const variationPrice = parseFloat(activeVariation?.price || 0);
-            // Use ?? (nullish coalescing) so a legitimate 0-discount is respected,
-            // and null/undefined falls through to product-level discount
             const variationDiscountRaw = activeVariation?.discount ?? null;
             const variationDiscount = variationDiscountRaw !== null ? parseFloat(variationDiscountRaw) : null;
 
             const basePrice = variationPrice > 0 ? variationPrice : parseFloat(data?.price || 0);
-            // If variation has an explicit discount (even 0), use it; otherwise fall back to product discount
             const discountAmount = variationDiscount !== null
                 ? variationDiscount
                 : parseFloat(data?.discount || 0);
@@ -77,13 +72,11 @@ function CartItem({product, setTotal}){
 
             setAmount(finalPrice);
             setQuantity(qty);
-            initialized.current = true;
             setTotal(prev => (parseFloat(prev) || 0) + (finalPrice * qty));
 
-            // Cleanup for React StrictMode: subtract on unmount to cancel double-add
+            // Cleanup: subtract contribution when data changes or component unmounts
             return () => {
                 setTotal(prev => (parseFloat(prev) || 0) - (finalPrice * qty));
-                initialized.current = false;
             };
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps

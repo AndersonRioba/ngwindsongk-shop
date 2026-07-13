@@ -96,9 +96,10 @@ export default function CategoryClient({ fallbackData, initialSearch = "" }) {
         fetcher,
         {
             fallbackData: fallbackData,
-            revalidateOnFocus: false,
-            revalidateOnReconnect: false,
-            revalidateOnMount: false,
+            // Revalidate on mount so backend price changes are always visible
+            revalidateOnFocus: true,
+            revalidateOnReconnect: true,
+            revalidateOnMount: true,
             errorRetryInterval: 300000
         }
     );
