@@ -3,7 +3,7 @@ import ProductsClient from "./ProductsClient";
 async function getProductsData() {
     try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products?per_page=500`, {
-            next: { revalidate: 60 }
+            next: { tags: ['products'], revalidate: 60 }
         });
         if (!res.ok) return null;
         return res.json();
@@ -12,6 +12,7 @@ async function getProductsData() {
         return null;
     }
 }
+
 
 export const metadata = {
     title: "All Products | Ngwindsongk",

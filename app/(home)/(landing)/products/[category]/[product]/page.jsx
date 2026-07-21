@@ -3,7 +3,7 @@ import ProductView from "./ProductView";
 async function getProductData(slug) {
     try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${slug}`, {
-            next: { revalidate: 3600 } // Cache for 1 hour
+            next: { tags: ['products'], revalidate: 3600 }
         });
         if (!res.ok) return null;
         return res.json();
@@ -16,7 +16,7 @@ async function getProductData(slug) {
 async function getDescriptionData(slug) {
     try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/descriptions/${slug}`, {
-            next: { revalidate: 3600 }
+            next: { tags: ['products'], revalidate: 3600 }
         });
         if (!res.ok) return null;
         return res.json();
@@ -25,6 +25,7 @@ async function getDescriptionData(slug) {
         return null;
     }
 }
+
 
 export async function generateMetadata({ params }) {
     const product = await getProductData(params.product);

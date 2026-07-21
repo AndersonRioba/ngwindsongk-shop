@@ -31,7 +31,7 @@ async function getCategoryProducts(category, page = 1, search = "") {
     try {
         const res = await fetch(
             `${process.env.NEXT_PUBLIC_API_URL}/products?${params.toString()}`,
-            { next: { revalidate: 60 } }
+            { next: { tags: ['products'], revalidate: 60 } }
         );
         if (!res.ok) return null;
         return res.json();

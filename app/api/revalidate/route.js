@@ -1,4 +1,4 @@
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import { NextResponse } from 'next/server';
 
 const CORS_HEADERS = {
@@ -24,11 +24,12 @@ async function handleRevalidate(request) {
     }
 
     try {
+        revalidateTag('products');
         revalidatePath('/', 'layout');
         return NextResponse.json(
             {
                 revalidated: true,
-                message: 'All Next.js cached pages successfully purged and revalidated.',
+                message: 'All Next.js cached pages and products successfully purged and revalidated.',
                 now: Date.now(),
             },
             { headers: CORS_HEADERS }
@@ -40,6 +41,7 @@ async function handleRevalidate(request) {
         );
     }
 }
+
 
 export async function POST(request) {
     return handleRevalidate(request);

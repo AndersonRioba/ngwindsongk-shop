@@ -355,10 +355,15 @@ export default function ProductView({params, initialProduct, initialDescription}
             const primary = (data.product_images || []).filter(image=>image.is_primary)[0]?.url || data.product_images?.[0]?.url;
             setActiveImage(prev => prev || primary);
             if(data?.product_variations && data.product_variations.length > 0) {
-                setVariation(v => v || data.product_variations[0]);
+                setVariation(prev => {
+                    if (!prev) return data.product_variations[0];
+                    const match = data.product_variations.find(v => v.id === prev.id);
+                    return match || data.product_variations[0];
+                });
             }
         }
     },[data, isLoading, error])
+
 
     if(!displayProduct && (isLoading || error)) return <div className="p-20 text-center"><Spinner/></div>
     
