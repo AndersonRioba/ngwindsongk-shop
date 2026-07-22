@@ -94,7 +94,7 @@ export default function CheckoutPaymentPage(){
         if (!settings || products.length === 0) return;
 
         // If shipping was already set by the zone picker on the previous page, don't overwrite it
-        if (shipping !== 0 && shipping !== 350 && !pickup) {
+        if (shipping !== 0 && !pickup) {
             setShippingLoading(false);
             return;
         }
@@ -150,17 +150,17 @@ export default function CheckoutPaymentPage(){
                         setDeliveryZone(res.matched_location);
                     } else {
                         // Keep current shipping if set, otherwise fallback
-                        if (!shipping) setShipping(350); 
+                        if (!shipping) setShipping(0); 
                     }
                 } catch (err) {
                     console.error("Failed to fetch delivery fee:", err);
-                    if (!shipping) setShipping(350);
+                    if (!shipping) setShipping(0);
                 } finally {
                     setShippingLoading(false);
                 }
             } else {
                 // If shipping is already set from zone picker, keep it
-                if (!shipping) setShipping(350);
+                if (!shipping) setShipping(0);
                 setShippingLoading(false);
             }
         };
