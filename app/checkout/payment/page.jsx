@@ -40,6 +40,7 @@ export default function CheckoutPaymentPage(){
     const [manualReceipt, setManualReceipt] = useState('');
     const [manualSubmitting, setManualSubmitting] = useState(false);
     const [paymentMode, setPaymentMode] = useState('stk');
+    const [isShippingFallback, setIsShippingFallback] = useState(false);
     const pollingIntervalRef = useRef(null);
 
     const { cart } = useCart();
@@ -105,6 +106,7 @@ export default function CheckoutPaymentPage(){
                 const selectedLocation = PICKUP_LOCATIONS.find(l => l.id === pickup);
                 setShipping(selectedLocation ? selectedLocation.fee : 0);
                 setDeliveryZone(selectedLocation ? selectedLocation.name : null);
+                setIsShippingFallback(false);
                 setShippingLoading(false);
                 return;
             }
@@ -132,6 +134,7 @@ export default function CheckoutPaymentPage(){
             if (total >= freeDeliveryThreshold && !requiresPaidShipping) {
                 setShipping(0);
                 setDeliveryZone("Free Delivery Threshold");
+                setIsShippingFallback(false);
                 setShippingLoading(false);
                 return;
             }
@@ -148,19 +151,29 @@ export default function CheckoutPaymentPage(){
                     if (res.delivery_fee !== null) {
                         setShipping(res.delivery_fee);
                         setDeliveryZone(res.matched_location);
+                        setIsShippingFallback(false);
                     } else {
                         // Keep current shipping if set, otherwise fallback
-                        if (!shipping) setShipping(0); 
+                        if (!shipping) {
+                            setShipping(0);
+                            setIsShippingFallback(true);
+                        }
                     }
                 } catch (err) {
                     console.error("Failed to fetch delivery fee:", err);
-                    if (!shipping) setShipping(0);
+                    if (!shipping) {
+                        setShipping(0);
+                        setIsShippingFallback(true);
+                    }
                 } finally {
                     setShippingLoading(false);
                 }
             } else {
                 // If shipping is already set from zone picker, keep it
-                if (!shipping) setShipping(0);
+                if (!shipping) {
+                    setShipping(0);
+                    setIsShippingFallback(true);
+                }
                 setShippingLoading(false);
             }
         };
@@ -572,14 +585,20 @@ export default function CheckoutPaymentPage(){
                             <p className="">Items</p>
                             <p>{total} <span className="text-sm uppercase">kes</span> </p>
                         </div>
-                        {!pickup && !shippingLoading && shipping === 0 && (
+                        {!pickup && !shippingLoading && shipping === 0 && !isShippingFallback && (
                             <p className="text-xs mb-1 text-primary bg-primary/10 p-2 rounded-lg w-fit">Free delivery applied</p>
+                        )}
+                        {isShippingFallback && !shippingLoading && (
+                            <div className="text-xs mb-3 text-amber-700 bg-amber-50 border border-amber-200 p-3 rounded-lg">
+                                <span className="font-semibold block mb-1">Delivery Notice:</span>
+                                The delivery fee for your location is not included in this total. You will be charged separately for delivery upon dispatch.
+                            </div>
                         )}
                         <div className="flex mb-3 justify-between text-base">
                             <p className="">Shipping</p>
                             {shippingLoading
                                 ? <p className="text-sm text-black/50 animate-pulse">Calculating...</p>
-                                : <p>{Number(shipping)} <span className="text-sm uppercase">kes</span></p>
+                                : <p>{Number(shipping) === 0 && isShippingFallback ? 'To be communicated' : `${Number(shipping)} `}{(!isShippingFallback || Number(shipping) > 0) && <span className="text-sm uppercase">kes</span>}</p>
                             }
                         </div>
 
