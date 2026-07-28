@@ -337,7 +337,8 @@ export default function CheckoutPaymentPage(){
                 pickup_station: pickupStation,
                 delivery_method: deliveryMethod,
                 delivery_zone: deliveryZone,
-                latitude: coordinates.latitude,
+                delivery_county_id: orderDetails.delivery_county_id || null,
+                latitude: coordinates ? coordinates.latitude : null,
                 longitude: coordinates.longitude
             },
             '/orders',
@@ -505,6 +506,7 @@ export default function CheckoutPaymentPage(){
                 pickup_station: pickupStation,
                 delivery_method: deliveryMethod,
                 delivery_zone: deliveryZone,
+                delivery_county_id: orderDetails.delivery_county_id || null,
                 latitude: coordinates?.latitude,
                 longitude: coordinates?.longitude
             },
