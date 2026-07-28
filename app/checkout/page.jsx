@@ -415,14 +415,6 @@ export default function CheckoutInfoPage(){
                         {/* Delivery: town input + address input */}
                         {deliveryMode === 'delivery' && (
                             <div className="mb-6 space-y-4">
-                                {/* Info bar */}
-                                <div className="flex items-center gap-2 p-3 bg-blue-50 border border-blue-100 rounded-lg">
-                                    <span className="icon-[fluent--vehicle-truck-24-regular] w-5 h-5 text-blue-600 shrink-0" />
-                                    <p className="text-sm text-blue-800 font-medium">
-                                        Enter your delivery town — our team will call to confirm delivery details and fees.
-                                    </p>
-                                </div>
-
                                 {/* County Autocomplete Search */}
                                 <div className="relative" ref={countyRef}>
                                     <label htmlFor="county_search" className="block text-sm font-medium mb-1">
