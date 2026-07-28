@@ -140,11 +140,13 @@ export default function CheckoutInfoPage(){
         setDeliveryMode(mode);
         if (mode === 'delivery') setPickup(null);
         if (mode === 'pickup') {
-            // COMMENTED OUT: county/urban state resets
-            // setSelectedCounty(null);
-            // setSelectedUrban('');
-            setDeliveryTown('');
+            setSelectedCounty(null);
+            setCountySearch('');
+            setSelectedTown(null);
+            setTownSearch('');
             setDeliveryFee(null);
+            setShipping(0);
+            setDeliveryZone('');
         }
     };
 
@@ -194,14 +196,6 @@ export default function CheckoutInfoPage(){
         }
     };
     */
-
-    const handleDeliveryTownChange = (e) => {
-        const town = e.target.value;
-        setDeliveryTown(town);
-        setDeliveryZone(town || null);
-        setOrderDetails(prev => ({ ...prev, delivery_zone: town, delivery_county: '' }));
-        if (errors.delivery_town) setErrors({ ...errors, delivery_town: null });
-    };
 
     const selectPickupLocation = (locationId) => {
         setPickup(locationId);
@@ -378,7 +372,7 @@ export default function CheckoutInfoPage(){
                                         <p className="font-semibold text-base">Delivery</p>
                                         <p className="text-black/60 text-sm">Have your order delivered to your address — urban centres in Kenya</p>
                                         <span className="mt-1.5 inline-block text-xs font-bold text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-full">
-                                            {deliveryTown ? `📍 ${deliveryTown}` : 'Enter your town'}
+                                            {deliveryZone ? `📍 ${deliveryZone}` : 'Select your location'}
                                         </span>
                                     </div>
                                 </div>
