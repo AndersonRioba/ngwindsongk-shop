@@ -40,6 +40,7 @@ export default function CheckoutPaymentPage(){
     const [manualReceipt, setManualReceipt] = useState('');
     const [manualSubmitting, setManualSubmitting] = useState(false);
     const [paymentMode, setPaymentMode] = useState('stk');
+    const [isPlacingManualOrder, setIsPlacingManualOrder] = useState(false);
     const [isShippingFallback, setIsShippingFallback] = useState(false);
     const pollingIntervalRef = useRef(null);
 
@@ -417,12 +418,8 @@ export default function CheckoutPaymentPage(){
         }
     }
 
-    const submitDirectManualPayment = () => {
-        if (!manualReceipt || manualReceipt.trim().length < 5) {
-            setErrorMsg("Please enter a valid M-Pesa receipt number.");
-            return;
-        }
-
+    // Step 1 of manual flow: create the order and surface the order slug
+    const placeManualOrder = () => {
         // Client-side Constraints Validation
         const brandTotals = {};
         for (const p of products) {
@@ -437,7 +434,6 @@ export default function CheckoutPaymentPage(){
                 brandTotals[p.brand.id].total += (p.price * p.quantity);
             }
         }
-        
         for (const bId in brandTotals) {
             const b = brandTotals[bId];
             if (b.max > 0 && b.total > b.max) {
@@ -446,56 +442,21 @@ export default function CheckoutPaymentPage(){
             }
         }
 
-        setIsProcessing(true);
+        setIsPlacingManualOrder(true);
         setErrorMsg('');
 
         const finalTotal = finalOrderTotal;
         const deliveryMethod = pickup ? 'pickup' : 'delivery';
         const pickupStation = pickup ? (PICKUP_LOCATIONS.find(l => l.id === pickup)?.name) : null;
 
-        const processManualReceipt = async (orderId) => {
-            try {
-                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/pay/mpesa/manual-receipt`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${load('token')}`
-                    },
-                    body: JSON.stringify({
-                        order_id: orderId,
-                        receipt_number: manualReceipt
-                    })
-                });
-                const data = await res.json();
-                
-                if (data.success) {
-                    router.push('/checkout/success?type=manual');
-                } else {
-                    setErrorMsg(data.message || "Failed to submit receipt.");
-                    setIsProcessing(false);
-                }
-            } catch (err) {
-                console.error("Manual receipt error:", err);
-                setErrorMsg("Network error. Please try again.");
-                setIsProcessing(false);
-            }
-        };
-
-        if (createdOrderId) {
-            processManualReceipt(createdOrderId);
-            return;
-        }
-
         postData(
-            (response)=>{
-                if(response.success){
-                    const orderSlug = response.data.slug;
-                    setCreatedOrderId(orderSlug);
-                    processManualReceipt(orderSlug);
+            (response) => {
+                if (response.success) {
+                    setCreatedOrderId(response.data.slug);
                 } else {
-                    setIsProcessing(false);
                     setErrorMsg("Failed to place order. Please try again.");
                 }
+                setIsPlacingManualOrder(false);
             },
             {
                 total: finalTotal,
@@ -515,7 +476,7 @@ export default function CheckoutPaymentPage(){
             load('token'),
             { 'Idempotency-Key': idempotencyKey },
             false
-        )
+        );
     }
 
     return(
@@ -652,21 +613,31 @@ export default function CheckoutPaymentPage(){
 
                     {(!isPolling && !paymentTimeout && paymentMode === 'manual') && (
                         <div className="my-3 p-4 border-[1px] border-gray-200 rounded-lg bg-gray-50">
-                            <div className="text-sm text-gray-700">
-                                <p className="mb-1">1. Go to M-Pesa &gt; Lipa na M-Pesa &gt; <strong>Pay Bill</strong></p>
-                                <p className="mb-1">2. Business No: <strong>4673793</strong></p>
-                                <p className="mb-1">3. Account No: <strong>{createdOrderId}</strong></p>
-                                <p className="mb-3">4. Amount: <strong>KES {finalOrderTotal}</strong></p>
-                                
-                                <label className="block text-sm font-semibold mb-1">Enter M-Pesa Receipt Number</label>
-                                <input 
-                                    type="text" 
-                                    placeholder="e.g. SHX1234567" 
-                                    value={manualReceipt}
-                                    onChange={(e) => setManualReceipt(e.target.value.toUpperCase())}
-                                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary mb-3 uppercase"
-                                />
-                            </div>
+                            {!createdOrderId ? (
+                                // Phase 1: order not yet created — prompt user to place it
+                                <div className="text-sm text-gray-600 text-center py-2">
+                                    <p className="mb-3">Click <strong>Place Order</strong> to generate your order reference, then follow the M-Pesa instructions shown.</p>
+                                </div>
+                            ) : (
+                                // Phase 2: order created — show Paybill instructions + receipt input
+                                <div className="text-sm text-gray-700">
+                                    <div className="mb-3 p-3 bg-green-50 border border-green-200 rounded-lg">
+                                        <p className="font-semibold text-green-800 mb-1">✅ Order placed! Now pay via M-Pesa:</p>
+                                        <p className="mb-1">1. Go to M-Pesa &gt; Lipa na M-Pesa &gt; <strong>Pay Bill</strong></p>
+                                        <p className="mb-1">2. Business No: <strong>4673793</strong></p>
+                                        <p className="mb-1">3. Account No: <strong className="text-primary">{createdOrderId}</strong></p>
+                                        <p>4. Amount: <strong>KES {finalOrderTotal}</strong></p>
+                                    </div>
+                                    <label className="block text-sm font-semibold mb-1">Enter M-Pesa Receipt Number</label>
+                                    <input 
+                                        type="text" 
+                                        placeholder="e.g. SHX1234567" 
+                                        value={manualReceipt}
+                                        onChange={(e) => setManualReceipt(e.target.value.toUpperCase())}
+                                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary mb-3 uppercase"
+                                    />
+                                </div>
+                            )}
                         </div>
                     )}
                     
@@ -675,13 +646,33 @@ export default function CheckoutPaymentPage(){
                     )}
 
                     {(!isPolling && !paymentTimeout) && (
-                        <button 
-                            disabled={isProcessing}
-                            onClick={paymentMode === 'stk' ? submitOrder : submitDirectManualPayment} 
-                            className={`mt-6 text-white block text-center w-full py-4 rounded-xl font-bold text-lg hover:bg-opacity-90 transition-all bg-primary disabled:bg-gray-400 disabled:cursor-not-allowed`}
-                        >
-                            {isProcessing ? 'Processing...' : (paymentMode === 'stk' ? 'Pay & Place Order' : 'Submit Receipt')}
-                        </button>
+                        paymentMode === 'stk' ? (
+                            <button 
+                                disabled={isProcessing}
+                                onClick={submitOrder}
+                                className="mt-6 text-white block text-center w-full py-4 rounded-xl font-bold text-lg hover:bg-opacity-90 transition-all bg-primary disabled:bg-gray-400 disabled:cursor-not-allowed"
+                            >
+                                {isProcessing ? 'Processing...' : 'Pay & Place Order'}
+                            </button>
+                        ) : !createdOrderId ? (
+                            // Manual Phase 1: place the order
+                            <button
+                                disabled={isPlacingManualOrder}
+                                onClick={placeManualOrder}
+                                className="mt-6 text-white block text-center w-full py-4 rounded-xl font-bold text-lg hover:bg-opacity-90 transition-all bg-primary disabled:bg-gray-400 disabled:cursor-not-allowed"
+                            >
+                                {isPlacingManualOrder ? 'Placing Order...' : 'Place Order'}
+                            </button>
+                        ) : (
+                            // Manual Phase 2: submit the receipt
+                            <button
+                                disabled={manualSubmitting}
+                                onClick={submitManualPayment}
+                                className="mt-6 text-white block text-center w-full py-4 rounded-xl font-bold text-lg hover:bg-opacity-90 transition-all bg-primary disabled:bg-gray-400 disabled:cursor-not-allowed"
+                            >
+                                {manualSubmitting ? 'Submitting...' : 'Submit Receipt'}
+                            </button>
+                        )
                     )}
                     
                     {isPolling && (
@@ -763,11 +754,22 @@ export default function CheckoutPaymentPage(){
                         <p className="text-base font-bold text-primary">{finalOrderTotal.toLocaleString()} KES</p>
                     </div>
                     <button
-                        disabled={isProcessing}
-                        onClick={paymentMode === 'stk' ? submitOrder : submitDirectManualPayment}
+                        disabled={isProcessing || isPlacingManualOrder || manualSubmitting}
+                        onClick={
+                            paymentMode === 'stk'
+                                ? submitOrder
+                                : !createdOrderId
+                                    ? placeManualOrder
+                                    : submitManualPayment
+                        }
                         className="bg-primary text-white py-3 px-6 rounded-xl font-bold text-sm hover:bg-opacity-90 transition-all disabled:bg-gray-400 disabled:cursor-not-allowed flex-1 max-w-[200px]"
                     >
-                        {isProcessing ? 'Processing...' : (paymentMode === 'stk' ? 'Pay & Place Order' : 'Submit Receipt')}
+                        {paymentMode === 'stk'
+                            ? (isProcessing ? 'Processing...' : 'Pay & Place Order')
+                            : !createdOrderId
+                                ? (isPlacingManualOrder ? 'Placing...' : 'Place Order')
+                                : (manualSubmitting ? 'Submitting...' : 'Submit Receipt')
+                        }
                     </button>
                 </div>
             )}
