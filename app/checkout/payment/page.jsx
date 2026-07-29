@@ -786,26 +786,58 @@ export default function CheckoutPaymentPage(){
                             </div>
 
                             <div className="mt-4 text-sm text-gray-700">
-                                <p className="mb-1">1. Go to M-Pesa &gt; Lipa na M-Pesa &gt; <strong>Pay Bill</strong></p>
-                                <p className="mb-1">2. Business No: <strong>4673793</strong></p>
-                                <p className="mb-1">3. Account No: <strong>{createdOrderId}</strong></p>
-                                <p className="mb-3">4. Amount: <strong>KES {finalOrderTotal}</strong></p>
-                                
-                                <label className="block text-sm font-semibold mb-1">Enter M-Pesa Receipt Number</label>
-                                <input 
-                                    type="text" 
-                                    placeholder="e.g. SHX1234567" 
-                                    value={manualReceipt}
-                                    onChange={(e) => setManualReceipt(e.target.value.toUpperCase())}
-                                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary mb-3 uppercase"
-                                />
-                                <button 
-                                    onClick={submitManualPayment}
-                                    disabled={manualSubmitting}
-                                    className="w-full py-3 bg-black text-white font-semibold rounded-lg hover:bg-gray-800 transition disabled:bg-gray-400"
-                                >
-                                    {manualSubmitting ? 'Verifying...' : 'Submit Receipt'}
-                                </button>
+                                <div className="mb-3 p-3 bg-green-50 border border-green-200 rounded-lg">
+                                    <p className="mb-1">1. Go to M-Pesa &gt; Lipa na M-Pesa &gt; <strong>Pay Bill</strong></p>
+                                    <p className="mb-1">2. Business No: <strong>4673793</strong></p>
+                                    <p className="mb-1">3. Account No: <strong className="text-primary select-all">{createdOrderId}</strong></p>
+                                    <p>4. Amount: <strong>KES {finalOrderTotal}</strong></p>
+                                </div>
+
+                                {!isManualPolling && !manualPaymentTimeout && (
+                                    <button
+                                        onClick={() => startManualPolling(createdOrderId)}
+                                        className="w-full py-3 bg-black text-white font-semibold rounded-lg hover:bg-gray-800 transition"
+                                    >
+                                        I've paid — Check Status
+                                    </button>
+                                )}
+
+                                {isManualPolling && (
+                                    <div className="p-4 bg-primary/5 border border-primary/20 rounded-xl text-center">
+                                        <div className="flex justify-center mb-3">
+                                            <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+                                        </div>
+                                        <p className="text-sm font-semibold text-primary">{manualPollingStatus}</p>
+                                        <div className="mt-3 max-w-xs mx-auto">
+                                            <div className="flex justify-between text-xs mb-1 font-medium">
+                                                <span className={manualTimeLeft <= 30 ? 'text-red-500' : 'text-primary'}>Time remaining</span>
+                                                <span className={manualTimeLeft <= 30 ? 'text-red-500' : 'text-gray-600'}>
+                                                    {Math.floor(manualTimeLeft / 60)}:{String(manualTimeLeft % 60).padStart(2, '0')}
+                                                </span>
+                                            </div>
+                                            <div className="w-full bg-gray-200 rounded-full h-1.5 overflow-hidden">
+                                                <div
+                                                    className={`h-1.5 rounded-full transition-all duration-1000 ease-linear ${manualTimeLeft <= 30 ? 'bg-red-500' : 'bg-primary'}`}
+                                                    style={{ width: `${(manualTimeLeft / 300) * 100}%` }}
+                                                />
+                                            </div>
+                                        </div>
+                                        <p className="text-xs text-gray-500 mt-3">This page will update automatically once your payment is confirmed.</p>
+                                    </div>
+                                )}
+
+                                {manualPaymentTimeout && (
+                                    <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-xl text-center">
+                                        <p className="text-sm font-semibold text-yellow-800 mb-1">Payment not detected yet.</p>
+                                        <p className="text-xs text-yellow-700 mb-3">If you've already paid, click below to check again.</p>
+                                        <button
+                                            onClick={() => { setManualPaymentTimeout(false); startManualPolling(createdOrderId); }}
+                                            className="w-full py-2.5 bg-primary text-white font-semibold rounded-lg text-sm hover:bg-opacity-90 transition"
+                                        >
+                                            Check Payment Status
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     )}

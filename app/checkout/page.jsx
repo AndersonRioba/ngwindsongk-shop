@@ -467,10 +467,9 @@ export default function CheckoutInfoPage(){
                                                             }));
                                                             if (errors.county) setErrors(prev => ({ ...prev, county: null }));
                                                         }}
-                                                        className="px-4 py-3 hover:bg-primary/5 cursor-pointer text-sm flex justify-between items-center border-b border-gray-100 last:border-0"
+                                                        className="px-4 py-3 hover:bg-primary/5 cursor-pointer text-sm border-b border-gray-100 last:border-0"
                                                     >
                                                         <span className="font-semibold text-gray-800">{county.name}</span>
-                                                        <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">Base: KES {county.delivery_fee || 0}</span>
                                                     </div>
                                                 ))
                                             }
