@@ -41,8 +41,13 @@ export default function CheckoutPaymentPage(){
     const [manualSubmitting, setManualSubmitting] = useState(false);
     const [paymentMode, setPaymentMode] = useState('stk');
     const [isPlacingManualOrder, setIsPlacingManualOrder] = useState(false);
+    const [isManualPolling, setIsManualPolling] = useState(false);
+    const [manualPollingStatus, setManualPollingStatus] = useState('');
+    const [manualTimeLeft, setManualTimeLeft] = useState(300);
+    const [manualPaymentTimeout, setManualPaymentTimeout] = useState(false);
     const [isShippingFallback, setIsShippingFallback] = useState(false);
     const pollingIntervalRef = useRef(null);
+    const manualPollingIntervalRef = useRef(null);
 
     const { cart } = useCart();
     const router = useRouter();
@@ -66,12 +71,25 @@ export default function CheckoutPaymentPage(){
         return () => clearInterval(timer);
     }, [isPolling, timeLeft]);
 
-    // Clear polling if timeout
+    // Clear STK polling on timeout
     useEffect(() => {
         if (paymentTimeout && pollingIntervalRef.current) {
             clearInterval(pollingIntervalRef.current);
         }
     }, [paymentTimeout]);
+
+    // Manual Paybill polling timer (5-minute window)
+    useEffect(() => {
+        let timer;
+        if (isManualPolling && manualTimeLeft > 0) {
+            timer = setInterval(() => setManualTimeLeft(prev => prev - 1), 1000);
+        } else if (isManualPolling && manualTimeLeft <= 0) {
+            setIsManualPolling(false);
+            setManualPaymentTimeout(true);
+            if (manualPollingIntervalRef.current) clearInterval(manualPollingIntervalRef.current);
+        }
+        return () => clearInterval(timer);
+    }, [isManualPolling, manualTimeLeft]);
 
     useEffect(() => {
         // Generate Idempotency-Key once when the checkout component mounts
@@ -383,6 +401,33 @@ export default function CheckoutPaymentPage(){
         }, 3000);
     }
 
+    // Polls /pay/mpesa/status every 5s waiting for the C2B confirmation callback to flip the order to 'success'
+    const startManualPolling = (slug) => {
+        setIsManualPolling(true);
+        setManualPaymentTimeout(false);
+        setManualTimeLeft(300);
+        setManualPollingStatus('Waiting for your M-Pesa payment...');
+
+        if (manualPollingIntervalRef.current) clearInterval(manualPollingIntervalRef.current);
+
+        manualPollingIntervalRef.current = setInterval(async () => {
+            try {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/pay/mpesa/status/${slug}`, {
+                    headers: { 'Authorization': `Bearer ${load('token')}` }
+                });
+                const data = await res.json();
+
+                if (data.status === 'success') {
+                    clearInterval(manualPollingIntervalRef.current);
+                    setIsManualPolling(false);
+                    router.push('/checkout/success?type=paybill');
+                }
+            } catch (err) {
+                console.error('Manual payment polling error:', err);
+            }
+        }, 5000);
+    };
+
     const submitManualPayment = async () => {
         if (!manualReceipt || manualReceipt.trim().length < 5) {
             setErrorMsg("Please enter a valid M-Pesa receipt number.");
@@ -452,7 +497,9 @@ export default function CheckoutPaymentPage(){
         postData(
             (response) => {
                 if (response.success) {
-                    setCreatedOrderId(response.data.slug);
+                    const slug = response.data.slug;
+                    setCreatedOrderId(slug);
+                    startManualPolling(slug);
                 } else {
                     setErrorMsg("Failed to place order. Please try again.");
                 }
@@ -614,40 +661,69 @@ export default function CheckoutPaymentPage(){
                     {(!isPolling && !paymentTimeout && paymentMode === 'manual') && (
                         <div className="my-3 p-4 border-[1px] border-gray-200 rounded-lg bg-gray-50">
                             {!createdOrderId ? (
-                                // Phase 1: order not yet created — prompt user to place it
+                                // Phase 1: no order yet
                                 <div className="text-sm text-gray-600 text-center py-2">
-                                    <p className="mb-3">Click <strong>Place Order</strong> to generate your order reference, then follow the M-Pesa instructions shown.</p>
+                                    <p>Click <strong>Place Order</strong> to generate your order reference, then follow the M-Pesa Paybill instructions.</p>
                                 </div>
                             ) : (
-                                // Phase 2: order created — show Paybill instructions + receipt input
+                                // Phase 2: order placed — show Paybill instructions + auto-poll
                                 <div className="text-sm text-gray-700">
-                                    <div className="mb-3 p-3 bg-green-50 border border-green-200 rounded-lg">
-                                        <p className="font-semibold text-green-800 mb-1">✅ Order placed! Now pay via M-Pesa:</p>
+                                    <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                                        <p className="font-semibold text-green-800 mb-2">✅ Order placed! Now pay via M-Pesa:</p>
                                         <p className="mb-1">1. Go to M-Pesa &gt; Lipa na M-Pesa &gt; <strong>Pay Bill</strong></p>
                                         <p className="mb-1">2. Business No: <strong>4673793</strong></p>
-                                        <p className="mb-1">3. Account No: <strong className="text-primary">{createdOrderId}</strong></p>
+                                        <p className="mb-1">3. Account No: <strong className="text-primary select-all">{createdOrderId}</strong></p>
                                         <p>4. Amount: <strong>KES {finalOrderTotal}</strong></p>
                                     </div>
-                                    <label className="block text-sm font-semibold mb-1">Enter M-Pesa Receipt Number</label>
-                                    <input 
-                                        type="text" 
-                                        placeholder="e.g. SHX1234567" 
-                                        value={manualReceipt}
-                                        onChange={(e) => setManualReceipt(e.target.value.toUpperCase())}
-                                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary mb-3 uppercase"
-                                    />
+
+                                    {isManualPolling && (
+                                        <div className="p-4 bg-primary/5 border border-primary/20 rounded-xl text-center">
+                                            <div className="flex justify-center mb-3">
+                                                <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+                                            </div>
+                                            <p className="text-sm font-semibold text-primary">{manualPollingStatus}</p>
+                                            <div className="mt-3 max-w-xs mx-auto">
+                                                <div className="flex justify-between text-xs mb-1 font-medium">
+                                                    <span className={manualTimeLeft <= 30 ? 'text-red-500' : 'text-primary'}>Time remaining</span>
+                                                    <span className={manualTimeLeft <= 30 ? 'text-red-500' : 'text-gray-600'}>
+                                                        {Math.floor(manualTimeLeft / 60)}:{String(manualTimeLeft % 60).padStart(2, '0')}
+                                                    </span>
+                                                </div>
+                                                <div className="w-full bg-gray-200 rounded-full h-1.5 overflow-hidden">
+                                                    <div
+                                                        className={`h-1.5 rounded-full transition-all duration-1000 ease-linear ${manualTimeLeft <= 30 ? 'bg-red-500' : 'bg-primary'}`}
+                                                        style={{ width: `${(manualTimeLeft / 300) * 100}%` }}
+                                                    />
+                                                </div>
+                                            </div>
+                                            <p className="text-xs text-gray-500 mt-3">Pay on M-Pesa then return here. This page will update automatically once confirmed.</p>
+                                        </div>
+                                    )}
+
+                                    {manualPaymentTimeout && (
+                                        <div className="mt-2 p-4 bg-yellow-50 border border-yellow-200 rounded-xl text-center">
+                                            <p className="text-sm font-semibold text-yellow-800 mb-1">Payment not detected yet.</p>
+                                            <p className="text-xs text-yellow-700 mb-3">If you've already paid, click below to check again.</p>
+                                            <button
+                                                onClick={() => { setManualPaymentTimeout(false); startManualPolling(createdOrderId); }}
+                                                className="w-full py-2.5 bg-primary text-white font-semibold rounded-lg text-sm hover:bg-opacity-90 transition"
+                                            >
+                                                Check Payment Status
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                             )}
                         </div>
                     )}
-                    
+
                     {errorMsg && (
                         <p className="text-red-500 text-sm my-3 font-semibold text-center">{errorMsg}</p>
                     )}
 
                     {(!isPolling && !paymentTimeout) && (
                         paymentMode === 'stk' ? (
-                            <button 
+                            <button
                                 disabled={isProcessing}
                                 onClick={submitOrder}
                                 className="mt-6 text-white block text-center w-full py-4 rounded-xl font-bold text-lg hover:bg-opacity-90 transition-all bg-primary disabled:bg-gray-400 disabled:cursor-not-allowed"
@@ -655,7 +731,6 @@ export default function CheckoutPaymentPage(){
                                 {isProcessing ? 'Processing...' : 'Pay & Place Order'}
                             </button>
                         ) : !createdOrderId ? (
-                            // Manual Phase 1: place the order
                             <button
                                 disabled={isPlacingManualOrder}
                                 onClick={placeManualOrder}
@@ -663,16 +738,7 @@ export default function CheckoutPaymentPage(){
                             >
                                 {isPlacingManualOrder ? 'Placing Order...' : 'Place Order'}
                             </button>
-                        ) : (
-                            // Manual Phase 2: submit the receipt
-                            <button
-                                disabled={manualSubmitting}
-                                onClick={submitManualPayment}
-                                className="mt-6 text-white block text-center w-full py-4 rounded-xl font-bold text-lg hover:bg-opacity-90 transition-all bg-primary disabled:bg-gray-400 disabled:cursor-not-allowed"
-                            >
-                                {manualSubmitting ? 'Submitting...' : 'Submit Receipt'}
-                            </button>
-                        )
+                        ) : null  /* polling UI handles all actions in Phase 2 */
                     )}
                     
                     {isPolling && (
@@ -753,24 +819,19 @@ export default function CheckoutPaymentPage(){
                         <p className="text-xs text-gray-400 font-medium">Total</p>
                         <p className="text-base font-bold text-primary">{finalOrderTotal.toLocaleString()} KES</p>
                     </div>
-                    <button
-                        disabled={isProcessing || isPlacingManualOrder || manualSubmitting}
-                        onClick={
-                            paymentMode === 'stk'
-                                ? submitOrder
-                                : !createdOrderId
-                                    ? placeManualOrder
-                                    : submitManualPayment
-                        }
-                        className="bg-primary text-white py-3 px-6 rounded-xl font-bold text-sm hover:bg-opacity-90 transition-all disabled:bg-gray-400 disabled:cursor-not-allowed flex-1 max-w-[200px]"
-                    >
-                        {paymentMode === 'stk'
-                            ? (isProcessing ? 'Processing...' : 'Pay & Place Order')
-                            : !createdOrderId
-                                ? (isPlacingManualOrder ? 'Placing...' : 'Place Order')
-                                : (manualSubmitting ? 'Submitting...' : 'Submit Receipt')
-                        }
-                    </button>
+                    {/* Mobile CTA: hidden once manual polling starts (inline UI takes over) */}
+                    {(paymentMode === 'stk' || !createdOrderId) && (
+                        <button
+                            disabled={isProcessing || isPlacingManualOrder}
+                            onClick={paymentMode === 'stk' ? submitOrder : placeManualOrder}
+                            className="bg-primary text-white py-3 px-6 rounded-xl font-bold text-sm hover:bg-opacity-90 transition-all disabled:bg-gray-400 disabled:cursor-not-allowed flex-1 max-w-[200px]"
+                        >
+                            {paymentMode === 'stk'
+                                ? (isProcessing ? 'Processing...' : 'Pay & Place Order')
+                                : (isPlacingManualOrder ? 'Placing...' : 'Place Order')
+                            }
+                        </button>
+                    )}
                 </div>
             )}
         </main>
