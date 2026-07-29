@@ -653,9 +653,10 @@ export default function CheckoutPaymentPage(){
                     {(!isPolling && !paymentTimeout && paymentMode === 'manual') && (
                         <div className="my-3 p-4 border-[1px] border-gray-200 rounded-lg bg-gray-50">
                             <div className="text-sm text-gray-700">
-                                <p className="mb-1">1. Go to M-Pesa &gt; Lipa na M-Pesa &gt; <strong>Buy Goods</strong></p>
-                                <p className="mb-1">2. Till Number: <strong>960393</strong></p>
-                                <p className="mb-3">3. Amount: <strong>KES {finalOrderTotal}</strong></p>
+                                <p className="mb-1">1. Go to M-Pesa &gt; Lipa na M-Pesa &gt; <strong>Pay Bill</strong></p>
+                                <p className="mb-1">2. Business No: <strong>4673793</strong></p>
+                                <p className="mb-1">3. Account No: <strong>{createdOrderId}</strong></p>
+                                <p className="mb-3">4. Amount: <strong>KES {finalOrderTotal}</strong></p>
                                 
                                 <label className="block text-sm font-semibold mb-1">Enter M-Pesa Receipt Number</label>
                                 <input 
@@ -728,9 +729,10 @@ export default function CheckoutPaymentPage(){
                             </div>
 
                             <div className="mt-4 text-sm text-gray-700">
-                                <p className="mb-1">1. Go to M-Pesa &gt; Lipa na M-Pesa &gt; <strong>Buy Goods</strong></p>
-                                <p className="mb-1">2. Till Number: <strong>960393</strong></p>
-                                <p className="mb-3">3. Amount: <strong>KES {finalOrderTotal}</strong></p>
+                                <p className="mb-1">1. Go to M-Pesa &gt; Lipa na M-Pesa &gt; <strong>Pay Bill</strong></p>
+                                <p className="mb-1">2. Business No: <strong>4673793</strong></p>
+                                <p className="mb-1">3. Account No: <strong>{createdOrderId}</strong></p>
+                                <p className="mb-3">4. Amount: <strong>KES {finalOrderTotal}</strong></p>
                                 
                                 <label className="block text-sm font-semibold mb-1">Enter M-Pesa Receipt Number</label>
                                 <input 
