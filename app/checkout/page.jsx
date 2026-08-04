@@ -272,7 +272,7 @@ export default function CheckoutInfoPage(){
                             </div>
                         </div>
 
-                        {/* Returning customer toggle */}
+                        {/* Returning customer toggle — commented out pending full implementation (lookup logic TBD)
                         <section ref={returningRef} className="relative mb-7">
                             <div onClick={e=>setIsReturning(!isReturning)} className="flex justify-between items-center rounded-xl p-3 bg-gray-100 hover:bg-primary hover:text-white cursor-pointer">
                                 <p>Returning customer?</p>
@@ -286,6 +286,7 @@ export default function CheckoutInfoPage(){
                                 </div>
                             </div>
                         </section>
+                        */}
 
                         <form id="checkout-form" onSubmit={continueToPayment}>
                             {/* Contact Details */}
