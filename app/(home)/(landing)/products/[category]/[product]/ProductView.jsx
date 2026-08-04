@@ -433,8 +433,23 @@ export default function ProductView({params, initialProduct, initialDescription}
                                 <div className="flex gap-4 my-6 items-center">
                                     <p><span className="font-semibold">{(displayProduct.approved_reviews || []).length}</span> <span className="text-gray-500">reviews</span></p>
                                     <p>
-                                        <span className="font-semibold">{variation ? variation.stock : displayProduct.stock}</span> 
-                                        <span className="text-gray-500"> in stock</span>
+                                        {(() => {
+                                            const stockCount = variation ? variation.stock : displayProduct.stock;
+                                            if (stockCount === 0) {
+                                                return (
+                                                    <span className="inline-flex items-center gap-1.5 bg-red-50 border border-red-200 text-red-700 font-bold text-xs uppercase tracking-widest px-3 py-1 rounded-full">
+                                                        <span className="w-2 h-2 rounded-full bg-red-500 inline-block animate-pulse"/>
+                                                        Out of Stock
+                                                    </span>
+                                                );
+                                            }
+                                            return (
+                                                <>
+                                                    <span className="font-semibold">{stockCount}</span>{' '}
+                                                    <span className="text-gray-500">in stock</span>
+                                                </>
+                                            );
+                                        })()}
                                     </p>
                                     <div className="flex items-center gap-1 font-semibold">
                                         <Rating rating={displayProduct.approved_reviews?.length > 0 ? (displayProduct.approved_reviews.reduce((acc, r) => acc + r.rate, 0) / displayProduct.approved_reviews.length) : 0}/> 
@@ -499,42 +514,68 @@ export default function ProductView({params, initialProduct, initialDescription}
                     }
                     <p>Quantity</p>
 
-                    <div className="flex items-center gap-3 my-3">
-                        <button
-                            onClick={() => setQuantity(q => Math.max(1, q - 1))}
-                            className="flex items-center justify-center min-w-[44px] min-h-[44px] rounded-lg bg-gray-100 hover:bg-gray-200 text-xl font-bold transition-colors"
-                            aria-label="Decrease quantity"
-                        >−</button>
-                        <input
-                            className="bg-gray-100 rounded-lg w-14 text-center text-base font-semibold h-11"
-                            value={quantity}
-                            onChange={e => {
-                                const val = parseInt(e.target.value) || 1;
-                                setQuantity(Math.min(val, displayProduct?.stock || 999));
-                            }}
-                            type="number"
-                            min={1}
-                            max={displayProduct?.stock}
-                        />
-                        <button
-                            onClick={() => setQuantity(q => Math.min(q + 1, displayProduct?.stock || 999))}
-                            className="flex items-center justify-center min-w-[44px] min-h-[44px] rounded-lg bg-gray-100 hover:bg-gray-200 text-xl font-bold transition-colors"
-                            aria-label="Increase quantity"
-                        >+</button>
-                    </div>
+                    {(() => {
+                        const currentStock = variation ? variation.stock : displayProduct.stock;
+                        const isOutOfStock = currentStock === 0;
 
-                    <div ref={ctaRef} className="flex flex-col-reverse md:flex-row gap-4 mt-2">
-                        <button 
-                          onClick={()=>addToCart(quantity,displayProduct.name,variation)}
-                          className="flex items-center gap-2 justify-center flex-grow text-center py-3 lg:py-2 2xl:py-3 rounded-md hover:scale-105 hover:font-semibold border-2 border-primary text-primary"
-                        >
-                            <span className="icon-[ri--shopping-cart-line] w-6 h-6"/>Add to cart
-                        </button>
-                        <button onClick={()=>{
-                            addToCart(quantity,displayProduct.name,variation)
-                            router.push('/checkout')
-                        }} className="block flex-grow text-center py-3 lg:py-2 2xl:py-3 rounded-md hover:scale-105 bg-primary text-white">Checkout</button>
-                    </div>
+                        if (isOutOfStock) {
+                            return (
+                                <div className="mt-4 mb-2 flex flex-col gap-3">
+                                    <div className="flex items-center gap-3 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
+                                        <span className="w-3 h-3 rounded-full bg-red-500 flex-shrink-0 animate-pulse"/>
+                                        <div>
+                                            <p className="font-bold text-red-700 text-sm">Currently Out of Stock</p>
+                                            <p className="text-red-600/80 text-xs mt-0.5">This product is temporarily unavailable. Check back soon.</p>
+                                        </div>
+                                    </div>
+                                    <button disabled className="block w-full text-center py-3 lg:py-2 2xl:py-3 rounded-md bg-gray-200 text-gray-400 font-semibold cursor-not-allowed">
+                                        Unavailable
+                                    </button>
+                                </div>
+                            );
+                        }
+
+                        return (
+                            <>
+                                <div className="flex items-center gap-3 my-3">
+                                    <button
+                                        onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                                        className="flex items-center justify-center min-w-[44px] min-h-[44px] rounded-lg bg-gray-100 hover:bg-gray-200 text-xl font-bold transition-colors"
+                                        aria-label="Decrease quantity"
+                                    >−</button>
+                                    <input
+                                        className="bg-gray-100 rounded-lg w-14 text-center text-base font-semibold h-11"
+                                        value={quantity}
+                                        onChange={e => {
+                                            const val = parseInt(e.target.value) || 1;
+                                            setQuantity(Math.min(val, displayProduct?.stock || 999));
+                                        }}
+                                        type="number"
+                                        min={1}
+                                        max={displayProduct?.stock}
+                                    />
+                                    <button
+                                        onClick={() => setQuantity(q => Math.min(q + 1, displayProduct?.stock || 999))}
+                                        className="flex items-center justify-center min-w-[44px] min-h-[44px] rounded-lg bg-gray-100 hover:bg-gray-200 text-xl font-bold transition-colors"
+                                        aria-label="Increase quantity"
+                                    >+</button>
+                                </div>
+
+                                <div ref={ctaRef} className="flex flex-col-reverse md:flex-row gap-4 mt-2">
+                                    <button 
+                                      onClick={()=>addToCart(quantity,displayProduct.name,variation)}
+                                      className="flex items-center gap-2 justify-center flex-grow text-center py-3 lg:py-2 2xl:py-3 rounded-md hover:scale-105 hover:font-semibold border-2 border-primary text-primary"
+                                    >
+                                        <span className="icon-[ri--shopping-cart-line] w-6 h-6"/>Add to cart
+                                    </button>
+                                    <button onClick={()=>{
+                                        addToCart(quantity,displayProduct.name,variation)
+                                        router.push('/checkout')
+                                    }} className="block flex-grow text-center py-3 lg:py-2 2xl:py-3 rounded-md hover:scale-105 bg-primary text-white">Checkout</button>
+                                </div>
+                            </>
+                        );
+                    })()}
                 </div>
             </div>
             <div className="my-20">

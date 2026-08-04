@@ -82,22 +82,33 @@ export default function ProductListing({data}){
     const productSlug = data.slug || data.name.toLowerCase().trim().replaceAll(' ', '-');
     const href = `/products/${categorySlug}/${productSlug}`;
 
+    const isOutOfStock = currentStock === 0;
+
     return(
         <div className="group flex flex-col h-full overflow-hidden rounded-[1.5rem] border border-black/5 bg-white shadow-[0_4px_20px_rgba(0,0,0,0.04)] transition-all duration-300 hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)] hover:-translate-y-1">
             
             {/* Image Section */}
             <Link href={href} className="relative aspect-square w-full bg-[#f5f5f3] overflow-hidden block">
                 {
-                    data.message && !isOffer && (
+                    data.message && !isOffer && !isOutOfStock && (
                         <span className="absolute top-3 left-3 z-10 bg-secondary text-white font-semibold py-1 px-2.5 rounded-full text-[10px] uppercase tracking-wider shadow-sm">
                             {data.message}
                         </span>
                     )
                 }
 
+                {/* Out of Stock overlay */}
+                {isOutOfStock && (
+                    <div className="absolute inset-0 z-10 bg-black/55 flex items-center justify-center">
+                        <span className="bg-red-600 text-white font-bold text-xs uppercase tracking-widest px-4 py-2 rounded-full shadow-lg rotate-[-8deg]">
+                            Out of Stock
+                        </span>
+                    </div>
+                )}
+
                 {imgSrc && (
                     <Image 
-                        className="object-cover transition-transform duration-700 group-hover:scale-105" 
+                        className={`object-cover transition-transform duration-700 group-hover:scale-105 ${isOutOfStock ? 'grayscale opacity-60' : ''}`}
                         src={imgSrc} 
                         alt={data.name} 
                         fill
@@ -175,19 +186,26 @@ export default function ProductListing({data}){
                                 )}
                             </div>
                             {typeof currentStock !== "undefined" && (
-                                <p className="mt-1 text-[11px] font-medium text-amber-600">
-                                    {currentStock} in stock
-                                </p>
+                                isOutOfStock ? (
+                                    <p className="mt-1 text-[11px] font-bold text-red-600 uppercase tracking-wide">
+                                        Out of Stock
+                                    </p>
+                                ) : (
+                                    <p className="mt-1 text-[11px] font-medium text-amber-600">
+                                        {currentStock} in stock
+                                    </p>
+                                )
                             )}
                         </div>
 
                         <div className="flex flex-col gap-2 shrink-0">
                             {/* Quantity Control */}
-                            <div className="flex items-center h-11 rounded-xl border border-black/10 bg-white overflow-hidden shadow-sm">
+                            <div className={`flex items-center h-11 rounded-xl border overflow-hidden shadow-sm ${isOutOfStock ? 'border-black/5 bg-gray-100 opacity-50' : 'border-black/10 bg-white'}`}>
                                 <button
                                     type="button"
+                                    disabled={isOutOfStock}
                                     onClick={() => setQuantity(prev => Math.max(1, prev - 1))}
-                                    className="w-11 h-full flex items-center justify-center text-black/60 hover:text-black hover:bg-black/5 transition-colors"
+                                    className="w-11 h-full flex items-center justify-center text-black/60 hover:text-black hover:bg-black/5 transition-colors disabled:cursor-not-allowed"
                                 >
                                     -
                                 </button>
@@ -196,6 +214,7 @@ export default function ProductListing({data}){
                                     value={quantity}
                                     min={1}
                                     type="number"
+                                    disabled={isOutOfStock}
                                     onChange={(e) => {
                                         const nextQuantity = Number.parseInt(e.target.value, 10);
                                         setQuantity(Number.isNaN(nextQuantity) || nextQuantity < 1 ? 1 : nextQuantity);
@@ -203,8 +222,9 @@ export default function ProductListing({data}){
                                 />
                                 <button
                                     type="button"
+                                    disabled={isOutOfStock}
                                     onClick={() => setQuantity(prev => prev + 1)}
-                                    className="w-11 h-full flex items-center justify-center text-black/60 hover:text-black hover:bg-black/5 transition-colors"
+                                    className="w-11 h-full flex items-center justify-center text-black/60 hover:text-black hover:bg-black/5 transition-colors disabled:cursor-not-allowed"
                                 >
                                     +
                                 </button>
@@ -212,11 +232,16 @@ export default function ProductListing({data}){
                             
                             {/* Add Button */}
                             <button
+                                disabled={isOutOfStock}
                                 onClick={()=>addToCart(quantity, data.name, variation)}
-                                className="h-11 px-6 rounded-xl bg-primary text-white text-xs font-bold uppercase tracking-wider shadow-md hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 active:scale-95"
+                                className={`h-11 px-6 rounded-xl text-xs font-bold uppercase tracking-wider shadow-md transition-colors flex items-center justify-center gap-2 active:scale-95 ${
+                                    isOutOfStock
+                                        ? 'bg-gray-300 text-gray-500 cursor-not-allowed shadow-none'
+                                        : 'bg-primary text-white hover:bg-primary/90'
+                                }`}
                             >
                                 <span className="icon-[ri--shopping-cart-line] w-4 h-4"/>
-                                Add
+                                {isOutOfStock ? 'Unavailable' : 'Add'}
                             </button>
                         </div>
                     </div>
