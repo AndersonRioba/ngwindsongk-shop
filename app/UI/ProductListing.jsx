@@ -113,7 +113,11 @@ export default function ProductListing({data}){
                         alt={data.name} 
                         fill
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
-                        onError={() => setImgSrc(null)}
+                        onError={() => {
+                            if (imgSrc !== '/product-placeholder.png') {
+                                setImgSrc('/product-placeholder.png');
+                            }
+                        }}
                     />
                 )}
             </Link>
