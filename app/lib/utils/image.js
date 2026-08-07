@@ -20,6 +20,7 @@ export function getImageUrl(path, fallback = "/logo.png") {
             const isBackend = (envBase && url.origin.includes(new URL(envBase).hostname)) || 
                               (envApi && url.origin.includes(new URL(envApi).hostname)) ||
                               url.hostname === 'localhost' ||
+                              url.hostname === '127.0.0.1' ||
                               url.hostname === 'api.ngwindsongk.com';
 
             // If it's not a known backend or local host, treat it as an external mock/remnant
