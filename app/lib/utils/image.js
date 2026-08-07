@@ -9,7 +9,11 @@
 export function getImageUrl(path, fallback = "/logo.png") {
     if (!path) return fallback;
 
-    // 1. Handle absolute URLs
+    // 1. Handle absolute, blob, or data URLs
+    if (path.startsWith('blob:') || path.startsWith('data:')) {
+        return path;
+    }
+
     if (path.startsWith('http')) {
         // Derive allowed backend hostnames
         const envBase = process.env.NEXT_PUBLIC_BASE_URL || '';
