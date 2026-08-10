@@ -352,8 +352,10 @@ export default function ProductView({params, initialProduct, initialDescription}
     
     useEffect(()=>{
         if(data && !isLoading && !error) {
-            const primary = (data.product_images || []).filter(image=>image.is_primary)[0]?.url || data.product_images?.[0]?.url;
-            setActiveImage(prev => prev || primary);
+            const primary = (data.product_images || []).find(image=>image.is_primary)?.url || data.product_images?.[0]?.url || "";
+            if (primary) {
+                setActiveImage(primary);
+            }
             if(data?.product_variations && data.product_variations.length > 0) {
                 setVariation(prev => {
                     if (!prev) return data.product_variations[0];
@@ -372,17 +374,15 @@ export default function ProductView({params, initialProduct, initialDescription}
         <div className="animate-in fade-in duration-700">
             <div className="flex flex-col md:flex-row md:gap-8 lg:gap-12">
                 <div className="flex flex-col md:w-1/2 lg:w-7/12">
-                    <div className="relative flex justify-center w-full h-72 md:h-96 mb-7 bg-gray-50/50 rounded-2xl">
-                        {activeImage && (
-                            <Image 
-                                src={getImageUrl(activeImage, '/product-placeholder.png')} 
-                                className="object-contain" 
-                                alt={displayProduct.name || "Product Image"} 
-                                fill
-                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
-                                priority
-                            />
-                        )}
+                    <div className="relative flex justify-center w-full h-72 md:h-96 mb-7 bg-gray-50/50 rounded-2xl overflow-hidden">
+                        <Image 
+                            src={getImageUrl(activeImage, '/product-placeholder.png')} 
+                            className="object-contain" 
+                            alt={displayProduct.name || "Product Image"} 
+                            fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
+                            priority
+                        />
                     </div>
                     {(displayProduct.product_images || []).length > 1 && (
                         <div className="flex items-center justify-center gap-2 py-3 w-full md:w-fit md:mx-auto">
