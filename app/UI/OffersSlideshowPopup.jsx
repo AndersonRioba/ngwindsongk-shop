@@ -52,7 +52,9 @@ export default function OffersSlideshowPopup() {
 
     const handleClaimClick = (offer, e) => {
         if (e) e.stopPropagation();
-        const choiceItems = (offer?.items || []).filter(i => i.choice_group);
+        const choiceItems = (offer?.items || []).filter(i => 
+            Boolean(i.choice_group) || i.is_required === false || i.is_required === 0 || i.is_required === 'false' || i.is_required === '0'
+        );
         if (choiceItems.length > 0) {
             setPendingOffer(offer);
             // Normalize ALL choice items into a SINGLE group key "1"
@@ -250,7 +252,10 @@ export default function OffersSlideshowPopup() {
                             <div className="space-y-4 max-h-[50vh] overflow-y-auto pr-1">
                                 {Object.entries(
                                     (pendingOffer?.items || []).reduce((acc, item) => {
-                                        if (item.choice_group || (!item.is_required && item.choice_group !== null)) {
+                                        const isChoice = Boolean(
+                                            item.choice_group || item.is_required === false || item.is_required === 0 || item.is_required === 'false' || item.is_required === '0'
+                                        );
+                                        if (isChoice) {
                                             // Normalize all choice items into group "1" if single group, or use their choice_group
                                             const groupKey = "1";
                                             if (!acc[groupKey]) acc[groupKey] = [];

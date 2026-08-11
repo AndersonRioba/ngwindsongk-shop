@@ -37,7 +37,9 @@ export default function OffersPage() {
 
     const handleClaimClick = (offer, e) => {
         if (e) e.stopPropagation();
-        const choiceItems = (offer?.items || []).filter(i => i.choice_group);
+        const choiceItems = (offer?.items || []).filter(i => 
+            Boolean(i.choice_group) || i.is_required === false || i.is_required === 0 || i.is_required === 'false' || i.is_required === '0'
+        );
         if (choiceItems.length > 0) {
             setPendingOffer(offer);
             // Normalize all choice items under key "1" so only ONE product ID is ever sent
@@ -282,7 +284,10 @@ export default function OffersPage() {
                             <div className="space-y-4 max-h-[50vh] overflow-y-auto pr-1">
                                 {Object.entries(
                                     (pendingOffer?.items || []).reduce((acc, item) => {
-                                        if (item.choice_group || (!item.is_required && item.choice_group !== null)) {
+                                        const isChoice = Boolean(
+                                            item.choice_group || item.is_required === false || item.is_required === 0 || item.is_required === 'false' || item.is_required === '0'
+                                        );
+                                        if (isChoice) {
                                             const groupKey = "1";
                                             if (!acc[groupKey]) acc[groupKey] = [];
                                             acc[groupKey].push(item);
