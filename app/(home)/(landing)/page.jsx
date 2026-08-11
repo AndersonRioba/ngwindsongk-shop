@@ -193,8 +193,8 @@ export default async function Home() {
                 <section className="relative">
                     <div className="absolute inset-x-0 top-0 -z-10 h-[30rem] luxe-glow bg-[radial-gradient(circle_at_top_left,_rgba(24,119,242,0.14),_transparent_38%),radial-gradient(circle_at_top_right,_rgba(249,115,22,0.14),_transparent_32%),linear-gradient(to_bottom,_rgba(255,255,255,0.9),_rgba(252,252,251,1))]" />
 
-                    {/* Offers Band hidden as requested */}
-                    {/* {!hasActiveSearch && <OffersSection products={offerProductsList} />} */}
+                    {/* Offers Band with Featured Combo Deals */}
+                    <OffersSection products={offerProductsList} />
 
                     {/* ── Brand Carousel Sections ── */}
                     <div className="flex flex-col gap-0">

@@ -39,48 +39,68 @@ function Related({product, category='oats'}){
 
 function CartItem({product, setTotal}){
 
-    let [quantity, setQuantity] =useState(0);
+    let [quantity, setQuantity] = useState(0);
     let [amount, setAmount] = useState(0);
-    const { removeFromCart, updateCartQuantity } = useCart();
+    const { removeFromCart, updateCartQuantity, updateBundleQuantity, removeBundleFromCart, swapBundleItem } = useCart();
+
+    const isBundleItem = !!(product.override_price !== undefined && product.override_price !== null && product.override_price !== '') || !!product.bundle_title || !!product.is_bundle_item;
+    const bundleIdentifier = product.bundle_title || product.bundle_id;
 
     const { data, error, isLoading } = useSWR([`/products/${product.product}`,{}], fetcher,{
-        // Let the global SWRConfig control revalidation so updates from the backend
-        // are always reflected (revalidateOnFocus / revalidateIfStale are set globally)
         errorRetryInterval: 300000
-    })
+    });
+
+    // Fetch active combo offers to check for choice groups if this is a bundle item
+    const { data: offersData } = useSWR(isBundleItem ? ['/offers/active', {}] : null, fetcher);
+    const activeOffersList = offersData?.data || [];
+    const matchingOffer = isBundleItem 
+        ? activeOffersList.find(o => (product.bundle_id && String(o.id) === String(product.bundle_id)) || (product.bundle_title && o.title === product.bundle_title))
+        : null;
+
+    // Find if this specific product belongs to a choice group in the bundle
+    const currentProdId = String(product.product?.id || product.product);
+    const matchingOfferItem = matchingOffer?.items?.find(i => String(i.product_id) === currentProdId);
+    
+    // Switch pills MUST only show on choice group items (never on fixed required items with choice_group null/0 or is_required true)
+    const availableGroupOptions = (matchingOfferItem && matchingOfferItem.choice_group && !matchingOfferItem.is_required)
+        ? matchingOffer?.items?.filter(i => String(i.choice_group) === String(matchingOfferItem.choice_group) && !i.is_required)
+        : [];
 
     useEffect(()=>{
         if(data && !isLoading && !error){
-            // Always recalculate from latest API data so price/discount changes
-            // made in the backend are immediately reflected here
-            const freshVariation = product.variation?.id
-                ? (data?.product_variations || []).find(v => v.id === product.variation.id)
-                : null;
-            const activeVariation = freshVariation || product.variation;
+            let finalPrice;
+            if (product.override_price !== undefined && product.override_price !== null && product.override_price !== '') {
+                finalPrice = parseFloat(product.override_price);
+            } else {
+                const freshVariation = product.variation?.id
+                    ? (data?.product_variations || []).find(v => v.id === product.variation.id)
+                    : null;
+                const activeVariation = freshVariation || product.variation;
 
-            const variationPrice = parseFloat(activeVariation?.price || 0);
-            const variationDiscountRaw = activeVariation?.discount ?? null;
-            const variationDiscount = variationDiscountRaw !== null ? parseFloat(variationDiscountRaw) : null;
+                const variationPrice = parseFloat(activeVariation?.price || 0);
+                const variationDiscountRaw = activeVariation?.discount ?? null;
+                const variationDiscount = variationDiscountRaw !== null ? parseFloat(variationDiscountRaw) : null;
 
-            const basePrice = variationPrice > 0 ? variationPrice : parseFloat(data?.price || 0);
-            const discountAmount = variationDiscount !== null
-                ? variationDiscount
-                : parseFloat(data?.discount || 0);
-            
-            const finalPrice = Math.max(0, basePrice - discountAmount);
+                const basePrice = variationPrice > 0 ? variationPrice : parseFloat(data?.price || 0);
+                const discountAmount = variationDiscount !== null
+                    ? variationDiscount
+                    : parseFloat(data?.discount || 0);
+                
+                finalPrice = Math.max(0, basePrice - discountAmount);
+            }
+
             const qty = parseInt(product?.quantity) || 1;
 
             setAmount(finalPrice);
             setQuantity(qty);
             setTotal(prev => (parseFloat(prev) || 0) + (finalPrice * qty));
 
-            // Cleanup: subtract contribution when data changes or component unmounts
             return () => {
                 setTotal(prev => (parseFloat(prev) || 0) - (finalPrice * qty));
             };
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[data, isLoading, error]);
+    },[data, isLoading, error, product.quantity]);
 
     const modify = (positive) => {
         let newQty = quantity;
@@ -91,14 +111,32 @@ function CartItem({product, setTotal}){
         }
 
         if (newQty !== quantity) {
-            setTotal(total => (parseFloat(total) || 0) + (positive ? amount : -amount));
             setQuantity(newQty);
+            if (isBundleItem && bundleIdentifier) {
+                updateBundleQuantity(bundleIdentifier, newQty);
+            } else {
+                updateCartQuantity(product.product, newQty, product.variation);
+            }
+        }
+    }
+
+    const handleCustomQtyChange = (val) => {
+        const newQty = parseInt(val) || 1;
+        if (data?.stock && newQty > data.stock) return;
+        setQuantity(newQty);
+        if (isBundleItem && bundleIdentifier) {
+            updateBundleQuantity(bundleIdentifier, newQty);
+        } else {
             updateCartQuantity(product.product, newQty, product.variation);
         }
     }
 
-    const remove = (product) => {
-        removeFromCart(product.product, product.variation);
+    const remove = () => {
+        if (isBundleItem && bundleIdentifier) {
+            removeBundleFromCart(bundleIdentifier);
+        } else {
+            removeFromCart(product.product, product.variation);
+        }
         setTotal(total => (parseFloat(total) || 0) - (amount * quantity));
         setQuantity(0);
     }
@@ -116,35 +154,76 @@ function CartItem({product, setTotal}){
                     />
                 </div>
                 <div className="space-y-1">
-                    <p className="text-xl">{data?.name} {product.variation &&<span className="text-sm text-black/70">({product.variation.attribute_value})</span>}</p>
+                    <p className="text-xl font-bold">{data?.name} {product.variation &&<span className="text-sm text-black/70">({product.variation.attribute_value})</span>}</p>
                     <p className="text-sm text-black/50">Quantity: {quantity}</p>
-                    <p className="">KSH {amount}</p>
+                    <p className="font-bold text-primary">KSH {amount}</p>
+                    {isBundleItem && (
+                        <div className="space-y-2 mt-1">
+                            <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-primary text-white text-xs font-bold rounded-full shadow-sm shadow-primary/20">
+                                <span className="icon-[heroicons--gift-solid] w-3 h-3 opacity-90" />
+                                Combo Deal (Synchronized Qty: {quantity})
+                            </span>
+
+                            {/* Option Selector for Choice Group Items */}
+                            {availableGroupOptions.length > 1 && (
+                                <div className="mt-2.5 p-3 bg-purple-50/60 rounded-2xl border border-primary/20">
+                                    <span className="text-[10px] font-black uppercase text-primary tracking-wider block mb-1.5 flex items-center gap-1">
+                                        <span className="icon-[heroicons--adjustments-horizontal-solid] w-3.5 h-3.5 text-primary" />
+                                        Switch Option Choice:
+                                    </span>
+                                    <div className="flex flex-wrap gap-2">
+                                        {availableGroupOptions.map(opt => {
+                                            const isSelected = String(opt.product_id) === currentProdId;
+                                            return (
+                                                <button
+                                                    key={opt.id}
+                                                    type="button"
+                                                    onClick={() => {
+                                                        if (!isSelected) {
+                                                            const newPrice = opt.override_price !== null && opt.override_price !== undefined 
+                                                                ? opt.override_price 
+                                                                : opt.product?.price;
+                                                            swapBundleItem(
+                                                                product.product?.id || product.product, 
+                                                                { id: opt.product_id, price: newPrice }, 
+                                                                bundleIdentifier
+                                                            );
+                                                        }
+                                                    }}
+                                                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                                                        isSelected
+                                                            ? 'bg-primary text-white shadow-md shadow-primary/20 border border-primary'
+                                                            : 'bg-white hover:bg-purple-50 text-gray-800 border border-purple-200'
+                                                    }`}
+                                                >
+                                                    <span className={`w-2 h-2 rounded-full ${isSelected ? 'bg-white' : 'bg-purple-300'}`} />
+                                                    {opt.product?.name || 'Option Item'}
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    )}
                 </div>
             </div>
-            <div className=" flex md:flex-col justify-end gap-x-4">
+            <div className="flex md:flex-col justify-end gap-x-4">
                 <div className="flex gap-5 mb-6 mt-2">
-                    <button onClick={e=>modify(false)} className="bg-primary text-white px-4">-</button>
+                    <button onClick={() => modify(false)} className="bg-primary text-white px-4 rounded-l-lg hover:bg-primary/90">-</button>
                     <input 
-                        className="bg-gray-200 p-2 w-10 text-center" 
+                        className="bg-gray-200 p-2 w-12 text-center font-bold text-sm" 
                         value={quantity} 
-                        onChange={e => {
-                            const newQty = parseInt(e.target.value) || 1;
-                            if (newQty > data?.stock) return;
-                            const diff = newQty - quantity;
-                            setTotal(total => (parseFloat(total) || 0) + (diff * amount));
-                            setQuantity(newQty);
-                            updateCartQuantity(product.product, newQty, product.variation);
-                        }} 
+                        onChange={e => handleCustomQtyChange(e.target.value)} 
                         type="number" 
-                        name="" 
-                        id="" 
-                        min={1} max={data?.stock}
+                        min={1} 
+                        max={data?.stock}
                     />
-                    <button onClick={e=>modify(true)} className="bg-primary text-white px-4">+</button>
+                    <button onClick={() => modify(true)} className="bg-primary text-white px-4 rounded-r-lg hover:bg-primary/90">+</button>
                 </div>
-                <button onClick={e=>remove(product)} className="rounded-lg flex items-center text-sm">
+                <button onClick={remove} className="rounded-lg flex items-center gap-1 text-sm font-semibold text-red-500 hover:text-red-700">
                     <span className="icon-[material-symbols-light--delete-outline] w-5 h-5 text-red-500"/>
-                    Remove Item
+                    {isBundleItem ? 'Remove Combo Deal' : 'Remove Item'}
                 </button>
             </div>
         </div>

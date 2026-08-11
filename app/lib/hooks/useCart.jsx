@@ -61,6 +61,61 @@ export default function useCart () {
         });
     }
 
+    let updateBundleQuantity = (bundleIdentifier, quantity) => {
+        const newCart = cart.map(item => {
+            const isMatchingBundle = (item.bundle_title && item.bundle_title === bundleIdentifier) || 
+                                     (item.bundle_id && item.bundle_id == bundleIdentifier);
+            if (isMatchingBundle) {
+                return { ...item, quantity: quantity };
+            }
+            return item;
+        });
+
+        updateRecord('cart', newCart).then(() => {
+            setCart(newCart);
+        }).catch(error => {
+            console.error('Failed to update bundle quantity:', error);
+        });
+    }
+
+    let swapBundleItem = (oldProductId, newProductData, bundleIdentifier) => {
+        const newCart = cart.map(item => {
+            const isMatchingBundle = (item.bundle_title && item.bundle_title === bundleIdentifier) || 
+                                     (item.bundle_id && item.bundle_id == bundleIdentifier);
+            const itemProdId = String(item.product?.id || item.product);
+            const targetOldId = String(oldProductId);
+            if (isMatchingBundle && itemProdId === targetOldId) {
+                return {
+                    ...item,
+                    product: newProductData.id || newProductData.product_id,
+                    variation: newProductData.variation || null,
+                    override_price: newProductData.price !== undefined ? newProductData.price : item.override_price,
+                };
+            }
+            return item;
+        });
+
+        updateRecord('cart', newCart).then(() => {
+            setCart(newCart);
+        }).catch(error => {
+            console.error('Failed to swap bundle item:', error);
+        });
+    }
+
+    let removeBundleFromCart = (bundleIdentifier) => {
+        const newCart = cart.filter(item => {
+            const isMatchingBundle = (item.bundle_title && item.bundle_title === bundleIdentifier) || 
+                                     (item.bundle_id && item.bundle_id == bundleIdentifier);
+            return !isMatchingBundle;
+        });
+
+        updateRecord('cart', newCart).then(() => {
+            setCart(newCart);
+        }).catch(error => {
+            console.error('Failed to remove bundle from cart:', error);
+        });
+    }
+
     let clearCart = ()=>{
         clearDatabase().then(data=>{
             setCart([]);
@@ -73,6 +128,9 @@ export default function useCart () {
         addToCart,
         removeFromCart,
         updateCartQuantity,
+        updateBundleQuantity,
+        swapBundleItem,
+        removeBundleFromCart,
         clearCart,
         cart
     }

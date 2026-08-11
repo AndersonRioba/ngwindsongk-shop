@@ -4,7 +4,9 @@ import Script from "next/script";
 import "./globals.css";
 import ContextProvider from "@/app/lib/ContextProvider";
 import Popup from "@/app/UI/Popup";
+import OffersSlideshowPopup from "@/app/UI/OffersSlideshowPopup";
 import Header from "@/app/UI/Header";
+
 import Footer from "@/app/UI/Footer";
 import Cart from "@/app/UI/Cart";
 // import Overlays from "@/app/UI/Overlays";
@@ -181,7 +183,9 @@ export default function RootLayout({ children }) {
               </div>
               <a href="https://wa.me/254718156421" aria-label="Chat on WhatsApp" className="block fixed z-50 bottom-[80px] md:bottom-10 right-[3vw] lg:right-[0.5vw] 2xl:right-[3vw] icon-[logos--whatsapp-icon] w-12 h-12 md:w-14 md:h-14">
               </a>
+              <OffersSlideshowPopup />
               {children}
+
             </ContextProvider>
           </AuthProvider>
         <Footer />

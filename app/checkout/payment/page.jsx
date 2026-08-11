@@ -210,18 +210,21 @@ export default function CheckoutPaymentPage(){
                         ? (data.product_variations || []).find(v => v.id === item.variation.id)
                         : null;
                     
-                    const variationPrice = parseFloat(variation?.price || 0);
-                    // Use nullish coalescing so a 0-discount on the variation is respected,
-                    // and null/undefined falls through to the product-level discount
-                    const variationDiscountRaw = variation?.discount ?? null;
-                    const variationDiscount = variationDiscountRaw !== null ? parseFloat(variationDiscountRaw) : null;
-                    
-                    let basePrice = variationPrice > 0 ? variationPrice : parseFloat(data.price || 0);
-                    let discountAmount = variationDiscount !== null
-                        ? variationDiscount
-                        : parseFloat(data.discount || 0);
-                    
-                    let itemPrice = Math.max(0, basePrice - discountAmount);
+                    let itemPrice;
+                    if (item.override_price !== undefined && item.override_price !== null && item.override_price !== '') {
+                        itemPrice = parseFloat(item.override_price);
+                    } else {
+                        const variationPrice = parseFloat(variation?.price || 0);
+                        const variationDiscountRaw = variation?.discount ?? null;
+                        const variationDiscount = variationDiscountRaw !== null ? parseFloat(variationDiscountRaw) : null;
+                        
+                        let basePrice = variationPrice > 0 ? variationPrice : parseFloat(data.price || 0);
+                        let discountAmount = variationDiscount !== null
+                            ? variationDiscount
+                            : parseFloat(data.discount || 0);
+                        
+                        itemPrice = Math.max(0, basePrice - discountAmount);
+                    }
                     return {
                         id: data.id,
                         quantity: parseInt(item.quantity) || 1,

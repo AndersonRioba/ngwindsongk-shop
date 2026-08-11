@@ -39,8 +39,13 @@ export default function Popup() {
             normalizedState = normalizedState.charAt(0).toUpperCase() + normalizedState.slice(1).toLowerCase();
         }
         
+        if (normalizedState === 'Hide') {
+            setHidden(true);
+            return;
+        }
+
         if (!POPUP_STATES[normalizedState]) {
-            normalizedState = 'Processing';
+            normalizedState = 'Success';
         }
 
         setState(normalizedState)

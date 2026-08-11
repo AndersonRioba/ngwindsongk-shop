@@ -72,9 +72,10 @@ export function MobileSideMenu({ isOpen, setIsOpen, fallbackNavData }){
         revalidateOnMount: false,
     })
 
-    useEffect(()=>{
+    useEffect(() => {
         setIsOpen(false);
-    },[pathname, setIsOpen])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [pathname]);
     return(
         <>
         <div
