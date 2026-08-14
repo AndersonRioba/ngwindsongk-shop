@@ -169,8 +169,8 @@ export default function OffersSlideshowPopup() {
                     <span className="icon-[material-symbols-light--close] w-7 h-7" />
                 </button>
 
-                {/* Main Banner Slide Container */}
-                <div className="relative group cursor-pointer bg-slate-950" onClick={() => handleOfferClick(currentOffer)}>
+                {/* Main Banner Slide Container — image is display only; only buttons are interactive */}
+                <div className="relative group bg-slate-950">
                     {/* Full Poster Image (Uncropped across all devices) */}
                     <div className="relative w-full flex items-center justify-center min-h-[300px] max-h-[70vh] overflow-hidden">
                         <Image
@@ -224,13 +224,22 @@ export default function OffersSlideshowPopup() {
                             )}
                             <span>{loadingOfferId === currentOffer.id ? 'Loading Bundle...' : 'Claim Offer & Proceed'}</span>
                         </button>
+
+                        {/* Secondary: browse shop */}
+                        <button
+                            onClick={() => { handleClose(); router.push('/products'); }}
+                            className="mt-2 w-full py-2.5 bg-white/10 hover:bg-white/20 text-white/80 hover:text-white font-bold text-xs uppercase tracking-widest rounded-xl border border-white/20 hover:border-white/40 flex items-center justify-center gap-2 transition-all active:scale-95 backdrop-blur-sm"
+                        >
+                            <span className="icon-[heroicons--squares-2x2-solid] w-4 h-4" />
+                            <span>Browse Other Products</span>
+                        </button>
                     </div>
                 </div>
 
-                {/* Choice Selection Pop-Up Overlay */}
+                {/* Choice Selection Pop-Up Overlay — backdrop is non-interactive, no dismiss on click outside */}
                 {showChoiceModal && pendingOffer && (
-                    <div className="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in">
-                        <div className="relative w-full max-w-md bg-white rounded-[2rem] p-6 shadow-2xl border border-gray-100 flex flex-col space-y-5">
+                    <div className="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in" style={{pointerEvents:'auto'}}>
+                        <div className="relative w-full max-w-md bg-white rounded-[2rem] p-6 shadow-2xl border border-gray-100 flex flex-col space-y-5" onClick={e => e.stopPropagation()}>
                             <div className="flex items-center justify-between border-b border-gray-100 pb-3">
                                 <div>
                                     <span className="text-[10px] font-black uppercase text-primary tracking-widest block">Customise Your Deal</span>

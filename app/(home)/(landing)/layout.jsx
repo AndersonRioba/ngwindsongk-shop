@@ -1,3 +1,5 @@
+import { SearchProvider } from "@/app/lib/providers/SearchProvider";
+
 export const metadata = {
     title: "Buy Healthy Oats & Baby Care Products Online in Kenya",
     description: "Buy premium steel-cut oats, jumbo oats, and oat flour online in Nairobi, Kenya. Plus Nanacare baby care products — breastmilk storage bags, nursing covers, and feeding bottles. Fast delivery across Kenya.",
@@ -29,7 +31,10 @@ export const metadata = {
 export default function HomeLayout({children}){
     return(
         <main className="bg-[#fcfcfb]">
-            {children}
+            <SearchProvider>
+                {children}
+            </SearchProvider>
         </main>
     )
 }
+
