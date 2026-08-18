@@ -2,15 +2,15 @@ const baseUrl = 'https://ngwindsongk.com'
 const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://api.ngwindsongk.com/api'
 
 export default async function sitemap() {
-  // Fetch all products from the API
+  // Fetch products
   let productEntries = []
   try {
     const res = await fetch(`${apiUrl}/products`, {
       headers: { 'Content-Type': 'application/json' },
-      next: { revalidate: 3600 }, // revalidate every hour
+      next: { revalidate: 3600 },
     })
     const data = await res.json()
-    const products = data.data || data || []
+    const products = (data.data || data || []).filter(p => !p.noindex)
 
     productEntries = products.map((product) => {
       const categorySlug = product.brand?.slug || product.category?.slug || (product.brand?.name || product.category?.name || 'Products').toLowerCase().trim().replaceAll(' ', '-');
@@ -26,12 +26,77 @@ export default async function sitemap() {
     // If API fails, sitemap still works with static pages
   }
 
+  // Fetch brand category pages (e.g. /products/Grainmill)
+  let brandEntries = []
+  try {
+    const res = await fetch(`${apiUrl}/brands`, {
+      headers: { 'Content-Type': 'application/json' },
+      next: { revalidate: 3600 },
+    })
+    const data = await res.json()
+    const brands = Array.isArray(data) ? data : (data.data || [])
+
+    brandEntries = brands.map((brand) => ({
+      url: `${baseUrl}/products/${brand.slug || brand.name.toLowerCase().replace(/\s+/g, '-')}`,
+      lastModified: brand.updated_at ? new Date(brand.updated_at) : new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    }))
+  } catch (e) {
+    // Non-critical fallback — use known brand slugs
+    brandEntries = [
+      { url: `${baseUrl}/products/Grainmill`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
+      { url: `${baseUrl}/products/Nanacare`,  lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
+      { url: `${baseUrl}/products/Nutmill`,   lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
+    ]
+  }
+
+  // Fetch blogs
+  let blogEntries = []
+  try {
+    const res = await fetch(`${apiUrl}/blogs`, {
+      headers: { 'Content-Type': 'application/json' },
+      next: { revalidate: 3600 },
+    })
+    const data = await res.json()
+    const blogs = (data.data?.data || data.data || data.blogs || []).filter(b => !b.noindex)
+
+    blogEntries = blogs.map((post) => ({
+      url: `${baseUrl}/blog/${post.slug}`,
+      lastModified: post.updated_at ? new Date(post.updated_at) : new Date(post.created_at || Date.now()),
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    }))
+  } catch (e) {
+    // Non-critical fallback
+  }
+
+  // Fetch recipes
+  let recipeEntries = []
+  try {
+    const res = await fetch(`${apiUrl}/recipes`, {
+      headers: { 'Content-Type': 'application/json' },
+      next: { revalidate: 3600 },
+    })
+    const data = await res.json()
+    const recipes = (data.data?.data || data.data || data.recipes || []).filter(r => !r.noindex)
+
+    recipeEntries = recipes.map((recipe) => ({
+      url: `${baseUrl}/recipes/${recipe.slug}`,
+      lastModified: recipe.updated_at ? new Date(recipe.updated_at) : new Date(recipe.created_at || Date.now()),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    }))
+  } catch (e) {
+    // Non-critical fallback
+  }
+
   const staticPages = [
     {
       url: baseUrl,
       lastModified: new Date(),
       changeFrequency: 'daily',
-      priority: 1,
+      priority: 1.0,
     },
     {
       url: `${baseUrl}/products`,
@@ -40,28 +105,28 @@ export default async function sitemap() {
       priority: 0.9,
     },
     {
+      url: `${baseUrl}/recipes`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/blog`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+    {
       url: `${baseUrl}/about`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
-      priority: 0.8,
+      priority: 0.7,
     },
     {
       url: `${baseUrl}/contact`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/blog`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/recipes`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.6,
     },
     {
       url: `${baseUrl}/FAQs`,
@@ -83,5 +148,5 @@ export default async function sitemap() {
     },
   ]
 
-  return [...staticPages, ...productEntries]
+  return [...staticPages, ...brandEntries, ...productEntries, ...blogEntries, ...recipeEntries]
 }

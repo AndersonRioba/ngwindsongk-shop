@@ -41,18 +41,56 @@ async function getCategoryProducts(category, page = 1, search = "") {
     }
 }
 
+const categoryBrandCopy = {
+    all: {
+        title: "All Healthy Products & Essentials",
+        description: "Browse our complete Kenyan catalog — hearty Grainmill oats, wholesome Nutmill snacks, Nanacare baby essentials, and more.",
+    },
+    oats: {
+        title: "Grainmill Healthy Oats & Breakfast Cereals",
+        description: "Shop 100% natural Jumbo Rolled Oats, Steel-Cut Oats, and fine Oat Flour in Nairobi, Kenya. Fast countrywide delivery.",
+    },
+    grainmill: {
+        title: "Grainmill Premium Oats & Grains",
+        description: "Explore the complete Grainmill collection: steel-cut, rolled jumbo oats, and nutritious grain flours crafted for everyday health.",
+    },
+    nanacare: {
+        title: "Nanacare Baby Essentials & Motherhood Care",
+        description: "Shop Nanacare breastmilk storage cups, insulated cooler bags, nursing covers, and feeding bottles online in Kenya.",
+    },
+    nutmill: {
+        title: "Nutmill Roasted Nuts & Seed Snacks",
+        description: "Discover fresh, perfectly roasted nuts, seeds, and healthy pantry snacks with doorstep delivery in Nairobi.",
+    },
+};
+
 export async function generateMetadata({ params }) {
     const rawSlug = (params.category || "").toLowerCase().trim();
-    if (rawSlug === "all") {
+    const copy = categoryBrandCopy[rawSlug];
+
+    if (copy) {
         return {
-            title: "All Products | Ngwindsongk",
-            description: "Browse our complete catalog — oats, nuts & seeds, baby care products and more.",
+            title: `${copy.title} | ngwindsongk`,
+            description: copy.description,
+            openGraph: {
+                title: `${copy.title} | ngwindsongk`,
+                description: copy.description,
+                images: ['/logo.png'],
+            },
+            alternates: {
+                canonical: `/products/${rawSlug}`,
+            }
         };
     }
+
     const spacedSlug = rawSlug.replaceAll('-', ' ').replaceAll('%20', ' ');
+    const titleCased = spacedSlug.charAt(0).toUpperCase() + spacedSlug.slice(1);
     return {
-        title: `${spacedSlug.charAt(0).toUpperCase() + spacedSlug.slice(1)} | Ngwindsongk`,
-        description: `Browse our collection of ${spacedSlug} products.`
+        title: `${titleCased} Products | ngwindsongk`,
+        description: `Browse premium ${spacedSlug} products from ngwindsongk in Nairobi, Kenya. Fast delivery across Kenya.`,
+        alternates: {
+            canonical: `/products/${rawSlug}`,
+        }
     };
 }
 
@@ -67,4 +105,3 @@ export default async function CategoryPage({ params, searchParams }) {
         <CategoryClient fallbackData={fallbackData} initialSearch={search} />
     );
 }
-

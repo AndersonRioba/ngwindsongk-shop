@@ -3,6 +3,7 @@ import Register from "@/src/components/auth/Register";
 export const metadata = {
   title: "Join Us",
   description: "Create your account",
+  robots: { index: false, follow: false },
 };
 
 export default function RegisterPage() {

@@ -23,9 +23,6 @@ export const metadata = {
       description: "Shop premium oats and Nanacare baby care products online in Nairobi. Steel-cut oats, jumbo oats, oat flour, and essentials for new mothers. Delivery across Kenya.",
       images: ['/logo.png'],
     },
-    alternates: {
-      canonical: '/',
-    },
   }
 
 export default function HomeLayout({children}){

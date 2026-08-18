@@ -1,36 +1,31 @@
 # ngwindsongk
 
-> Premium healthy oats and Nanacare products for new mothers. Founded by Jennifer in Nairobi, Kenya.
+> Premium healthy oats, nutritional grain essentials, and Nanacare products for mothers and families. Based in Nairobi, Kenya.
 
-## About
+## About ngwindsongk
 
-ngwindsongk is an e-commerce store offering two main product lines:
+ngwindsongk is an authentic Kenyan brand offering 100% natural grain staples, premium breakfast cereals, and motherhood essentials with countrywide delivery across Kenya.
 
-1. **Grainmill** - Premium healthy oats including jumbo oats, steel-cut oats, oat flour, and quick breakfast oats. All products are 100% natural with no additives or preservatives.
-2. **Nanacare** - Thoughtful products designed for new mothers, including cooler bags, storage cups, and motherhood essentials.
+### Core Brands & Product Lines
+1. **Grainmill** — Premium hearty oats including 100% whole grain Jumbo Rolled Oats, Steel-Cut Oats, finely ground Oat Flour, and Quick Breakfast Oats. Non-GMO, no artificial preservatives.
+2. **Nanacare** — Practical baby care and feeding solutions for new mothers, including insulated breastmilk cooler bags, leakproof milk storage cups, nursing covers, and feeding bottles.
+3. **Nutmill** — Wholesome roasted nuts, seeds, and healthy pantry picks.
 
-All products are available for delivery across Nairobi with 7 delivery zones.
-
-## Product Categories
-
-- Breakfast Cereal: Jumbo oats, steel-cut oats, oat flour, quick breakfast oats
-- Nanacare: Cooler bags, storage cups, motherhood essentials
+## Content & Resources
+- **Recipes**: Step-by-step guides for cooking steel-cut oats, oat flour baking, baby-friendly meals, and breakfast smoothies at https://ngwindsongk.com/recipes
+- **Health & Wellness Blog**: Nutritional breakdowns, tips for breastfeeding mothers, and wholesome living at https://ngwindsongk.com/blog
 
 ## Key Pages
-
-- Homepage: https://ngwindsongk.com/
-- Products: https://ngwindsongk.com/products
-- About: https://ngwindsongk.com/about
+- Homepage: https://ngwindsongk.com
+- All Products: https://ngwindsongk.com/products
+- Recipes: https://ngwindsongk.com/recipes
+- Blog: https://ngwindsongk.com/blog
+- About Us: https://ngwindsongk.com/about
 - Contact: https://ngwindsongk.com/contact
 - FAQs: https://ngwindsongk.com/FAQs
 
-## Product URLs
-
-Product pages follow the pattern: https://ngwindsongk.com/products/{category}/{product-name}
-
-## Contact
-
-- Website: https://ngwindsongk.com
-- Email: Available via contact page
-- Location: Nairobi, Kenya
-- Currency: KES (Kenyan Shillings)
+## Delivery & Logistics
+- Serves Nairobi County with express 90-minute and standard same-day delivery.
+- PickUp Mtaani & countrywide courier options available for all 47 counties in Kenya.
+- Accepted Payment: M-Pesa (STK Push / Paybill / Till Number), Card.
+- Currency: KES (Kenyan Shillings).

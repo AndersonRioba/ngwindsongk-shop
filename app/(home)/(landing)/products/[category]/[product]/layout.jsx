@@ -5,6 +5,7 @@ async function fetchProduct(params) {
     const productData = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${product}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
+      next: { revalidate: 3600 },
     }).then(res => res.json()).catch(() => null);
     return { product, productData };
 }
@@ -24,35 +25,50 @@ export async function generateMetadata({ params }) {
     const productSlug = productData.slug || productData.name.toLowerCase().trim().replaceAll(' ', '-');
     const productUrl = `${SITE_URL}/products/${categorySlug}/${productSlug}`;
     const primaryImage = productData.product_images?.find(img => img.is_primary)?.url || productData.product_images?.[0]?.url;
-    const metaDescription = productData.about?.substring(0, 160) || `Shop ${productData.name} from ngwindsongk. Premium healthy oats and Nanacare products.`;
+
+    // SEO field fallback chain
+    const title = productData.seo_title || `${productData.name} - ${productData.category?.name || 'Products'}`;
+    const metaDescription = productData.seo_description || productData.about?.substring(0, 160) || `Shop ${productData.name} from ngwindsongk. Premium healthy oats and Nanacare products.`;
+    const canonical = productData.canonical_url || `/products/${categorySlug}/${productSlug}`;
+
+    const keywords = productData.seo_keywords
+      ? productData.seo_keywords.split(',').map(k => k.trim()).filter(Boolean)
+      : [
+          productData.name,
+          productData.category?.name,
+          productData.brand?.name,
+          'ngwindsongk',
+          'healthy oats',
+          'nanacare',
+          'premium products'
+        ].filter(Boolean);
 
     return {
-      title: `${productData.name} - ${productData.category?.name || 'Products'}`,
+      title: `${title} | ngwindsongk`,
       description: metaDescription,
-      keywords: [
-        productData.name,
-        productData.category?.name,
-        productData.brand?.name,
-        'ngwindsongk',
-        'healthy oats',
-        'nanacare',
-        'premium products'
-      ].filter(Boolean),
+      keywords,
       openGraph: {
-        title: `${productData.name} - ngwindsongk`,
+        title: `${title} | ngwindsongk`,
         description: metaDescription,
         url: productUrl,
-        images: primaryImage ? [primaryImage] : ['/logo.png'],
+        images: primaryImage ? [{ url: primaryImage, alt: productData.name }] : [{ url: `${SITE_URL}/logo.png`, alt: 'ngwindsongk' }],
         type: 'website',
       },
       twitter: {
         card: 'summary_large_image',
-        title: `${productData.name} - ngwindsongk`,
+        title: `${title} | ngwindsongk`,
         description: metaDescription,
-        images: primaryImage ? [primaryImage] : ['/logo.png'],
+        images: primaryImage ? [primaryImage] : [`${SITE_URL}/logo.png`],
       },
       alternates: {
-        canonical: `/products/${categorySlug}/${productSlug}`,
+        canonical,
+      },
+      robots: productData.noindex ? {
+        index: false,
+        follow: false,
+      } : {
+        index: true,
+        follow: true,
       },
     };
   }
@@ -67,8 +83,8 @@ export default async function ProductDescription({children, params}){
     const jsonLd = productData ? {
       "@context": "https://schema.org",
       "@type": "Product",
-      "name": productData.name,
-      "description": productData.about,
+      "name": productData.seo_title || productData.name,
+      "description": productData.seo_description || productData.about,
       "image": (productData.product_images || []).map(img => img.url),
       "brand": {
         "@type": "Brand",
@@ -76,6 +92,7 @@ export default async function ProductDescription({children, params}){
       },
       "category": productData.category?.name || "Health & Wellness",
       "sku": productData.slug || productData.id?.toString(),
+      "keywords": productData.seo_keywords || undefined,
       "offers": {
         "@type": "Offer",
         "price": productData.price,
