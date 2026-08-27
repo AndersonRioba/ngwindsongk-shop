@@ -23,7 +23,9 @@ export default function CheckoutPaymentPage(){
         contact, setContact,
         coordinates, setCoordinates,
         addressComponents, setAddressComponents,
-        deliveryZone, setDeliveryZone
+        deliveryZone, setDeliveryZone,
+        carrierType,
+        carrierName
     } = useContext(CheckoutContext);
 
     const [products, setProducts] = useState([]);
@@ -359,7 +361,10 @@ export default function CheckoutPaymentPage(){
                 pickup_station: pickupStation,
                 delivery_method: deliveryMethod,
                 delivery_zone: deliveryZone,
+                delivery_county: orderDetails.delivery_county || null,
                 delivery_county_id: orderDetails.delivery_county_id || null,
+                carrier_type: orderDetails.carrier_type || carrierType || null,
+                carrier_name: orderDetails.carrier_name || carrierName || null,
                 latitude: coordinates ? coordinates.latitude : null,
                 longitude: coordinates.longitude
             },
@@ -518,6 +523,9 @@ export default function CheckoutPaymentPage(){
                 delivery_method: deliveryMethod,
                 delivery_zone: deliveryZone,
                 delivery_county_id: orderDetails.delivery_county_id || null,
+                delivery_county: orderDetails.delivery_county || null,
+                carrier_type: orderDetails.carrier_type || carrierType || null,
+                carrier_name: orderDetails.carrier_name || carrierName || null,
                 latitude: coordinates?.latitude,
                 longitude: coordinates?.longitude
             },
@@ -569,6 +577,19 @@ export default function CheckoutPaymentPage(){
                             <>
                                 {orderDetails.delivery_county && <p><span className="font-semibold">County:</span> {orderDetails.delivery_county}</p>}
                                 <p><span className="font-semibold">Delivery Town:</span> {orderDetails.delivery_zone || 'Not specified'}</p>
+                                {(orderDetails.carrier_type || carrierType) && (
+                                    <p className="flex items-center gap-2">
+                                        <span className="font-semibold">Delivery Option:</span>
+                                        <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold ${
+                                            (orderDetails.carrier_type || carrierType) === 'rider'
+                                                ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                                                : 'bg-indigo-100 text-indigo-800 border border-indigo-300'
+                                        }`}>
+                                            {(orderDetails.carrier_type || carrierType) === 'rider' ? '🛵 Bike Rider' : '🚐 Matatu SACCO'}
+                                            {(orderDetails.carrier_name || carrierName) ? ` (${orderDetails.carrier_name || carrierName})` : ''}
+                                        </span>
+                                    </p>
+                                )}
                                 <p><span className="font-semibold">Address:</span> {orderDetails.address || 'N/A'}</p>
                             </>
                         )}

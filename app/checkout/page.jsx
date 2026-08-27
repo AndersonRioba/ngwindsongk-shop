@@ -23,7 +23,9 @@ export default function CheckoutInfoPage(){
         coordinates, setCoordinates,
         addressComponents, setAddressComponents,
         shipping, setShipping,
-        deliveryZone, setDeliveryZone
+        deliveryZone, setDeliveryZone,
+        carrierType, setCarrierType,
+        carrierName, setCarrierName
     } = useContext(CheckoutContext);
 
     const { cart } = useCart();
@@ -141,55 +143,10 @@ export default function CheckoutInfoPage(){
             setDeliveryFee(null);
             setShipping(0);
             setDeliveryZone('');
+            setCarrierType(null);
+            setCarrierName(null);
         }
     };
-
-    /* COMMENTED OUT: County + urban center change handlers
-       Keeping for potential future re-enablement.
-    const handleCountyChange = (e) => {
-        const val = e.target.value;
-        const county = val ? counties.find(c => c.id === parseInt(val)) : null;
-        
-        setSelectedCounty(county || null);
-        setCountySearch(county ? county.name : '');
-        setShowCountyList(false);
-        setSelectedUrban('');
-        setManualTown('');
-        
-        const fee = county ? parseFloat(county.delivery_fee) : 0;
-        setDeliveryFee(fee);
-        setShipping(fee);
-        setDeliveryZone(county?.name || null);
-
-        setOrderDetails(prev => ({ ...prev, delivery_county: county?.name || '', delivery_zone: '' }));
-    };
-
-    const handleUrbanChange = (e) => {
-        const val = e.target.value;
-        setSelectedUrban(val);
-        setManualTown('');
-        if (val === 'other') {
-            const fee = selectedCounty ? parseFloat(selectedCounty.delivery_fee) : 0;
-            setDeliveryFee(fee);
-            setShipping(fee);
-            setDeliveryZone(selectedCounty?.name ? `${selectedCounty.name} (Other Town)` : null);
-            setOrderDetails(prev => ({ ...prev, delivery_zone: '' }));
-        } else if (val) {
-            const urban = selectedCounty?.children?.find(c => c.id === parseInt(val));
-            const fee = urban ? parseFloat(urban.delivery_fee) : (selectedCounty ? parseFloat(selectedCounty.delivery_fee) : 0);
-            setDeliveryFee(fee);
-            setShipping(fee);
-            setDeliveryZone(urban?.name || selectedCounty?.name || null);
-            setOrderDetails(prev => ({ ...prev, delivery_zone: urban?.name || '' }));
-        } else {
-            const fee = selectedCounty ? parseFloat(selectedCounty.delivery_fee) : 0;
-            setDeliveryFee(fee);
-            setShipping(fee);
-            setDeliveryZone(selectedCounty?.name || null);
-            setOrderDetails(prev => ({ ...prev, delivery_zone: '' }));
-        }
-    };
-    */
 
     const selectPickupLocation = (locationId) => {
         setPickup(locationId);
@@ -217,6 +174,10 @@ export default function CheckoutInfoPage(){
             if (!townSearch || townSearch.trim() === '') {
                 newErrors.town = 'Please enter or select your town / urban center.';
             }
+            const isNairobi = (selectedCounty?.name || '').toLowerCase().includes('nairobi');
+            if (isNairobi && !carrierType) {
+                newErrors.carrier = 'Please choose either Bike Rider or Matatu SACCO.';
+            }
         }
 
         if (Object.keys(newErrors).length > 0) {
@@ -240,6 +201,8 @@ export default function CheckoutInfoPage(){
                 delivery_county: finalCountyName,
                 delivery_county_id: finalCountyId,
                 delivery_zone: finalTownName,
+                carrier_type: (selectedCounty?.name || '').toLowerCase().includes('nairobi') ? carrierType : null,
+                carrier_name: (selectedCounty?.name || '').toLowerCase().includes('nairobi') ? carrierName : null,
                 shipping: finalFee,
             }));
         }
@@ -431,6 +394,8 @@ export default function CheckoutInfoPage(){
                                             setDeliveryFee(null);
                                             setShipping(0);
                                             setDeliveryZone('');
+                                            setCarrierType(null);
+                                            setCarrierName(null);
                                         }}
                                         className={`block w-full h-11 px-4 border-[1px] rounded-xl focus:outline-none focus:ring-2 transition-all ${errors.county ? 'border-red-500 focus:ring-red-200' : 'border-primary focus:ring-primary/20'}`}
                                     />
@@ -449,6 +414,8 @@ export default function CheckoutInfoPage(){
                                                             setShowCountyList(false);
                                                             setTownSearch('');
                                                             setSelectedTown(null);
+                                                            setCarrierType(null);
+                                                            setCarrierName(null);
                                                             const baseFee = parseFloat(county.delivery_fee || 0);
                                                             setDeliveryFee(baseFee);
                                                             setShipping(baseFee);
@@ -491,11 +458,15 @@ export default function CheckoutInfoPage(){
                                                 const query = e.target.value;
                                                 setTownSearch(query);
                                                 setShowTownList(true);
+                                                setSelectedTown(null);
                                                 
-                                                // Fallback to county fee if custom typed town
-                                                const countyBaseFee = parseFloat(selectedCounty.delivery_fee || 0);
-                                                setDeliveryFee(countyBaseFee);
-                                                setShipping(countyBaseFee);
+                                                const isNrb = (selectedCounty.name || '').toLowerCase().includes('nairobi');
+                                                if (!isNrb) {
+                                                    // Fallback to county fee if custom typed town for non-Nairobi
+                                                    const countyBaseFee = parseFloat(selectedCounty.delivery_fee || 0);
+                                                    setDeliveryFee(countyBaseFee);
+                                                    setShipping(countyBaseFee);
+                                                }
                                                 setDeliveryZone(query);
                                                 setOrderDetails(prev => ({
                                                     ...prev,
@@ -520,9 +491,30 @@ export default function CheckoutInfoPage(){
                                                                 setSelectedTown(town);
                                                                 setTownSearch(town.name);
                                                                 setShowTownList(false);
-                                                                const fee = town.delivery_fee !== null ? parseFloat(town.delivery_fee) : parseFloat(selectedCounty.delivery_fee || 0);
-                                                                setDeliveryFee(fee);
-                                                                setShipping(fee);
+                                                                
+                                                                const isNrb = (selectedCounty.name || '').toLowerCase().includes('nairobi');
+                                                                if (isNrb) {
+                                                                    // Default to rider if available, else sacco, else fallback
+                                                                    const rFee = town.rider_fee !== null && town.rider_fee !== undefined ? parseFloat(town.rider_fee) : null;
+                                                                    const sFee = town.sacco_fee !== null && town.sacco_fee !== undefined ? parseFloat(town.sacco_fee) : null;
+                                                                    
+                                                                    let initialType = carrierType || (rFee !== null ? 'rider' : 'sacco');
+                                                                    let pickedFee = initialType === 'sacco' ? (sFee ?? rFee ?? parseFloat(town.delivery_fee || selectedCounty.delivery_fee || 0))
+                                                                                                            : (rFee ?? sFee ?? parseFloat(town.delivery_fee || selectedCounty.delivery_fee || 0));
+                                                                    let pickedName = initialType === 'sacco' ? (town.sacco_name || 'Matatu SACCO') : (town.rider_name || 'Bike Rider');
+                                                                    
+                                                                    setCarrierType(initialType);
+                                                                    setCarrierName(pickedName);
+                                                                    setDeliveryFee(pickedFee);
+                                                                    setShipping(pickedFee);
+                                                                } else {
+                                                                    const fee = town.delivery_fee !== null ? parseFloat(town.delivery_fee) : parseFloat(selectedCounty.delivery_fee || 0);
+                                                                    setDeliveryFee(fee);
+                                                                    setShipping(fee);
+                                                                    setCarrierType(null);
+                                                                    setCarrierName(null);
+                                                                }
+                                                                
                                                                 setDeliveryZone(town.name);
                                                                 setOrderDetails(prev => ({
                                                                     ...prev,
@@ -534,9 +526,24 @@ export default function CheckoutInfoPage(){
                                                             className="px-4 py-3 hover:bg-primary/5 cursor-pointer text-sm flex justify-between items-center border-b border-gray-100 last:border-0"
                                                         >
                                                             <span className="font-semibold text-gray-800">{town.name}</span>
-                                                            <span className="text-xs font-bold text-primary bg-primary/10 px-2 py-0.5 rounded">
-                                                                KES {town.delivery_fee !== null ? town.delivery_fee : selectedCounty.delivery_fee}
-                                                            </span>
+                                                            {(selectedCounty.name || '').toLowerCase().includes('nairobi') ? (
+                                                                <div className="flex items-center gap-1.5 text-xs">
+                                                                    {town.rider_fee !== null && (
+                                                                        <span className="font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                                                                            🛵 KES {town.rider_fee}
+                                                                        </span>
+                                                                    )}
+                                                                    {town.sacco_fee !== null && (
+                                                                        <span className="font-medium text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">
+                                                                            🚐 KES {town.sacco_fee}
+                                                                        </span>
+                                                                    )}
+                                                                </div>
+                                                            ) : (
+                                                                <span className="text-xs font-bold text-primary bg-primary/10 px-2 py-0.5 rounded">
+                                                                    KES {town.delivery_fee !== null ? town.delivery_fee : selectedCounty.delivery_fee}
+                                                                </span>
+                                                            )}
                                                         </div>
                                                     ))
                                                 }
@@ -557,6 +564,115 @@ export default function CheckoutInfoPage(){
                                                 )}
                                             </div>
                                         )}
+                                    </div>
+                                )}
+
+                                {/* Nairobi-Specific Carrier Selection (Bike Rider vs Matatu SACCO) */}
+                                {selectedCounty && (selectedCounty.name || '').toLowerCase().includes('nairobi') && (
+                                    <div className="bg-gradient-to-br from-emerald-50/50 via-white to-indigo-50/50 p-4 rounded-xl border border-gray-200/80 shadow-sm" id="carrier">
+                                        <div className="flex items-center justify-between mb-2.5">
+                                            <label className="block text-sm font-semibold text-gray-800">
+                                                Select Delivery Carrier Option <span className="text-red-500">*</span>
+                                            </label>
+                                            <span className="text-[11px] font-medium text-emerald-700 bg-emerald-100/80 px-2 py-0.5 rounded-full">
+                                                Nairobi Express
+                                            </span>
+                                        </div>
+                                        <p className="text-xs text-gray-500 mb-3">
+                                            Choose your preferred shipping method for this urban center:
+                                        </p>
+
+                                        {(() => {
+                                            const rFee = selectedTown?.rider_fee !== null && selectedTown?.rider_fee !== undefined
+                                                ? parseFloat(selectedTown.rider_fee)
+                                                : (selectedCounty.delivery_fee ? parseFloat(selectedCounty.delivery_fee) : 0);
+                                            const rName = selectedTown?.rider_name || 'Bike Rider Delivery';
+
+                                            const sFee = selectedTown?.sacco_fee !== null && selectedTown?.sacco_fee !== undefined
+                                                ? parseFloat(selectedTown.sacco_fee)
+                                                : (selectedCounty.delivery_fee ? parseFloat(selectedCounty.delivery_fee) : 0);
+                                            const sName = selectedTown?.sacco_name || 'Matatu SACCO Parcel';
+
+                                            return (
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                                    {/* Bike Rider Option */}
+                                                    <div
+                                                        onClick={() => {
+                                                            setCarrierType('rider');
+                                                            setCarrierName(rName);
+                                                            setDeliveryFee(rFee);
+                                                            setShipping(rFee);
+                                                            if (errors.carrier) setErrors(prev => ({ ...prev, carrier: null }));
+                                                        }}
+                                                        className={`relative p-3.5 rounded-xl border-2 cursor-pointer transition-all flex flex-col justify-between ${
+                                                            carrierType === 'rider'
+                                                                ? 'border-emerald-600 bg-emerald-50/70 shadow-sm ring-1 ring-emerald-500/30'
+                                                                : 'border-gray-200 hover:border-emerald-300 bg-white'
+                                                        }`}
+                                                    >
+                                                        <div className="flex items-start justify-between">
+                                                            <div className="flex items-center gap-2.5">
+                                                                <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-lg font-bold">
+                                                                    🛵
+                                                                </div>
+                                                                <div>
+                                                                    <div className="text-sm font-bold text-gray-900 leading-tight">Bike Rider</div>
+                                                                    <div className="text-xs text-gray-500 font-medium truncate max-w-[140px]" title={rName}>
+                                                                        {rName}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${carrierType === 'rider' ? 'border-emerald-600 bg-emerald-600' : 'border-gray-300'}`}>
+                                                                {carrierType === 'rider' && <div className="w-1.5 h-1.5 bg-white rounded-full" />}
+                                                            </div>
+                                                        </div>
+                                                        <div className="mt-3 pt-2.5 border-t border-gray-100 flex items-baseline justify-between">
+                                                            <span className="text-[11px] text-gray-500 font-medium">Doorstep Rider Fee</span>
+                                                            <span className="text-sm font-extrabold text-emerald-700">KES {rFee}</span>
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Matatu SACCO Option */}
+                                                    <div
+                                                        onClick={() => {
+                                                            setCarrierType('sacco');
+                                                            setCarrierName(sName);
+                                                            setDeliveryFee(sFee);
+                                                            setShipping(sFee);
+                                                            if (errors.carrier) setErrors(prev => ({ ...prev, carrier: null }));
+                                                        }}
+                                                        className={`relative p-3.5 rounded-xl border-2 cursor-pointer transition-all flex flex-col justify-between ${
+                                                            carrierType === 'sacco'
+                                                                ? 'border-indigo-600 bg-indigo-50/70 shadow-sm ring-1 ring-indigo-500/30'
+                                                                : 'border-gray-200 hover:border-indigo-300 bg-white'
+                                                        }`}
+                                                    >
+                                                        <div className="flex items-start justify-between">
+                                                            <div className="flex items-center gap-2.5">
+                                                                <div className="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center text-lg font-bold">
+                                                                    🚐
+                                                                </div>
+                                                                <div>
+                                                                    <div className="text-sm font-bold text-gray-900 leading-tight">Matatu SACCO</div>
+                                                                    <div className="text-xs text-gray-500 font-medium truncate max-w-[140px]" title={sName}>
+                                                                        {sName}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${carrierType === 'sacco' ? 'border-indigo-600 bg-indigo-600' : 'border-gray-300'}`}>
+                                                                {carrierType === 'sacco' && <div className="w-1.5 h-1.5 bg-white rounded-full" />}
+                                                            </div>
+                                                        </div>
+                                                        <div className="mt-3 pt-2.5 border-t border-gray-100 flex items-baseline justify-between">
+                                                            <span className="text-[11px] text-gray-500 font-medium">SACCO Parcel Fee</span>
+                                                            <span className="text-sm font-extrabold text-indigo-700">KES {sFee}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })()}
+
+                                        {errors.carrier && <p className="text-red-500 text-xs mt-2 font-medium">{errors.carrier}</p>}
                                     </div>
                                 )}
 

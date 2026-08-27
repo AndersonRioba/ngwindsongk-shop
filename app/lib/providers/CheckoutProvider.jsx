@@ -17,6 +17,8 @@ export default function CheckoutProvider({ children }) {
     const [coordinates, setCoordinates] = useState({ latitude: null, longitude: null });
     const [addressComponents, setAddressComponents] = useState([]);
     const [deliveryZone, setDeliveryZone] = useState(null);
+    const [carrierType, setCarrierType] = useState(null); // 'rider' | 'sacco'
+    const [carrierName, setCarrierName] = useState(null);
 
     return(
         <CheckoutContext.Provider value={{
@@ -29,7 +31,9 @@ export default function CheckoutProvider({ children }) {
             contact, setContact,
             coordinates, setCoordinates,
             addressComponents, setAddressComponents,
-            deliveryZone, setDeliveryZone
+            deliveryZone, setDeliveryZone,
+            carrierType, setCarrierType,
+            carrierName, setCarrierName,
         }}>
         {children}
         </CheckoutContext.Provider>
