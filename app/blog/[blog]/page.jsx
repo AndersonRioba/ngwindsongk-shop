@@ -7,6 +7,7 @@ import { getData, postData } from "@/app/lib/data"
 import Link from "next/link"
 import { getImageUrl } from "@/app/lib/utils/image";
 import useUser from "@/app/lib/hooks/useUser"
+import ShareModal from "@/app/UI/ShareModal";
 
 export default function BlogDetail() {
     const { blog: slug } = useParams();
@@ -17,6 +18,7 @@ export default function BlogDetail() {
     const [name, setName] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [successMessage, setSuccessMessage] = useState("");
+    const [showShareModal, setShowShareModal] = useState(false);
 
     useEffect(() => {
         if (slug) {
@@ -81,6 +83,13 @@ export default function BlogDetail() {
 
     return (
         <main className='mx-2 md:mx-auto md:w-9/12 lg:w-7/12 md:mt-10 pb-20'>
+            {/* Share Modal */}
+            <ShareModal
+                isOpen={showShareModal}
+                onClose={() => setShowShareModal(false)}
+                title={blog.title}
+                shareText={`Read this article: ${blog.title}`}
+            />
             {/* Header */}
             <header className="mb-10 animate-in slide-in-from-top duration-700">
                 <Link href="/blog" className="text-sm text-gray-400 hover:text-primary transition-colors flex items-center gap-1 mb-6 font-bold">
@@ -88,7 +97,7 @@ export default function BlogDetail() {
                     Back to Blog
                 </Link>
                 <h1 className='text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight mb-6'>{blog.title}</h1>
-                <div className="flex items-center gap-6">
+                <div className="flex flex-wrap items-center gap-4">
                     <div className="flex items-center gap-3">
                         <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary border-2 border-primary/20">
                             <span className="icon-[solar--user-bold] w-6 h-6" />
@@ -99,9 +108,18 @@ export default function BlogDetail() {
                         </div>
                     </div>
                     <div className="h-8 w-[1px] bg-gray-100"></div>
-                    <div className="flex gap-2">
+                    <div className="flex flex-wrap gap-2">
                         <span className='text-[10px] font-bold border-[1px] py-1 px-3 rounded-full bg-gray-50 text-gray-500 border-gray-100 uppercase tracking-widest'>{blog.comments?.length || 0} Comments</span>
                         <span className='text-[10px] font-bold border-[1px] py-1 px-3 rounded-full bg-primary/5 text-primary border-primary/20 uppercase tracking-widest'>Article</span>
+                        {/* Share button */}
+                        <button
+                            id="blog-share-btn"
+                            onClick={() => setShowShareModal(true)}
+                            className="flex items-center gap-1.5 text-[10px] font-bold border py-1 px-3 rounded-full bg-primary/5 text-primary border-primary/20 uppercase tracking-widest hover:bg-primary hover:text-white hover:border-primary transition-all"
+                        >
+                            <span className="icon-[tabler--share] w-3 h-3" />
+                            Share
+                        </button>
                     </div>
                 </div>
             </header>

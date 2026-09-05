@@ -12,6 +12,7 @@ import ProductListing, {ProductListingSkeleton} from "@/app/UI/ProductListing";
 import ReviewModal from "@/app/UI/ReviewModal";
 import { Question } from "@/app/(docs)/FAQs/page";
 import { getImageUrl } from "@/app/lib/utils/image";
+import ShareModal from "@/app/UI/ShareModal";
 
 function Details({product, initialData}){
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -312,6 +313,7 @@ export default function ProductView({params, initialProduct, initialDescription}
     let product = params.product;
     let category = params.category;
     let [quantity, setQuantity] =useState(1);
+    const [showShareModal, setShowShareModal] = useState(false);
     const [variation, setVariation] = useState(() => {
         if(initialProduct?.product_variations && initialProduct.product_variations.length > 0) {
             return initialProduct.product_variations[0];
@@ -371,6 +373,13 @@ export default function ProductView({params, initialProduct, initialDescription}
     
     return(
         <>
+        {/* Share Modal */}
+        <ShareModal
+            isOpen={showShareModal}
+            onClose={() => setShowShareModal(false)}
+            title={displayProduct?.name}
+            shareText={`Check out this product: ${displayProduct?.name}`}
+        />
         <div className="animate-in fade-in duration-700">
             <div className="flex flex-col md:flex-row md:gap-8 lg:gap-12">
                 <div className="flex flex-col md:w-1/2 lg:w-7/12">
@@ -573,6 +582,15 @@ export default function ProductView({params, initialProduct, initialDescription}
                                         router.push('/checkout')
                                     }} className="block flex-grow text-center py-3 lg:py-2 2xl:py-3 rounded-md hover:scale-105 bg-primary text-white">Checkout</button>
                                 </div>
+                                {/* Share button */}
+                                <button
+                                    id="product-share-btn"
+                                    onClick={() => setShowShareModal(true)}
+                                    className="flex items-center justify-center gap-2 w-full mt-1 py-2.5 rounded-xl border border-black/8 bg-gray-50 hover:bg-gray-100 text-black/50 hover:text-black font-bold text-[10px] uppercase tracking-widest transition-all"
+                                >
+                                    <span className="icon-[tabler--share] w-4 h-4" />
+                                    Share this product
+                                </button>
                             </>
                         );
                     })()}
