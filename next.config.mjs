@@ -89,6 +89,25 @@ const nextConfig = {
             },
         ];
     },
+    async redirects() {
+        return [
+            {
+                source: '/returns',
+                destination: '/return-policy',
+                permanent: true,
+            },
+            {
+                source: '/refund-policy',
+                destination: '/return-policy',
+                permanent: true,
+            },
+            {
+                source: '/returns-policy',
+                destination: '/return-policy',
+                permanent: true,
+            },
+        ];
+    },
 };
 
 export default nextConfig;

@@ -235,6 +235,7 @@ export default function FooterClient({ fallbackSettings, fallbackBrands }) {
                     <div className="flex items-center gap-6">
                         <Link href="/policy" className="hover:text-black transition-colors">Privacy Policy</Link>
                         <Link href="/terms" className="hover:text-black transition-colors">Terms & Conditions</Link>
+                        <Link href="/return-policy" className="hover:text-black transition-colors">Return Policy</Link>
                         <Link href="/cookies" className="hover:text-black transition-colors">Cookies</Link>
                     </div>
                 </div>
