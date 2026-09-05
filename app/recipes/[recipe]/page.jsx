@@ -236,8 +236,9 @@ export default function RecipeDetail() {
                             {/* Share/Actions */}
                             <div className="flex gap-3 luxe-reveal luxe-delay-4">
                                 <button 
+                                    id="recipe-share-btn"
                                     onClick={handleShare}
-                                    className="flex-1 bg-primary hover:bg-primary-dark text-white py-4 rounded-2xl font-semibold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-2 shadow-[0_12px_30px_rgba(109,49,237,0.15)] hover:-translate-y-0.5"
+                                    className="flex-1 bg-white border-2 border-primary text-primary hover:bg-primary hover:text-white py-4 rounded-2xl font-bold uppercase text-[10px] tracking-[0.2em] transition-all flex items-center justify-center gap-2 shadow-sm hover:shadow-md hover:shadow-primary/20 hover:-translate-y-0.5"
                                 >
                                     <Share2 size={14} />
                                     Share Recipe

@@ -586,7 +586,7 @@ export default function ProductView({params, initialProduct, initialDescription}
                                 <button
                                     id="product-share-btn"
                                     onClick={() => setShowShareModal(true)}
-                                    className="flex items-center justify-center gap-2 w-full mt-1 py-2.5 rounded-xl border border-black/8 bg-gray-50 hover:bg-gray-100 text-black/50 hover:text-black font-bold text-[10px] uppercase tracking-widest transition-all"
+                                    className="flex items-center justify-center gap-2 w-full mt-1 py-2.5 rounded-xl border-2 border-primary bg-white text-primary hover:bg-primary hover:text-white font-bold text-[10px] uppercase tracking-widest transition-all shadow-sm hover:shadow-md hover:shadow-primary/20"
                                 >
                                     <span className="icon-[tabler--share] w-4 h-4" />
                                     Share this product

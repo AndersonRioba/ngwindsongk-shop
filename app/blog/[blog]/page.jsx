@@ -115,7 +115,7 @@ export default function BlogDetail() {
                         <button
                             id="blog-share-btn"
                             onClick={() => setShowShareModal(true)}
-                            className="flex items-center gap-1.5 text-[10px] font-bold border py-1 px-3 rounded-full bg-primary/5 text-primary border-primary/20 uppercase tracking-widest hover:bg-primary hover:text-white hover:border-primary transition-all"
+                            className="flex items-center gap-1.5 text-[10px] font-bold border-2 border-primary bg-white text-primary hover:bg-primary hover:text-white py-1 px-3 rounded-full uppercase tracking-widest transition-all shadow-sm hover:shadow-md hover:shadow-primary/20"
                         >
                             <span className="icon-[tabler--share] w-3 h-3" />
                             Share
