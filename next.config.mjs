@@ -83,7 +83,7 @@ const nextConfig = {
                     },
                     {
                         key: 'Content-Security-Policy',
-                        value: "default-src 'self' 'unsafe-inline' 'unsafe-eval' http://localhost:8000 http://127.0.0.1:8000 https://api.ngwindsongk.com; img-src 'self' data: blob: http://localhost:8000 http://127.0.0.1:8000 https://api.ngwindsongk.com https://encrypted-tbn0.gstatic.com https://images.unsplash.com; font-src 'self' data:; frame-src 'self' https://www.youtube.com https://youtube.com https://www.youtube-nocookie.com;",
+                        value: "default-src 'self' 'unsafe-inline' 'unsafe-eval' http://localhost:8000 http://127.0.0.1:8000 https://api.ngwindsongk.com https://www.googletagmanager.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com; connect-src 'self' http://localhost:8000 http://127.0.0.1:8000 https://api.ngwindsongk.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; img-src 'self' data: blob: http://localhost:8000 http://127.0.0.1:8000 https://api.ngwindsongk.com https://encrypted-tbn0.gstatic.com https://images.unsplash.com https://www.google-analytics.com https://*.google-analytics.com https://*.googletagmanager.com; font-src 'self' data:; frame-src 'self' https://www.youtube.com https://youtube.com https://www.youtube-nocookie.com;",
                     }
                 ],
             },
