@@ -125,9 +125,6 @@ export default function RootLayout({ children }) {
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
 
-        <GoogleTag disableAnalytics={disableAnalytics} />
-
-
 
         {/* Structured Data */}
         <script
@@ -170,6 +167,7 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body suppressHydrationWarning className={`${outfit.className} lg:text-sm 2xl:text-base`}>
+        <GoogleTag disableAnalytics={disableAnalytics} />
       {!disableAnalytics && <Analytics/>}
       <SpeedInsights />
         <AuthProvider>
