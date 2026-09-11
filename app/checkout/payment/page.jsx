@@ -190,10 +190,16 @@ export default function CheckoutPaymentPage(){
                     setShippingLoading(false);
                 }
             } else {
-                // If shipping is already set from zone picker, keep it
-                if (!shipping) {
-                    setShipping(0);
-                    setIsShippingFallback(true);
+                // If shipping is already set from zone picker or county default, keep it
+                if (!shipping || shipping === 0) {
+                    const fallbackFee = parseFloat(orderDetails.shipping || 0);
+                    if (fallbackFee > 0) {
+                        setShipping(fallbackFee);
+                        setIsShippingFallback(false);
+                    } else {
+                        setShipping(0);
+                        setIsShippingFallback(true);
+                    }
                 }
                 setShippingLoading(false);
             }
@@ -201,7 +207,7 @@ export default function CheckoutPaymentPage(){
 
         calculateShipping();
 
-    }, [total, pickup, coordinates, addressComponents, settings, products, setShipping, setDeliveryZone, shipping]);
+    }, [total, pickup, coordinates, addressComponents, settings, products, setShipping, setDeliveryZone, shipping, orderDetails.shipping]);
 
     useEffect(()=>{
         if (items.length > 0 && products.length === 0) {

@@ -192,7 +192,8 @@ export default function CheckoutInfoPage(){
             const finalCountyName = selectedCounty ? selectedCounty.name : '';
             const finalCountyId = selectedCounty ? selectedCounty.id : null;
             const finalTownName = townSearch.trim();
-            const finalFee = deliveryFee !== null ? deliveryFee : parseFloat(selectedCounty?.delivery_fee || 0);
+            const countyDefaultFee = parseFloat(selectedCounty?.delivery_fee || 0);
+            const finalFee = (deliveryFee !== null && deliveryFee > 0) ? deliveryFee : countyDefaultFee;
 
             setDeliveryZone(finalTownName);
             setShipping(finalFee);
@@ -460,19 +461,18 @@ export default function CheckoutInfoPage(){
                                                 setShowTownList(true);
                                                 setSelectedTown(null);
                                                 
-                                                const isNrb = (selectedCounty.name || '').toLowerCase().includes('nairobi');
-                                                if (!isNrb) {
-                                                    // Fallback to county fee if custom typed town for non-Nairobi
-                                                    const countyBaseFee = parseFloat(selectedCounty.delivery_fee || 0);
-                                                    setDeliveryFee(countyBaseFee);
-                                                    setShipping(countyBaseFee);
-                                                }
+                                                // Always default to county base fee when typing a custom/new urban center
+                                                const countyBaseFee = parseFloat(selectedCounty?.delivery_fee || 0);
+                                                setDeliveryFee(countyBaseFee);
+                                                setShipping(countyBaseFee);
+
                                                 setDeliveryZone(query);
                                                 setOrderDetails(prev => ({
                                                     ...prev,
                                                     delivery_county: selectedCounty.name,
                                                     delivery_county_id: selectedCounty.id,
-                                                    delivery_zone: query
+                                                    delivery_zone: query,
+                                                    shipping: countyBaseFee,
                                                 }));
                                                 if (errors.town) setErrors(prev => ({ ...prev, town: null }));
                                             }}
@@ -554,7 +554,12 @@ export default function CheckoutInfoPage(){
                                                             const countyBaseFee = parseFloat(selectedCounty.delivery_fee || 0);
                                                             setDeliveryFee(countyBaseFee);
                                                             setShipping(countyBaseFee);
-                                                            setDeliveryZone(townSearch);
+                                                            setDeliveryZone(townSearch.trim());
+                                                            setOrderDetails(prev => ({
+                                                                ...prev,
+                                                                delivery_zone: townSearch.trim(),
+                                                                shipping: countyBaseFee,
+                                                            }));
                                                         }}
                                                         className="px-4 py-3 hover:bg-blue-50 cursor-pointer text-sm text-blue-700 font-medium flex items-center justify-between border-t border-gray-100"
                                                     >
