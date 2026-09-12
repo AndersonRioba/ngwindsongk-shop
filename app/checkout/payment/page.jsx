@@ -39,8 +39,6 @@ export default function CheckoutPaymentPage(){
     const [pollingStatus, setPollingStatus] = useState('');
     const [timeLeft, setTimeLeft] = useState(60);
     const [paymentTimeout, setPaymentTimeout] = useState(false);
-    const [manualReceipt, setManualReceipt] = useState('');
-    const [manualSubmitting, setManualSubmitting] = useState(false);
     const [paymentMode, setPaymentMode] = useState('stk');
     const [isPlacingManualOrder, setIsPlacingManualOrder] = useState(false);
     const [isManualPolling, setIsManualPolling] = useState(false);
@@ -441,41 +439,6 @@ export default function CheckoutPaymentPage(){
             }
         }, 5000);
     };
-
-    const submitManualPayment = async () => {
-        if (!manualReceipt || manualReceipt.trim().length < 5) {
-            setErrorMsg("Please enter a valid M-Pesa receipt number.");
-            return;
-        }
-        setManualSubmitting(true);
-        setErrorMsg('');
-
-        try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/pay/mpesa/manual-receipt`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${load('token')}`
-                },
-                body: JSON.stringify({
-                    order_id: createdOrderId,
-                    receipt_number: manualReceipt
-                })
-            });
-            const data = await res.json();
-            
-            if (data.success) {
-                router.push('/checkout/success?type=manual');
-            } else {
-                setErrorMsg(data.message || "Failed to submit receipt.");
-                setManualSubmitting(false);
-            }
-        } catch (err) {
-            console.error("Manual receipt error:", err);
-            setErrorMsg("Network error. Please try again.");
-            setManualSubmitting(false);
-        }
-    }
 
     // Step 1 of manual flow: create the order and surface the order slug
     const placeManualOrder = () => {
