@@ -93,9 +93,7 @@ export const metadata = {
     },
   },
   verification: {
-    google: 'your-google-verification-code',
-    yandex: 'your-yandex-verification-code',
-    yahoo: 'your-yahoo-verification-code',
+    google: 'vBHQe1M0C8X_LIChPV0dIc7gmESalu_V87oAVsWqdk0',
   },
 };
 
