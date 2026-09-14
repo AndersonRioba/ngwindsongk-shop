@@ -13,6 +13,7 @@ import Cart from "@/app/UI/Cart";
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import PageTracker from "@/app/components/PageTracker";
+import GoogleTag from "@/app/components/GoogleTag";
 import { cookies } from "next/headers";
 
 
@@ -102,7 +103,6 @@ import { AuthProvider } from "@/src/context/AuthContext";
 export default function RootLayout({ children }) {
   const cookieStore = cookies();
   const disableAnalytics = cookieStore.get('disable_analytics')?.value === 'true';
-  const tagId = process.env.NEXT_PUBLIC_GOOGLE_TAG_ID || 'GT-P84567X7';
 
   return (
     <html lang="en">
@@ -166,26 +166,7 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body suppressHydrationWarning className={`${outfit.className} lg:text-sm 2xl:text-base`}>
-        {!disableAnalytics && (
-          <>
-            <Script
-              strategy="afterInteractive"
-              src={`https://www.googletagmanager.com/gtag/js?id=${tagId}`}
-            />
-            <Script
-              id="google-analytics"
-              strategy="afterInteractive"
-              dangerouslySetInnerHTML={{
-                __html: `
-                  window.dataLayer = window.dataLayer || [];
-                  function gtag(){dataLayer.push(arguments);}
-                  gtag('js', new Date());
-                  gtag('config', '${tagId}');
-                `,
-              }}
-            />
-          </>
-        )}
+        <GoogleTag disableAnalytics={disableAnalytics} />
       {!disableAnalytics && <Analytics/>}
       <SpeedInsights />
         <AuthProvider>
