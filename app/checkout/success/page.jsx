@@ -24,18 +24,41 @@ export default function CheckoutSuccessPage(){
         );
 
         // Track Conversions
+        const executeSnippet = (snippetCode) => {
+            if (!snippetCode) return;
+            const trimmed = snippetCode.trim();
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = window.gtag || function() { window.dataLayer.push(arguments); };
+
+            if (trimmed.startsWith('<script') || trimmed.includes('</script>')) {
+                try {
+                    const fragment = document.createRange().createContextualFragment(trimmed);
+                    document.head.appendChild(fragment);
+                } catch (err) {
+                    console.error("Failed to append script snippet:", err);
+                }
+            } else {
+                try {
+                    const runner = new Function('gtag', 'window', 'dataLayer', trimmed);
+                    runner(window.gtag, window, window.dataLayer);
+                } catch (err) {
+                    console.error("Failed to execute snippet:", err);
+                }
+            }
+        };
+
         const trackConversions = async () => {
             try {
+                const apiBase = process.env.NEXT_PUBLIC_API_URL || 'https://api.ngwindsongk.com/api';
+                const trackingEndpoint = apiBase.endsWith('/api') 
+                    ? `${apiBase}/settings?group=tracking` 
+                    : `${apiBase}/api/settings?group=tracking`;
+
                 // 1. Global Tracking
-                const settingsRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/settings?group=tracking`);
+                const settingsRes = await fetch(trackingEndpoint);
                 const settingsData = await settingsRes.json();
-                if (settingsData.success && settingsData.data.purchase_event_snippet) {
-                    try {
-                        const fragment = document.createRange().createContextualFragment(settingsData.data.purchase_event_snippet);
-                        document.head.appendChild(fragment);
-                    } catch (err) {
-                        console.error("Failed to execute global purchase snippet:", err);
-                    }
+                if (settingsData.success && settingsData.data?.purchase_event_snippet) {
+                    executeSnippet(settingsData.data.purchase_event_snippet);
                 }
 
                 // 2. Brand-Specific Tracking
@@ -43,16 +66,14 @@ export default function CheckoutSuccessPage(){
                     const brandIds = [...new Set(products.map(p => p.brand?.id).filter(id => !!id))];
                     
                     for (const brandId of brandIds) {
-                        const brandRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/brands/${brandId}`);
+                        const brandEndpoint = apiBase.endsWith('/api') 
+                            ? `${apiBase}/brands/${brandId}` 
+                            : `${apiBase}/api/brands/${brandId}`;
+                        const brandRes = await fetch(brandEndpoint);
                         const brandData = await brandRes.json();
                         
                         if (brandData && brandData.purchase_snippet) {
-                            try {
-                                const fragment = document.createRange().createContextualFragment(brandData.purchase_snippet);
-                                document.head.appendChild(fragment);
-                            } catch (err) {
-                                console.error(`Failed to execute purchase snippet for brand ${brandId}:`, err);
-                            }
+                            executeSnippet(brandData.purchase_snippet);
                         }
                     }
 
