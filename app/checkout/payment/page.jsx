@@ -353,14 +353,17 @@ export default function CheckoutPaymentPage(){
                     );
                 } else {
                     setIsProcessing(false);
-                    setErrorMsg("Failed to place order. Please try again.");
+                    setErrorMsg(response?.message || "Failed to place order. Please try again.");
                 }
             },
             {
                 total: finalTotal,
                 payment_method: 'mpesa',
                 shipping: Number(shipping),
-                order_details: orderDetails,
+                order_details: {
+                    ...orderDetails,
+                    phone: contact || orderDetails.phone
+                },
                 sales: products,
                 pickup_station: pickupStation,
                 delivery_method: deliveryMethod,
@@ -442,6 +445,12 @@ export default function CheckoutPaymentPage(){
 
     // Step 1 of manual flow: create the order and surface the order slug
     const placeManualOrder = () => {
+        const phone = orderDetails.phone || contact;
+        if (!phone || phone.trim() === '') {
+            setErrorMsg("Please provide a phone number for your order.");
+            return;
+        }
+
         // Client-side Constraints Validation
         const brandTotals = {};
         for (const p of products) {
@@ -478,7 +487,7 @@ export default function CheckoutPaymentPage(){
                     setCreatedOrderId(slug);
                     startManualPolling(slug);
                 } else {
-                    setErrorMsg("Failed to place order. Please try again.");
+                    setErrorMsg(response?.message || "Failed to place order. Please try again.");
                 }
                 setIsPlacingManualOrder(false);
             },
@@ -486,7 +495,10 @@ export default function CheckoutPaymentPage(){
                 total: finalTotal,
                 payment_method: 'mpesa',
                 shipping: Number(shipping),
-                order_details: orderDetails,
+                order_details: {
+                    ...orderDetails,
+                    phone: phone
+                },
                 sales: products,
                 pickup_station: pickupStation,
                 delivery_method: deliveryMethod,
