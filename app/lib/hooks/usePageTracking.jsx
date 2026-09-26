@@ -24,7 +24,22 @@ export default function usePageTracking() {
 
         // 2. Prepare the tracking data
         const trackPage = async () => {
-            const url = `${pathname}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`;
+            // Strip marketing / ad tracking parameters to prevent fragmentation in analytics and DB truncation
+            const cleanParams = new URLSearchParams();
+            const trackingKeys = new Set([
+                'fbclid', 'gclid', 'gbraid', 'wbraid', 'msclkid', 'twclid', 'ttclid',
+                '_ga', '_gl', 'ref_src', 'igshid', 'mc_cid', 'mc_eid'
+            ]);
+
+            searchParams.forEach((value, key) => {
+                const lower = key.toLowerCase();
+                if (!trackingKeys.has(lower) && !lower.startsWith('utm_')) {
+                    cleanParams.append(key, value);
+                }
+            });
+
+            const queryString = cleanParams.toString();
+            const cleanPath = (queryString ? `${pathname}?${queryString}` : (pathname || '/')).slice(0, 255);
             
             try {
                 const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'https://api.ngwindsongk.com';
@@ -37,8 +52,8 @@ export default function usePageTracking() {
                         'Accept': 'application/json',
                     },
                     body: JSON.stringify({
-                        path: url,
-                        referrer: document.referrer,
+                        path: cleanPath,
+                        referrer: document.referrer ? document.referrer.slice(0, 1000) : null,
                         session_id: sessionId,
                     }),
                     keepalive: true,
