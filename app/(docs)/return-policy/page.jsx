@@ -183,7 +183,7 @@ export default function ReturnPolicyPage() {
                 <div>
                   <h3 className="font-bold text-gray-900">Contact Customer Support Promptly</h3>
                   <p className="text-sm text-black/70 mt-0.5">
-                    Contact our customer care team via WhatsApp at <a href="https://wa.me/254113748906" className="text-primary font-semibold underline">+254 113 748 906</a> or email <a href="mailto:info@ngwindsongk.com" className="text-primary font-semibold underline">info@ngwindsongk.com</a> upon receiving your order. Please provide your order number, product name, and a clear photo or short video demonstrating the issue.
+                    Contact our customer care team via WhatsApp at <a href="https://wa.me/254718156421" className="text-primary font-semibold underline">+254 718 156 421</a> or email <a href="mailto:info@ngwindsongk.com" className="text-primary font-semibold underline">info@ngwindsongk.com</a> upon receiving your order. Please provide your order number, product name, and a clear photo or short video demonstrating the issue.
                   </p>
                 </div>
               </div>
@@ -252,16 +252,16 @@ export default function ReturnPolicyPage() {
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <a
-                href="https://wa.me/254113748906?text=Hello%20NGWindsong,%20I%20would%20like%20assistance%20with%20my%20order"
+                href="https://wa.me/254718156421?text=Hello%20NGWindsong,%20I%20would%20like%20assistance%20with%20my%20order"
                 className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-[#25D366] text-white font-bold text-xs uppercase tracking-wider hover:opacity-90 transition-opacity shadow-sm"
               >
                 Chat on WhatsApp
               </a>
               <a
-                href="tel:+254113748906"
+                href="tel:+254718156421"
                 className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl border-2 border-primary bg-white text-primary font-bold text-xs uppercase tracking-wider hover:bg-primary hover:text-white transition-all shadow-sm"
               >
-                Call: +254 113 748 906
+                Call: +254 718 156 421
               </a>
               <a
                 href="mailto:info@ngwindsongk.com?subject=Order%20Inquiry"
