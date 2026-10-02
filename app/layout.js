@@ -200,7 +200,7 @@ export default function RootLayout({ children }) {
               <div className="fixed z-50 bottom-[140px] md:bottom-24 right-[3vw] lg:right-[0.5vw] 2xl:right-[3vw] w-fit h-fit">
                   <Cart />
               </div>
-              <a href="https://wa.me/254718156421" aria-label="Chat on WhatsApp" className="block fixed z-50 bottom-[80px] md:bottom-10 right-[3vw] lg:right-[0.5vw] 2xl:right-[3vw] icon-[logos--whatsapp-icon] w-12 h-12 md:w-14 md:h-14">
+              <a href="https://wa.me/254113748906" aria-label="Chat on WhatsApp" className="block fixed z-50 bottom-[80px] md:bottom-10 right-[3vw] lg:right-[0.5vw] 2xl:right-[3vw] icon-[logos--whatsapp-icon] w-12 h-12 md:w-14 md:h-14">
               </a>
               <OffersSlideshowPopup />
               {children}

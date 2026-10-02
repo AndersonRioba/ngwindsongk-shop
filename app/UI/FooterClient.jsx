@@ -101,7 +101,7 @@ export default function FooterClient({ fallbackSettings, fallbackBrands }) {
                                         </a>
                                     )}
                                     <a
-                                        href={`https://wa.me/${settings.consultant_whatsapp || settings.footer_whatsapp || '254718156421'}`}
+                                        href={`https://wa.me/${settings.consultant_whatsapp || settings.footer_whatsapp || '254113748906'}`}
                                         className="flex items-center gap-2 text-sm font-bold text-green-600 hover:text-green-700 transition-colors">
                                         <span className="icon-[logos--whatsapp-icon] w-4 h-4" />
                                         Chat on WhatsApp
@@ -145,7 +145,7 @@ export default function FooterClient({ fallbackSettings, fallbackBrands }) {
                         <div className="mt-3">
                             <p className="text-black/30 text-[10px] font-black uppercase tracking-widest mb-2">Need help?</p>
                             <a
-                                href={`https://wa.me/${settings.footer_whatsapp || '254718156421'}`}
+                                href={`https://wa.me/${settings.footer_whatsapp || '254113748906'}`}
                                 className="flex items-center gap-2 text-green-600 font-bold hover:text-green-700 transition-all hover:translate-x-1"
                             >
                                 <span className="icon-[logos--whatsapp-icon] w-5 h-5 flex-shrink-0" />
