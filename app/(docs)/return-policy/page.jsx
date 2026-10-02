@@ -183,7 +183,7 @@ export default function ReturnPolicyPage() {
                 <div>
                   <h3 className="font-bold text-gray-900">Contact Customer Support Promptly</h3>
                   <p className="text-sm text-black/70 mt-0.5">
-                    Contact our customer care team via WhatsApp at <a href="https://wa.me/254718156421" className="text-primary font-semibold underline">+254 718 156 421</a> or email <a href="mailto:info@ngwindsongk.com" className="text-primary font-semibold underline">info@ngwindsongk.com</a> upon receiving your order. Please provide your order number, product name, and a clear photo or short video demonstrating the issue.
+                    Contact our customer care team via WhatsApp at <a href="https://wa.me/254718156421" className="text-primary font-semibold underline">+254 718 156 421</a> or call <a href="tel:+254795666840" className="text-primary font-semibold underline">+254 795 666 840</a> or email <a href="mailto:info@ngwindsongk.com" className="text-primary font-semibold underline">info@ngwindsongk.com</a> upon receiving your order. Please provide your order number, product name, and a clear photo or short video demonstrating the issue.
                   </p>
                 </div>
               </div>
@@ -258,10 +258,10 @@ export default function ReturnPolicyPage() {
                 Chat on WhatsApp
               </a>
               <a
-                href="tel:+254718156421"
+                href="tel:+254795666840"
                 className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl border-2 border-primary bg-white text-primary font-bold text-xs uppercase tracking-wider hover:bg-primary hover:text-white transition-all shadow-sm"
               >
-                Call: +254 718 156 421
+                Call: +254 795 666 840
               </a>
               <a
                 href="mailto:info@ngwindsongk.com?subject=Order%20Inquiry"

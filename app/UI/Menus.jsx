@@ -227,7 +227,7 @@ export function TopMenu({ fallbackNavData, fallbackSettings }){
                         <span className="icon-[line-md--phone-call-loop] w-4 h-4 text-primary"/>
                         <div className="flex flex-col">
                             <span className="text-[9px] font-bold text-gray-400 uppercase tracking-tighter">Sales & Support</span>
-                            <span className="text-xs font-black text-gray-800 tracking-tight">{settings.footer_phone || '+254 718 156 421'}</span>
+                            <span className="text-xs font-black text-gray-800 tracking-tight">{settings.footer_phone || '+254 795 666 840'}</span>
                         </div>
                     </div>
 
