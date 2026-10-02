@@ -1,9 +1,10 @@
 'use client'
 
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useRef } from "react";
 import { CheckoutContext } from "@/app/lib/providers/CheckoutProvider";
 import useCart from "@/app/lib/hooks/useCart";
 import Link from "next/link";
+import Script from "next/script";
 import { useSearchParams } from "next/navigation";
 import { gsap } from "gsap";
 
@@ -15,8 +16,12 @@ export default function CheckoutSuccessPage(){
     const { clearCart } = useCart();
     const searchParams = useSearchParams();
     const paymentType = searchParams.get('type');
+    const hasTrackedRef = useRef(false);
 
     useEffect(() => {
+        if (hasTrackedRef.current) return;
+        hasTrackedRef.current = true;
+
         // Animate success checkmark
         gsap.fromTo('.success-check', 
             { scale: 0, opacity: 0, rotate: -180 }, 
@@ -54,11 +59,15 @@ export default function CheckoutSuccessPage(){
                     ? `${apiBase}/settings?group=tracking` 
                     : `${apiBase}/api/settings?group=tracking`;
 
-                // 1. Global Tracking
+                // 1. Global Tracking (execute if custom snippet different from the default Google Ads purchase conversion)
                 const settingsRes = await fetch(trackingEndpoint);
                 const settingsData = await settingsRes.json();
                 if (settingsData.success && settingsData.data?.purchase_event_snippet) {
-                    executeSnippet(settingsData.data.purchase_event_snippet);
+                    const snippet = settingsData.data.purchase_event_snippet;
+                    // Avoid double firing if it's the exact same conversion label
+                    if (!snippet.includes('ZtL4CPXW8ZIcEMmOy6BD')) {
+                        executeSnippet(snippet);
+                    }
                 }
 
                 // 2. Brand-Specific Tracking
@@ -94,7 +103,26 @@ export default function CheckoutSuccessPage(){
 
 
     return(
-        <main className="md:max-w-[80vw] mx-auto md:my-20 p-2 flex justify-center items-center min-h-[50vh]">
+        <>
+            {/* Google Ads Purchase Conversion Event */}
+            <Script
+                id="google-ads-purchase-conversion"
+                strategy="afterInteractive"
+                dangerouslySetInnerHTML={{
+                    __html: `
+                        window.dataLayer = window.dataLayer || [];
+                        function gtag(){dataLayer.push(arguments);}
+                        gtag('event', 'conversion', {
+                            'send_to': 'AW-18053515081/ZtL4CPXW8ZIcEMmOy6BD',
+                            'value': 1.0,
+                            'currency': 'USD',
+                            'transaction_id': ''
+                        });
+                    `
+                }}
+            />
+
+            <main className="md:max-w-[80vw] mx-auto md:my-20 p-2 flex justify-center items-center min-h-[50vh]">
             <div className="text-center md:w-1/2 lg:w-1/3 space-y-6 bg-white p-8 rounded-2xl shadow-xl border-[1px] border-gray-100">
                 <div className="w-24 h-24 mx-auto rounded-full bg-green-100 flex items-center justify-center success-check">
                     <span className="icon-[mdi--check-bold] w-12 h-12 text-green-500" />
@@ -127,5 +155,6 @@ export default function CheckoutSuccessPage(){
                 </div>
             </div>
         </main>
+        </>
     )
 }

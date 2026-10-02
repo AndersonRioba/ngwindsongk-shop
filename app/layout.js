@@ -164,6 +164,28 @@ export default function RootLayout({ children }) {
             })
           }}
         />
+
+        {/* Google Tag (gtag.js) & Google Ads */}
+        {!disableAnalytics && (
+          <>
+            <script
+              async
+              src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ADS_ID || 'AW-18053515081'}`}
+            />
+            <script
+              id="google-tag-init"
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ADS_ID || 'AW-18053515081'}');
+                  ${process.env.NEXT_PUBLIC_GOOGLE_TAG_ID && process.env.NEXT_PUBLIC_GOOGLE_TAG_ID !== (process.env.NEXT_PUBLIC_GOOGLE_ADS_ID || 'AW-18053515081') ? `gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_TAG_ID}');` : `gtag('config', 'GT-P84567X7');`}
+                `,
+              }}
+            />
+          </>
+        )}
       </head>
       <body suppressHydrationWarning className={`${outfit.className} lg:text-sm 2xl:text-base`}>
         <GoogleTag disableAnalytics={disableAnalytics} />
