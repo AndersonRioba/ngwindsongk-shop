@@ -10,7 +10,12 @@ import { useRouter } from "next/navigation";
 
 const PICKUP_LOCATIONS = [
     { id: 'industrial', name: 'Head Office / Factory (Industrial Area)', address: 'Industrial Area, Nairobi, Kenya', fee: 0 },
-    { id: 'bazaar',     name: 'Bazaar Plaza Pick-up Station',            address: 'Moi Avenue, Nairobi, Kenya', fee: 0 },
+    { 
+        id: 'bazaar',     
+        name: 'Bazaar Plaza',            
+        address: '3rd Flour,  Rm C1C\nShop name:Alittlecosy\nMoi Avenue\nNairobi', 
+        fee: 0 
+    },
 ];
 
 export default function CheckoutPaymentPage(){
@@ -298,7 +303,7 @@ export default function CheckoutPaymentPage(){
 
         const finalTotal = finalOrderTotal;
         const deliveryMethod = pickup ? 'pickup' : 'delivery';
-        const pickupStation = pickup ? (PICKUP_LOCATIONS.find(l => l.id === pickup)?.name) : null;
+        const pickupStation = pickup ? (() => { const loc = PICKUP_LOCATIONS.find(l => l.id === pickup); return loc ? `${loc.name} - ${loc.address.replace(/\n/g, ' ')}` : null; })() : null;
 
         if (createdOrderId) {
             postData(
@@ -478,7 +483,7 @@ export default function CheckoutPaymentPage(){
 
         const finalTotal = finalOrderTotal;
         const deliveryMethod = pickup ? 'pickup' : 'delivery';
-        const pickupStation = pickup ? (PICKUP_LOCATIONS.find(l => l.id === pickup)?.name) : null;
+        const pickupStation = pickup ? (() => { const loc = PICKUP_LOCATIONS.find(l => l.id === pickup); return loc ? `${loc.name} - ${loc.address.replace(/\n/g, ' ')}` : null; })() : null;
 
         postData(
             (response) => {
@@ -553,7 +558,16 @@ export default function CheckoutPaymentPage(){
                         <p><span className="font-semibold">Phone:</span> {orderDetails.phone}</p>
                         {pickup ? (() => {
                             const loc = PICKUP_LOCATIONS.find(l => l.id === pickup);
-                            return <p><span className="font-semibold">Pickup:</span> {loc ? `${loc.name} — ${loc.address}` : pickup}</p>;
+                            return (
+                                <div className="space-y-1">
+                                    <p><span className="font-semibold">Pickup:</span> {loc ? loc.name : pickup}</p>
+                                    {loc?.address && (
+                                        <div className="pl-3 text-xs text-black/60 whitespace-pre-line border-l-2 border-primary/30 py-0.5 leading-relaxed">
+                                            {loc.address}
+                                        </div>
+                                    )}
+                                </div>
+                            );
                         })() : (
                             <>
                                 {orderDetails.delivery_county && <p><span className="font-semibold">County:</span> {orderDetails.delivery_county}</p>}

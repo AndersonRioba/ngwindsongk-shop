@@ -11,7 +11,12 @@ import useCart from "@/app/lib/hooks/useCart";
 
 const PICKUP_LOCATIONS = [
     { id: 'industrial', name: 'Head Office / Factory (Industrial Area)', address: 'Industrial Area, Nairobi, Kenya', fee: 0 },
-    { id: 'bazaar',     name: 'Bazaar Plaza Pick-up Station',            address: 'Moi Avenue, Nairobi, Kenya', fee: 0 },
+    { 
+        id: 'bazaar',     
+        name: 'Bazaar Plaza',            
+        address: '3rd Flour,  Rm C1C\nShop name:Alittlecosy\nMoi Avenue\nNairobi', 
+        fee: 0 
+    },
 ];
 
 export default function CheckoutInfoPage(){
@@ -360,7 +365,7 @@ export default function CheckoutInfoPage(){
                                                 }
                                                 <div className="flex-1">
                                                     <p className="font-semibold">{loc.name}</p>
-                                                    <p className="text-black/60 text-sm">{loc.address}</p>
+                                                    <p className="text-black/60 text-sm whitespace-pre-line leading-relaxed mt-0.5">{loc.address}</p>
                                                 </div>
                                                 <span className="text-xs font-bold text-green-700 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full shrink-0 self-center">FREE</span>
                                             </div>
