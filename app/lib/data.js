@@ -15,7 +15,9 @@ export function getData(setData, endpoint, parameters, baseURL = process.env.NEX
     })
         .then((res) => {
             if (res.status === 401) {
-                window.location.href = '/login';
+                if (typeof window !== 'undefined' && window.location.pathname !== '/login') {
+                    window.location.href = '/login';
+                }
                 return;
             }
             if (res.status === 404) {
@@ -158,8 +160,10 @@ export async function postData(setData, data, endpoint, baseURL = process.env.NE
         body: JSON.stringify(data)
     })
         .then((res) => {
-            if (res.status === 401) {
-                window.location.href = '/login';
+            if (res.status === 401 && endpoint !== '/login' && endpoint !== '/register' && endpoint !== '/signup') {
+                if (typeof window !== 'undefined' && window.location.pathname !== '/login') {
+                    window.location.href = '/login';
+                }
                 return;
             }
             if (res.status === 404) {
@@ -168,7 +172,7 @@ export async function postData(setData, data, endpoint, baseURL = process.env.NE
             if (!res.ok) {
                 return res.json().then(errData => {
                     if (errData.errors) throw new Error(errData.errors[Object.keys(errData.errors)[0]]);
-                    else throw new Error(errData.message);
+                    else throw new Error(errData.message || 'Server Error');
                 });
             }
             return res.json();
@@ -306,7 +310,9 @@ export async function fetcher([endpoint, parameters, baseURL = process.env.NEXT_
     })
         .then((res) => {
             if (res.status === 401) {
-                window.location.href = '/login';
+                if (typeof window !== 'undefined' && window.location.pathname !== '/login') {
+                    window.location.href = '/login';
+                }
                 return;
             }
             if (res.status === 404) {

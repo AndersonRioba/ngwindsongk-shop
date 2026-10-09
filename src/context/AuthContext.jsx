@@ -17,6 +17,7 @@ export function AuthProvider({ children }) {
 
     if (storedToken) {
       setToken(storedToken);
+      if (storedUser) setUser(storedUser);
       setIsVerifyingToken(true);
       
       // Re-verify token on mount to refresh user roles/permissions
@@ -61,6 +62,7 @@ export function AuthProvider({ children }) {
     setToken,
     isLoading,
     isVerifyingToken,
+    setIsVerifyingToken,
   };
 
   return (

@@ -1,5 +1,6 @@
 'use client'
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import useUser from "@/app/lib/hooks/useUser"
 import { getAdminUrl } from "@/app/lib/urls"
 
@@ -14,7 +15,16 @@ export default function Login({control}){
         login(phone, password, (response) => {
             if(response.success && response.token) {
                 control('')
-                if (response.user?.role === 'admin' || response.user?.role === 'super_admin') {
+                const roles = response.user?.roles || []
+                const isAdmin = 
+                    response.user?.role === 'admin' || 
+                    response.user?.role === 'superadmin' || 
+                    response.user?.role === 'super_admin' ||
+                    roles.includes('admin') || 
+                    roles.includes('superadmin') || 
+                    roles.includes('super_admin');
+
+                if (isAdmin) {
                     window.location.href = `${getAdminUrl()}/login?token=${response.token}`
                 } else {
                     router.push('/')

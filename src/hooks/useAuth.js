@@ -14,7 +14,7 @@ export default function useAuth() {
         throw new Error('useAuth must be used within an AuthProvider');
     }
 
-    const { user, setUser, token, setToken, isLoading, isVerifyingToken } = context;
+    const { user, setUser, token, setToken, isLoading, isVerifyingToken, setIsVerifyingToken } = context;
 
     const login = async (phone, password) => {
         return new Promise((resolve) => {
@@ -60,6 +60,7 @@ export default function useAuth() {
     };
 
     const loginWithToken = async (newToken) => {
+        if (setIsVerifyingToken) setIsVerifyingToken(true);
         return new Promise((resolve) => {
             fetch(`${process.env.NEXT_PUBLIC_API_URL}/user`, {
                 headers: {
@@ -91,6 +92,9 @@ export default function useAuth() {
                 })
                 .catch(err => {
                     resolve({ success: false, message: err.message });
+                })
+                .finally(() => {
+                    if (setIsVerifyingToken) setIsVerifyingToken(false);
                 });
         });
     };

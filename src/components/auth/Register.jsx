@@ -18,19 +18,19 @@ export default function Register() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { register, user, token, isLoading: isAuthLoading } = useAuth();
+  const { register, user, token, isAdmin, isLoading: isAuthLoading } = useAuth();
   const router = useRouter();
 
   // Redirect if already logged in
   useEffect(() => {
     if (!isAuthLoading && token && user) {
-      if (user?.role === 'admin' || user?.role === 'super_admin') {
+      if (isAdmin) {
         window.location.href = `${getAdminUrl()}/login?token=${token}`;
       } else {
         router.push('/');
       }
     }
-  }, [user, token, isAuthLoading, router]);
+  }, [user, token, isAdmin, isAuthLoading, router]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -65,7 +65,16 @@ export default function Register() {
     setIsLoading(false);
 
     if (result.success) {
-      if (result.user?.role === 'admin' || result.user?.role === 'super_admin') {
+      const roles = result.user?.roles || [];
+      const isResultAdmin = 
+        result.user?.role === 'admin' || 
+        result.user?.role === 'superadmin' || 
+        result.user?.role === 'super_admin' ||
+        roles.includes('admin') || 
+        roles.includes('superadmin') || 
+        roles.includes('super_admin');
+
+      if (isResultAdmin) {
         window.location.href = `${getAdminUrl()}/login?token=${result.token}`;
       } else {
         router.push('/');

@@ -20,8 +20,15 @@ export default function Login() {
 
   // Handle SSO token from URL
   useEffect(() => {
-    if (urlToken && !token) {
-      loginWithToken(urlToken);
+    if (urlToken) {
+      const cleanToken = urlToken.replace(/^["']+|["']+$/g, '');
+      if (!token || cleanToken !== token) {
+        loginWithToken(cleanToken).then(() => {
+          window.history.replaceState({}, '', window.location.pathname);
+        });
+      } else {
+        window.history.replaceState({}, '', window.location.pathname);
+      }
     }
   }, [urlToken, token, loginWithToken]);
 
@@ -50,7 +57,16 @@ export default function Login() {
     setIsLoading(false);
 
     if (result.success) {
-      if (result.user?.role === 'admin' || result.user?.role === 'superadmin' || result.user?.role === 'super_admin') {
+      const roles = result.user?.roles || [];
+      const isResultAdmin = 
+        result.user?.role === 'admin' || 
+        result.user?.role === 'superadmin' || 
+        result.user?.role === 'super_admin' ||
+        roles.includes('admin') || 
+        roles.includes('superadmin') || 
+        roles.includes('super_admin');
+
+      if (isResultAdmin) {
         window.location.href = `${getAdminUrl()}/login?token=${result.token}`;
       } else {
         router.push('/');
